@@ -1,0 +1,595 @@
+"use client";
+
+import React, { useState } from 'react';
+import { Calendar, Clock, User, Mail, Phone, MessageSquare, CheckCircle, MapPin, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+
+const BookMeetingPage = () => {
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    serviceType: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [meetingLink, setMeetingLink] = useState('');
+  const [eventId, setEventId] = useState('');
+
+  // Available time slots
+  const timeSlots = [
+    '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
+    '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM', '04:00 PM', '04:30 PM'
+  ];
+
+  // Service types with descriptions
+  const serviceTypes = [
+    { name: 'Individual Tax Preparation', price: 'From PKR 1500', popular: true },
+    { name: 'Business Tax Filing', price: 'From PKR 2000', popular: true },
+    { name: 'Tax Planning & Strategy', price: 'From PKR 1500', popular: false },
+    { name: 'IRS Problem Resolution', price: 'From PKR 2000', popular: false },
+    { name: 'Bookkeeping Services', price: 'From PKR 5000/month', popular: false },
+    { name: 'Payroll Services', price: 'Custom Quote', popular: false },
+    { name: 'General Consultation', price: 'Free 15min', popular: true }
+  ];
+
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+
+  // Helper function to format date consistently (fixes timezone issues)
+  const formatDateForStorage = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  // Helper function to parse stored date back to Date object
+  const parseDateFromStorage = (dateString) => {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
+  // Convert 12-hour time to 24-hour format for API
+  const convertTo24Hour = (time12h) => {
+    const [time, modifier] = time12h.split(' ');
+    let [hours, minutes] = time.split(':');
+    if (hours === '12') {
+      hours = '00';
+    }
+    if (modifier === 'PM') {
+      hours = parseInt(hours, 10) + 12;
+    }
+    return `${String(hours).padStart(2, '0')}:${minutes}`;
+  };
+
+  // Generate calendar days for current month view
+  const generateCalendarDays = () => {
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    
+    // First day of the month
+    const firstDay = new Date(year, month, 1);
+    // Last day of the month
+    const lastDay = new Date(year, month + 1, 0);
+    
+    // Start from the first day of the week that contains the first day of the month
+    const startDate = new Date(firstDay);
+    startDate.setDate(startDate.getDate() - firstDay.getDay());
+    
+    // End at the last day of the week that contains the last day of the month
+    const endDate = new Date(lastDay);
+    endDate.setDate(endDate.getDate() + (6 - lastDay.getDay()));
+    
+    const days = [];
+    const currentDate = new Date(startDate);
+    
+    while (currentDate <= endDate) {
+      days.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    
+    return days;
+  };
+
+  const calendarDays = generateCalendarDays();
+
+  // Check if a date is available (not weekend, not past, not today)
+  const isDateAvailable = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const checkDate = new Date(date);
+    checkDate.setHours(0, 0, 0, 0);
+    
+    // Not available if it's in the past or today
+    if (checkDate <= today) return false;
+    
+    // Not available on weekends (0 = Sunday, 6 = Saturday)
+    if (date.getDay() === 0 || date.getDay() === 6) return false;
+    
+    return true;
+  };
+
+  // Check if date is in current month
+  const isCurrentMonth = (date) => {
+    return date.getMonth() === currentMonth.getMonth() && 
+           date.getFullYear() === currentMonth.getFullYear();
+  };
+
+  // Navigate months
+  const goToPreviousMonth = () => {
+    const newMonth = new Date(currentMonth);
+    newMonth.setMonth(currentMonth.getMonth() - 1);
+    setCurrentMonth(newMonth);
+  };
+
+  const goToNextMonth = () => {
+    const newMonth = new Date(currentMonth);
+    newMonth.setMonth(currentMonth.getMonth() + 1);
+    setCurrentMonth(newMonth);
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+const handleSubmit = async () => {
+  // Validate required fields
+  if (!selectedDate || !selectedTime || !formData.firstName || 
+      !formData.lastName || !formData.email || !formData.phone || 
+      !formData.serviceType) {
+    alert('Please fill in all required fields');
+    return;
+  }
+
+  setIsSubmitting(true);
+  
+  try {
+    // Create appointment datetime
+    const appointmentDate = parseDateFromStorage(selectedDate);
+    const time24h = convertTo24Hour(selectedTime);
+    const [hours, minutes] = time24h.split(':').map(Number);
+    
+    // Create start and end times
+    const startTime = new Date(appointmentDate);
+    startTime.setHours(hours, minutes, 0, 0);
+    
+    const endTime = new Date(startTime);
+    endTime.setHours(startTime.getHours() + 1);
+    
+    // Prepare event data
+    const eventData = {
+      title: `${formData.serviceType} - ${formData.firstName} ${formData.lastName}`,
+      description: `Tax consultation appointment\n\nClient Details:\n- Name: ${formData.firstName} ${formData.lastName}\n- Email: ${formData.email}\n- Phone: ${formData.phone}\n- Service: ${formData.serviceType}\n\n${formData.message ? `Additional Notes: ${formData.message}` : ''}`,
+      startTime: startTime.toISOString(),
+      endTime: endTime.toISOString(),
+      location: 'Akbar Tax Store - Virtual Meeting',
+      attendeeEmail: formData.email,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      phone: formData.phone,
+      serviceType: formData.serviceType
+    };
+
+    // Create calendar event
+    const response = await fetch('/api/calendar/events', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(eventData),
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok && data.success) {
+      setEventId(data.eventId || '');
+      setMeetingLink(data.eventLink || '');
+      setIsSubmitted(true);
+    } else {
+      alert(`Failed to schedule meeting: ${data.error || 'Unknown error'}`);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('An error occurred. Please try again.');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+  const formatDate = (dateString) => {
+    const date = parseDateFromStorage(dateString);
+    return date.toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
+  const formatDateLong = (dateString) => {
+    const date = parseDateFromStorage(dateString);
+    return date.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  if (isSubmitted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-4">
+        <div className="max-w-lg w-full text-center bg-white rounded-2xl shadow-2xl p-8">
+          <div className="bg-green-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+            <CheckCircle className="w-12 h-12 text-green-600" />
+          </div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Meeting Confirmed!</h2>
+          <div className="bg-gray-50 rounded-xl p-6 mb-6">
+            <p className="text-lg font-semibold text-gray-800 mb-2">
+              {formatDateLong(selectedDate)} at {selectedTime}
+            </p>
+            <p className="text-gray-600 mb-2">
+              Service: {formData.serviceType}
+            </p>
+            <p className="text-gray-600 mb-2">
+              Client: {formData.firstName} {formData.lastName}
+            </p>
+            {eventId && (
+              <p className="text-sm text-gray-500 mb-2">
+                Event ID: {eventId}
+              </p>
+            )}
+            {meetingLink && (
+              <p className="text-gray-600 mt-3">
+                <strong>Calendar Event:</strong>{' '}
+                <a
+                  href={meetingLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline break-all"
+                >
+                  View in Google Calendar
+                </a>
+              </p>
+            )}
+          </div>
+          <p className="text-gray-600 mb-8">
+            The appointment has been added to your Google Calendar. You will receive a confirmation email shortly.
+          </p>
+          <div className="space-y-3">
+            <button
+              onClick={() => window.location.reload()}
+              className="w-full bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700 transition-colors font-semibold"
+            >
+              Schedule Another Meeting
+            </button>
+            {meetingLink && (
+              <a
+                href={meetingLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full bg-green-600 text-white px-8 py-3 rounded-xl hover:bg-green-700 transition-colors font-semibold text-center"
+              >
+                Open Calendar Event
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-br from-[#072971] via-[#0040A8] to-[#072971] text-white">
+        <div className="max-w-6xl mx-auto px-4 py-12">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Akbar Tax Store</h1>
+            <p className="text-xl text-blue-100 mb-6">Schedule Your Professional Tax Consultation</p>
+            <div className="flex items-center justify-center space-x-8 text-sm">
+              <div className="flex items-center">
+                <Star className="w-5 h-5 mr-2 text-yellow-400" />
+                <span>4.9/5 Rating</span>
+              </div>
+              <div className="flex items-center">
+                <MapPin className="w-5 h-5 mr-2" />
+                <span>Licensed Tax Professionals</span>
+              </div>
+              <div className="flex items-center">
+                <Clock className="w-5 h-5 mr-2" />
+                <span>Same Day Service</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          {/* Left Column - Services */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-4">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Our Services</h3>
+              <div className="space-y-3">
+                {serviceTypes.map((service, index) => (
+                  <div
+                    key={index}
+                    className={`p-4 rounded-xl border-2 transition-all cursor-pointer ${
+                      formData.serviceType === service.name
+                        ? 'border-blue-500 bg-blue-50'
+                        : 'border-gray-200 hover:border-blue-300'
+                    } ${service.popular ? 'relative' : ''}`}
+                    onClick={() => setFormData({...formData, serviceType: service.name})}
+                  >
+                    {service.popular && (
+                      <div className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
+                        Popular
+                      </div>
+                    )}
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-semibold text-gray-900 text-sm">{service.name}</h4>
+                        <p className="text-blue-600 font-medium text-sm mt-1">{service.price}</p>
+                      </div>
+                      <div className={`w-5 h-5 rounded-full border-2 ${
+                        formData.serviceType === service.name
+                          ? 'border-blue-500 bg-blue-500'
+                          : 'border-gray-300'
+                      }`}>
+                        {formData.serviceType === service.name && (
+                          <div className="w-3 h-3 bg-white rounded-full m-0.5"></div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Booking Form */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-2xl shadow-lg p-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-8">Book Your Appointment</h2>
+              
+              {/* Date Selection */}
+              <div className="mb-8">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <Calendar className="w-6 h-6 mr-3 text-blue-600" />
+                  Select Date
+                </h3>
+                
+                {/* Calendar Header */}
+                <div className="bg-gray-50 rounded-t-xl p-4 flex items-center justify-between">
+                  <button
+                    onClick={goToPreviousMonth}
+                    className="p-2 hover:bg-white rounded-lg transition-colors"
+                  >
+                    <ChevronLeft className="w-5 h-5 text-gray-600" />
+                  </button>
+                  
+                  <h4 className="text-lg font-semibold text-gray-900">
+                    {currentMonth.toLocaleDateString('en-US', { 
+                      month: 'long', 
+                      year: 'numeric' 
+                    })}
+                  </h4>
+                  
+                  <button
+                    onClick={goToNextMonth}
+                    className="p-2 hover:bg-white rounded-lg transition-colors"
+                  >
+                    <ChevronRight className="w-5 h-5 text-gray-600" />
+                  </button>
+                </div>
+
+                {/* Calendar Grid */}
+                <div className="bg-white border border-gray-200 rounded-b-xl overflow-hidden">
+                  {/* Days of week header */}
+                  <div className="grid grid-cols-7 bg-gray-100">
+                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
+                      <div key={index} className="p-3 text-center font-semibold text-gray-600 text-sm">
+                        {day}
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Calendar days */}
+                  <div className="grid grid-cols-7">
+                    {calendarDays.map((date, index) => {
+                      const isAvailable = isDateAvailable(date);
+                      const isCurrentMonthDate = isCurrentMonth(date);
+                      const dateString = formatDateForStorage(date);
+                      const isSelected = selectedDate === dateString;
+                      const isToday = date.toDateString() === new Date().toDateString();
+                      
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => {
+                            if (isAvailable) {
+                              setSelectedDate(dateString);
+                            }
+                          }}
+                          disabled={!isAvailable}
+                          className={`
+                            relative p-3 h-12 text-center transition-all border-r border-b border-gray-100 last:border-r-0
+                            ${isSelected 
+                              ? 'bg-blue-500 text-white font-bold' 
+                              : isAvailable 
+                                ? 'hover:bg-blue-50 hover:text-blue-600 cursor-pointer' 
+                                : 'cursor-not-allowed'
+                            }
+                            ${!isCurrentMonthDate 
+                              ? 'text-gray-300' 
+                              : isAvailable 
+                                ? 'text-gray-900' 
+                                : 'text-gray-400'
+                            }
+                            ${isToday && !isSelected ? 'bg-blue-100 font-semibold' : ''}
+                          `}
+                        >
+                          <span className="text-sm">
+                            {date.getDate()}
+                          </span>
+                          
+                          {isToday && !isSelected && (
+                            <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full"></div>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* Time Selection */}
+              <div className="mb-8">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <Clock className="w-6 h-6 mr-3 text-blue-600" />
+                  Select Time
+                </h3>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                  {timeSlots.map((time, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedTime(time)}
+                      className={`p-3 rounded-xl border-2 transition-all font-semibold ${
+                        selectedTime === time
+                          ? 'border-blue-500 bg-blue-500 text-white'
+                          : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
+                      }`}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Contact Information */}
+              <div className="mb-8">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <User className="w-6 h-6 mr-3 text-blue-600" />
+                  Your Information
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      First Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                      placeholder="John"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Last Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                      placeholder="Doe"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <Mail className="w-4 h-4 inline mr-2" />
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                      placeholder="john@example.com"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <Phone className="w-4 h-4 inline mr-2" />
+                      Phone Number *
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                      placeholder="(555) 123-4567"
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <MessageSquare className="w-4 h-4 inline mr-2" />
+                    Additional Notes (Optional)
+                  </label>
+                  <textarea
+                    name="message"
+                    rows={3}
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors resize-none"
+                    placeholder="Tell us about your specific needs or questions..."
+                  />
+                </div>
+              </div>
+
+              {/* Summary & Submit */}
+              {(selectedDate || selectedTime || formData.serviceType) && (
+                <div className="bg-gray-50 rounded-xl p-6 mb-6">
+                  <h4 className="font-semibold text-gray-900 mb-3">Appointment Summary</h4>
+                  <div className="space-y-2 text-sm">
+                    {formData.serviceType && (
+                      <p><span className="font-medium">Service:</span> {formData.serviceType}</p>
+                    )}
+                    {selectedDate && (
+                      <p><span className="font-medium">Date:</span> {formatDateLong(selectedDate)}</p>
+                    )}
+                    {selectedTime && (
+                      <p><span className="font-medium">Time:</span> {selectedTime}</p>
+                    )}
+                    {formData.firstName && formData.lastName && (
+                      <p><span className="font-medium">Client:</span> {formData.firstName} {formData.lastName}</p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <button
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 px-6 rounded-xl hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-bold text-lg shadow-lg"
+              >
+                {isSubmitting ? 'Bokking Your Appointment...' : 'Schedule My Appointment'}
+              </button>
+             
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BookMeetingPage;
