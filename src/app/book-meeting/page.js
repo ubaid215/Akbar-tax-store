@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, User, Mail, Phone, MessageSquare, CheckCircle, MapPin, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const BookMeetingPage = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
+  const [bookedSlots, setBookedSlots] = useState({}); // Store booked slots by date
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -21,9 +22,15 @@ const BookMeetingPage = () => {
 
   // Available time slots
   const timeSlots = [
-    '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
-    '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM', '04:00 PM', '04:30 PM'
-  ];
+  '01:00 PM',
+  '02:30 PM',
+  '04:00 PM',
+  '05:30 PM',
+  '07:00 PM',
+  '08:30 PM',
+  '10:00 PM'
+];
+
 
   // Service types with descriptions
   const serviceTypes = [
@@ -37,6 +44,41 @@ const BookMeetingPage = () => {
   ];
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
+
+  // Load booked slots from localStorage on component mount
+  useEffect(() => {
+    const savedBookedSlots = localStorage.getItem('bookedSlots');
+    if (savedBookedSlots) {
+      setBookedSlots(JSON.parse(savedBookedSlots));
+    }
+  }, []);
+
+  // Fetch existing bookings from server to sync with Google Calendar
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const startDate = new Date();
+        const endDate = new Date();
+        endDate.setMonth(endDate.getMonth() + 3); // Fetch 3 months ahead
+        
+        const response = await fetch(`/api/calendar/bookings?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`);
+        const data = await response.json();
+        
+        if (data.success) {
+          // Merge server bookings with local storage
+          const localBookings = JSON.parse(localStorage.getItem('bookedSlots') || '{}');
+          const mergedBookings = { ...localBookings, ...data.bookedSlots };
+          
+          setBookedSlots(mergedBookings);
+          localStorage.setItem('bookedSlots', JSON.stringify(mergedBookings));
+        }
+      } catch (error) {
+        console.error('Error fetching bookings:', error);
+      }
+    };
+
+    fetchBookings();
+  }, []);
 
   // Helper function to format date consistently (fixes timezone issues)
   const formatDateForStorage = (date) => {
@@ -104,11 +146,11 @@ const BookMeetingPage = () => {
     const checkDate = new Date(date);
     checkDate.setHours(0, 0, 0, 0);
     
-    // Not available if it's in the past or today
-    if (checkDate <= today) return false;
+    if (checkDate < today) return false;
     
-    // Not available on weekends (0 = Sunday, 6 = Saturday)
-    if (date.getDay() === 0 || date.getDay() === 6) return false;
+    // Not available on sunday
+    if (date.getDay() === 0) return false;
+
     
     return true;
   };
@@ -117,6 +159,20 @@ const BookMeetingPage = () => {
   const isCurrentMonth = (date) => {
     return date.getMonth() === currentMonth.getMonth() && 
            date.getFullYear() === currentMonth.getFullYear();
+  };
+
+  // Check if a time slot is booked for a specific date
+  const isTimeSlotBooked = (date, time) => {
+    const dateString = formatDateForStorage(date);
+    return bookedSlots[dateString] && bookedSlots[dateString].includes(time);
+  };
+
+  // Get available time slots for selected date
+  const getAvailableTimeSlots = () => {
+    if (!selectedDate) return timeSlots;
+    
+    const dateBookedSlots = bookedSlots[selectedDate] || [];
+    return timeSlots.filter(slot => !dateBookedSlots.includes(slot));
   };
 
   // Navigate months
@@ -139,67 +195,115 @@ const BookMeetingPage = () => {
     });
   };
 
-const handleSubmit = async () => {
-  // Validate required fields
-  if (!selectedDate || !selectedTime || !formData.firstName || 
-      !formData.lastName || !formData.email || !formData.phone || 
-      !formData.serviceType) {
-    alert('Please fill in all required fields');
-    return;
-  }
-
-  setIsSubmitting(true);
-  
-  try {
-    // Create appointment datetime
-    const appointmentDate = parseDateFromStorage(selectedDate);
-    const time24h = convertTo24Hour(selectedTime);
-    const [hours, minutes] = time24h.split(':').map(Number);
-    
-    // Create start and end times
-    const startTime = new Date(appointmentDate);
-    startTime.setHours(hours, minutes, 0, 0);
-    
-    const endTime = new Date(startTime);
-    endTime.setHours(startTime.getHours() + 1);
-    
-    // Prepare event data
-    const eventData = {
-      title: `${formData.serviceType} - ${formData.firstName} ${formData.lastName}`,
-      description: `Tax consultation appointment\n\nClient Details:\n- Name: ${formData.firstName} ${formData.lastName}\n- Email: ${formData.email}\n- Phone: ${formData.phone}\n- Service: ${formData.serviceType}\n\n${formData.message ? `Additional Notes: ${formData.message}` : ''}`,
-      startTime: startTime.toISOString(),
-      endTime: endTime.toISOString(),
-      location: 'Akbar Tax Store - Virtual Meeting',
-      attendeeEmail: formData.email,
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      phone: formData.phone,
-      serviceType: formData.serviceType
+  // Generate Google Calendar URL
+  const generateGoogleCalendarURL = (startTime, endTime, title, description, location) => {
+    const formatDateForGoogle = (date) => {
+      return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
     };
 
-    // Create calendar event
-    const response = await fetch('/api/calendar/events', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(eventData),
+    const startDate = formatDateForGoogle(new Date(startTime));
+    const endDate = formatDateForGoogle(new Date(endTime));
+    
+    const params = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: title,
+      dates: `${startDate}/${endDate}`,
+      details: description,
+      location: location,
+      trp: 'false'
     });
     
-    const data = await response.json();
-    
-    if (response.ok && data.success) {
-      setEventId(data.eventId || '');
-      setMeetingLink(data.eventLink || '');
-      setIsSubmitted(true);
-    } else {
-      alert(`Failed to schedule meeting: ${data.error || 'Unknown error'}`);
+    return `https://calendar.google.com/calendar/render?${params.toString()}`;
+  };
+
+  const handleSubmit = async () => {
+    // Validate required fields
+    if (!selectedDate || !selectedTime || !formData.firstName || 
+        !formData.lastName || !formData.email || !formData.phone || 
+        !formData.serviceType) {
+      alert('Please fill in all required fields');
+      return;
     }
-  } catch (error) {
-    console.error('Error:', error);
-    alert('An error occurred. Please try again.');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+
+    // Check if slot is still available
+    if (isTimeSlotBooked(parseDateFromStorage(selectedDate), selectedTime)) {
+      alert('This time slot has been booked by someone else. Please select another time.');
+      setSelectedTime('');
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      // Create appointment datetime
+      const appointmentDate = parseDateFromStorage(selectedDate);
+      const time24h = convertTo24Hour(selectedTime);
+      const [hours, minutes] = time24h.split(':').map(Number);
+      
+      // Create start and end times
+      const startTime = new Date(appointmentDate);
+      startTime.setHours(hours, minutes, 0, 0);
+      
+      const endTime = new Date(startTime);
+      endTime.setHours(startTime.getHours() + 1);
+      
+      // Prepare event data
+      const eventData = {
+        title: `${formData.serviceType} - ${formData.firstName} ${formData.lastName}`,
+        description: `Tax consultation appointment\n\nClient Details:\n- Name: ${formData.firstName} ${formData.lastName}\n- Email: ${formData.email}\n- Phone: ${formData.phone}\n- Service: ${formData.serviceType}\n\n${formData.message ? `Additional Notes: ${formData.message}` : ''}`,
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString(),
+        location: 'Akbar Tax Store - Virtual Meeting',
+        attendeeEmail: formData.email,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phone: formData.phone,
+        serviceType: formData.serviceType
+      };
+
+      // Create calendar event
+      const response = await fetch('/api/calendar/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(eventData),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok && data.success) {
+        // Mark the slot as booked
+        const updatedBookedSlots = { ...bookedSlots };
+        if (!updatedBookedSlots[selectedDate]) {
+          updatedBookedSlots[selectedDate] = [];
+        }
+        updatedBookedSlots[selectedDate].push(selectedTime);
+        
+        // Save to localStorage and state
+        localStorage.setItem('bookedSlots', JSON.stringify(updatedBookedSlots));
+        setBookedSlots(updatedBookedSlots);
+
+        // Generate Google Calendar URL
+        const googleCalendarURL = generateGoogleCalendarURL(
+          startTime.toISOString(),
+          endTime.toISOString(),
+          eventData.title,
+          eventData.description,
+          eventData.location
+        );
+        
+        setEventId(data.eventId || '');
+        setMeetingLink(googleCalendarURL);
+        setIsSubmitted(true);
+      } else {
+        alert(`Failed to schedule meeting: ${data.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const formatDate = (dateString) => {
     const date = parseDateFromStorage(dateString);
@@ -243,30 +347,11 @@ const handleSubmit = async () => {
                 Event ID: {eventId}
               </p>
             )}
-            {meetingLink && (
-              <p className="text-gray-600 mt-3">
-                <strong>Calendar Event:</strong>{' '}
-                <a
-                  href={meetingLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline break-all"
-                >
-                  View in Google Calendar
-                </a>
-              </p>
-            )}
           </div>
           <p className="text-gray-600 mb-8">
-            The appointment has been added to your Google Calendar. You will receive a confirmation email shortly.
+            You will receive a confirmation email shortly. Click the button below to add this appointment to your calendar.
           </p>
           <div className="space-y-3">
-            <button
-              onClick={() => window.location.reload()}
-              className="w-full bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700 transition-colors font-semibold"
-            >
-              Schedule Another Meeting
-            </button>
             {meetingLink && (
               <a
                 href={meetingLink}
@@ -274,9 +359,15 @@ const handleSubmit = async () => {
                 rel="noopener noreferrer"
                 className="block w-full bg-green-600 text-white px-8 py-3 rounded-xl hover:bg-green-700 transition-colors font-semibold text-center"
               >
-                Open Calendar Event
+                📅 Add to Google Calendar
               </a>
             )}
+            <button
+              onClick={() => window.location.reload()}
+              className="w-full bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700 transition-colors font-semibold"
+            >
+              Schedule Another Meeting
+            </button>
           </div>
         </div>
       </div>
@@ -408,6 +499,7 @@ const handleSubmit = async () => {
                       const dateString = formatDateForStorage(date);
                       const isSelected = selectedDate === dateString;
                       const isToday = date.toDateString() === new Date().toDateString();
+                      const hasBookedSlots = bookedSlots[dateString] && bookedSlots[dateString].length > 0;
                       
                       return (
                         <button
@@ -415,6 +507,7 @@ const handleSubmit = async () => {
                           onClick={() => {
                             if (isAvailable) {
                               setSelectedDate(dateString);
+                              setSelectedTime(''); // Reset time when date changes
                             }
                           }}
                           disabled={!isAvailable}
@@ -442,6 +535,10 @@ const handleSubmit = async () => {
                           {isToday && !isSelected && (
                             <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full"></div>
                           )}
+                          
+                          {hasBookedSlots && isAvailable && (
+                            <div className="absolute top-1 right-1 w-2 h-2 bg-orange-400 rounded-full"></div>
+                          )}
                         </button>
                       );
                     })}
@@ -454,22 +551,45 @@ const handleSubmit = async () => {
                 <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
                   <Clock className="w-6 h-6 mr-3 text-blue-600" />
                   Select Time
+                  {selectedDate && bookedSlots[selectedDate] && bookedSlots[selectedDate].length > 0 && (
+                    <span className="ml-2 text-sm text-orange-600 font-normal">
+                      ({bookedSlots[selectedDate].length} slots unavailable)
+                    </span>
+                  )}
                 </h3>
                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-                  {timeSlots.map((time, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedTime(time)}
-                      className={`p-3 rounded-xl border-2 transition-all font-semibold ${
-                        selectedTime === time
-                          ? 'border-blue-500 bg-blue-500 text-white'
-                          : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
-                      }`}
-                    >
-                      {time}
-                    </button>
-                  ))}
+                  {timeSlots.map((time, index) => {
+                    const isBooked = selectedDate && isTimeSlotBooked(parseDateFromStorage(selectedDate), time);
+                    const isDisabled = !selectedDate || isBooked;
+                    
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => !isDisabled && setSelectedTime(time)}
+                        disabled={isDisabled}
+                        className={`p-3 rounded-xl border-2 transition-all font-semibold relative ${
+                          isDisabled
+                            ? isBooked 
+                              ? 'border-red-200 bg-red-50 text-red-400 cursor-not-allowed'
+                              : 'border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed'
+                            : selectedTime === time
+                              ? 'border-blue-500 bg-blue-500 text-white'
+                              : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
+                        }`}
+                      >
+                        {time}
+                        {isBooked && (
+                          <span className="absolute -top-1 -right-1 text-xs bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
+                            ✕
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
+                {!selectedDate && (
+                  <p className="text-sm text-gray-500 mt-2">Please select a date first to see available time slots.</p>
+                )}
               </div>
 
               {/* Contact Information */}
@@ -490,7 +610,7 @@ const handleSubmit = async () => {
                       value={formData.firstName}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                      placeholder="John"
+                      placeholder="Enter your First Name"
                     />
                   </div>
                   <div>
@@ -503,7 +623,7 @@ const handleSubmit = async () => {
                       value={formData.lastName}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                      placeholder="Doe"
+                      placeholder="Enter Your Last Name"
                     />
                   </div>
                 </div>
@@ -520,7 +640,7 @@ const handleSubmit = async () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                      placeholder="john@example.com"
+                      placeholder="ats@gmail.com"
                     />
                   </div>
                   <div>
@@ -534,7 +654,7 @@ const handleSubmit = async () => {
                       value={formData.phone}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                      placeholder="(555) 123-4567"
+                      placeholder="03010000000"
                     />
                   </div>
                 </div>
@@ -581,7 +701,7 @@ const handleSubmit = async () => {
                 disabled={isSubmitting}
                 className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 px-6 rounded-xl hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-bold text-lg shadow-lg"
               >
-                {isSubmitting ? 'Bokking Your Appointment...' : 'Schedule My Appointment'}
+                {isSubmitting ? 'Booking Your Appointment...' : 'Schedule My Appointment'}
               </button>
              
             </div>
