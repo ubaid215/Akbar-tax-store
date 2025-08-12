@@ -6,6 +6,7 @@ import {
   Instagram,
 } from "lucide-react";
 import Link from 'next/link';
+import Image from 'next/image';
 
 
 const Footer = () => {
@@ -21,9 +22,13 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
           {/* Brand & Tagline */}
           <div className="lg:col-span-1">
-            <h2 className="text-xl font-bold mb-3" style={{ color: "#FFFFFF" }}>
-              Akbar Tax Store
-            </h2>
+            <Image
+                    src="/logo-1.png" 
+                    alt="Logo"
+                    width={70}
+                    height={70}
+                    priority 
+                  />
             <p
               className="text-sm leading-relaxed mb-4"
               style={{ color: "#D9E8FF" }}
