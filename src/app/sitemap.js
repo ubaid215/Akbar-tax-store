@@ -1,6 +1,6 @@
 // app/sitemap.js
 export default async function sitemap() {
-  const baseUrl = "https://www.akbartaxstore.com/"; 
+  const baseUrl = "https://www.akbartaxstore.com"; 
 
   // Static routes
   const routes = [
