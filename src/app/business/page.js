@@ -46,7 +46,7 @@ const businessServices = [
   },
   {
     id: 'filer',
-    title: 'Filer Registration',
+    title: 'Business File Return',
     price: '7,000',
     description: 'Become an active tax filer',
     image: '/images/filer-status.jpg',
@@ -148,7 +148,7 @@ const businessServices = [
   {
     id: 'gst',
     title: 'GST Registration',
-    price: '10,000',
+    price: '40,000',
     description: 'Goods and Services Tax registration',
     image: '/images/gst.jpg',
     category: 'Tax',

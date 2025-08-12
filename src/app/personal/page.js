@@ -46,7 +46,7 @@ const personalServices = [
   },
   {
     id: 'filer',
-    title: 'Filer Registration',
+    title: 'Business File Return',
     price: '7,000',
     description: 'Become an active tax filer',
     image: '/images/filer-status.jpg',

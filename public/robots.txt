@@ -1,18 +1,27 @@
 User-agent: *
 Allow: /
-Disallow: /private/
 Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
 
-Sitemap: https://www.akbartaxstore.com/sitemap.xml
-
-# Googlebot
+# Major Search Engines - No crawl delay
 User-agent: Googlebot
 Allow: /
+Disallow: /api/
 
-# Bingbot
 User-agent: Bingbot
 Allow: /
+Disallow: /api/
 
-# Crawl Delay for non-Google/Bing bots
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+# General crawl delay for other bots
 User-agent: *
-Crawl-delay: 10
+Crawl-delay: 5
+
+# Sitemap location
+Sitemap: https://www.akbartaxstore.com/sitemap.xml

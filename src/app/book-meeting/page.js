@@ -34,11 +34,11 @@ const BookMeetingPage = () => {
 
   // Service types with descriptions
   const serviceTypes = [
-    { name: 'Individual Tax Preparation', price: 'From PKR 1500', popular: true },
-    { name: 'Business Tax Filing', price: 'From PKR 2000', popular: true },
+    { name: 'Individual Tax Preparation', price: 'From PKR 4000', popular: true },
+    { name: 'Business Tax Preperation', price: 'From PKR 7000', popular: true },
     { name: 'Tax Planning & Strategy', price: 'From PKR 1500', popular: false },
-    { name: 'IRS Problem Resolution', price: 'From PKR 2000', popular: false },
-    { name: 'Bookkeeping Services', price: 'From PKR 5000/month', popular: false },
+    { name: 'IRS Problem Resolution', price: 'From PKR 3000', popular: false },
+    { name: 'Bookkeeping Services', price: 'From PKR 7000/month', popular: false },
     { name: 'Payroll Services', price: 'Custom Quote', popular: false },
     { name: 'General Consultation', price: 'Free 15min', popular: true }
   ];

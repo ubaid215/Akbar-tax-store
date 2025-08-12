@@ -18,7 +18,7 @@ const ServicesFeePage = () => {
       icon: '/icons/personal-tax.png',
       services: [
         {
-          id: 'nin',
+          id: 'personal-nin', // Changed to make unique
           name: 'NIN Registration',
           fee: '1,500 PKR',
           description: 'National Identity Number registration for tax purposes',
@@ -30,7 +30,7 @@ const ServicesFeePage = () => {
           process: '24 Hours'
         },
         {
-          id: 'ntn',
+          id: 'personal-ntn', // Changed to make unique
           name: 'NTN Certificate',
           fee: '1,500 PKR',
           description: 'National Tax Number registration',
@@ -42,7 +42,7 @@ const ServicesFeePage = () => {
           process: '24 Hours'
         },
         {
-          id: 'tax-return',
+          id: 'personal-tax-return', // Changed to make unique
           name: 'Tax Return Filing',
           fee: '4,000 PKR',
           description: 'Annual income tax return filing',
@@ -52,8 +52,8 @@ const ServicesFeePage = () => {
           process: '24-48 hours after document submission'
         },
         {
-          id: 'filer',
-          name: 'Filer Registration',
+          id: 'personal-filer', // Changed to make unique
+          name: 'Business File Return',
           fee: '7,000 PKR',
           description: 'Become an active tax filer',
           requirements: [
@@ -67,8 +67,8 @@ const ServicesFeePage = () => {
           ],
           process: '24-48 hours after document submission'
         },
-         {
-          id: 'gst',
+        {
+          id: 'personal-gst', // Changed to make unique
           name: 'GST Registration',
           fee: '10,000 PKR',
           description: 'Goods and Services Tax registration',
@@ -87,7 +87,7 @@ const ServicesFeePage = () => {
           process: '5-7 working days'
         },
         {
-          id: 'pra',
+          id: 'personal-pra', // Changed to make unique
           name: 'PRA Registration',
           fee: '10,000 PKR',
           description: 'Punjab Revenue Authority registration',
@@ -106,7 +106,7 @@ const ServicesFeePage = () => {
           process: '5-7 working days'
         },
         {
-          id: 'chamber',
+          id: 'personal-chamber', // Changed to make unique
           name: 'Chamber of Commerce',
           fee: '18,000 PKR',
           description: 'Membership registration',
@@ -131,7 +131,7 @@ const ServicesFeePage = () => {
       icon: '/icons/business-tax.png',
       services: [
         {
-          id: 'nin',
+          id: 'business-nin', // Changed to make unique
           name: 'NIN Registration',
           fee: '1,500 PKR',
           description: 'National Identity Number registration for tax purposes',
@@ -143,7 +143,7 @@ const ServicesFeePage = () => {
           process: '24 Hours'
         },
         {
-          id: 'ntn',
+          id: 'business-ntn', // Changed to make unique
           name: 'NTN Certificate',
           fee: '1,500 PKR',
           description: 'National Tax Number registration',
@@ -155,7 +155,7 @@ const ServicesFeePage = () => {
           process: '24 Hours'
         },
         {
-          id: 'tax-return',
+          id: 'business-tax-return', // Changed to make unique
           name: 'Tax Return Filing',
           fee: '4,000 PKR',
           description: 'Annual income tax return filing',
@@ -165,8 +165,8 @@ const ServicesFeePage = () => {
           process: '24-48 hours after document submission'
         },
         {
-          id: 'filer',
-          name: 'Filer Registration',
+          id: 'business-filer', // Changed to make unique
+          name: 'Business File Return',
           fee: '7,000 PKR',
           description: 'Become an active tax filer',
           requirements: [
@@ -260,9 +260,9 @@ const ServicesFeePage = () => {
           process: '24-48 hours after document submission'
         },
         {
-          id: 'gst',
+          id: 'business-gst', // Changed to make unique
           name: 'GST Registration',
-          fee: '10,000 PKR',
+          fee: '40,000 PKR',
           description: 'Goods and Services Tax registration',
           requirements: [
             'ID Card Picture',
@@ -279,7 +279,7 @@ const ServicesFeePage = () => {
           process: '5-7 working days'
         },
         {
-          id: 'pra',
+          id: 'business-pra', // Changed to make unique
           name: 'PRA Registration',
           fee: '10,000 PKR',
           description: 'Punjab Revenue Authority registration',
@@ -298,7 +298,7 @@ const ServicesFeePage = () => {
           process: '5-7 working days'
         },
         {
-          id: 'chamber',
+          id: 'business-chamber', // Changed to make unique
           name: 'Chamber of Commerce',
           fee: '18,000 PKR',
           description: 'Membership registration',
@@ -354,7 +354,7 @@ const ServicesFeePage = () => {
         {
           id: 'booking',
           name: 'Bookkeeping service',
-          fee: '10,000 PKR',
+          fee: '7,000 PKR',
           description: '',
           requirements: [
              'No Document Reauired',
@@ -373,7 +373,6 @@ const ServicesFeePage = () => {
         }
       ]
     },
-    
   ];
 
   return (

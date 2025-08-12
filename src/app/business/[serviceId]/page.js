@@ -96,7 +96,7 @@ const businessServiceDatabase = {
   },
 
   'filer': {
-    title: 'Filer Registration',
+    title: 'Business File Return',
     price: '7,000 PKR',
     description: 'Become an active tax filer for reduced tax rates',
     fullDescription: 'Transform your tax status from non-filer to active filer and enjoy significantly reduced tax rates on various transactions. Our comprehensive filer registration service includes asset declaration, income documentation, and ongoing compliance support.',

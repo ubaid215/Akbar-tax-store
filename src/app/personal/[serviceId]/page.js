@@ -104,7 +104,7 @@ const serviceData = {
     deadlineWarning: 'September 30 annual deadline approaching!'
   },
   'filer': {
-    title: 'Filer Registration',
+    title: 'Business File Return',
     price: '7,000 PKR',
     description: 'Become an active tax filer',
     fullDescription: 'Being a filer provides significant advantages including lower tax rates, property transaction benefits, and better banking terms. Our complete filer package includes NTN registration (if needed), NIN linkage, and first-year tax return filing. We guarantee your active filer status will reflect in FBR\'s system within 15 working days or we refund 50% of our fee.',
