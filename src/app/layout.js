@@ -23,6 +23,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <meta name="akbar-tax-store" content="Akbar Tax Store" />
       <body className="bg-white text-black">
         <SmoothScrolling />
         <Navbar />

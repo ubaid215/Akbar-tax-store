@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from 'next/link';
+import Image from 'next/image';
+
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -364,9 +366,19 @@ export default function Navbar() {
 
       {/* Main navigation section */}
       <div className="px-6 py-4 flex justify-between items-center bg-white">
-        <Link href="/" className="text-2xl font-bold hover:scale-105 transform transition-all duration-300" style={{ color: '#0040A8' }}>
-          Akbar Tax Store
-        </Link>
+        <Link
+      href="/"
+      className="flex items-center gap-2 text-2xl font-bold hover:scale-105 transform transition-all duration-300"
+      style={{ color: "#0040A8" }}
+    >
+      <Image
+        src="/logo.png" 
+        alt="Logo"
+        width={70}
+        height={70}
+        priority 
+      />
+    </Link>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-8">
