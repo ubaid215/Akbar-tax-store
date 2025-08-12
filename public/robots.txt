@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Disallow: /private/
+Disallow: /api/
+
+Sitemap: https://www.akbartaxstore.com/sitemap.xml
+
+# Googlebot
+User-agent: Googlebot
+Allow: /
+
+# Bingbot
+User-agent: Bingbot
+Allow: /
+
+# Crawl Delay for non-Google/Bing bots
+User-agent: *
+Crawl-delay: 10
