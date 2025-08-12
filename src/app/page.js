@@ -296,12 +296,14 @@ const Homepage = () => {
                     <h3 className="text-lg font-semibold truncate" style={{ color: '#050505' }}>{service.title}</h3>
                   </div>
                   <p className="mb-4 leading-relaxed text-sm line-clamp-3" style={{ color: '#072971' }}>{service.description}</p>
+                  <Link href='/services-fees'>
                   <button
                     className="w-full text-white px-3 py-2 rounded-md hover:opacity-90 transition-colors text-sm font-medium"
                     style={{ backgroundColor: '#0040A8' }}
                   >
                     Get Started
                   </button>
+                  </Link>
                 </div>
               </div>
             ))}
