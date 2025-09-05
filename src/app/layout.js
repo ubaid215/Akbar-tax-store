@@ -1,5 +1,6 @@
 // app/layout.jsx (Server Component) - SEO Optimized with Environment Support
 import { Geist, Geist_Mono } from "next/font/google";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SmoothScrolling from "./components/SmoothScrolling";
@@ -279,7 +280,7 @@ export default function RootLayout({ children }) {
       <body className="bg-white text-black">
         <SmoothScrolling />
         <Navbar />
-        <main className="pt-16 md:pt-24 lg:pt-20">{children}</main>
+        <main className="pt-16 md:pt-24 lg:pt-20">{children} <SpeedInsights /></main>
         <Footer />
       </body>
     </html>
