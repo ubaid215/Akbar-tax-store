@@ -10,10 +10,6 @@ button{
 }
 
 
-/* Ensure smooth scrolling and transitions */
-html {
-  scroll-behavior: smooth;
-}
 
 * {
   box-sizing: border-box;
