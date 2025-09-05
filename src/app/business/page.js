@@ -226,6 +226,50 @@ const businessServices = [
       'Property/office agreement',
       'Bank maintenance Certificate (Business bank)'
     ]
+  },
+  {
+    id: 'accounting',
+    title: 'Accountant and Financial Reporting',
+    price: '25,000 PKR',
+    category: 'Accounting',
+    description: 'Accountant and financial reporting from experts',
+    image: '/images/accounting-finance.jpg',
+    requirements: [
+      'Previous Tax Return',
+      'Previous Financials',
+      'Current Year All Bank Statement',
+      'All General Ledger',
+      'Capital detail ledger',
+      'Stock detail',
+      'Administration detail ledger',
+      'HR detail ledger',
+      'Shareholder detail/paid up capital Detail'
+    ],
+    duration: '4-5 working days'
+  },
+  {
+    id: 'bookkeeping',
+    title: 'Bookkeeping Service',
+    price: '7,000 PKR',
+    category: 'Bookkeeping',
+    description: 'Professional bookkeeping services',
+    image: '/images/bookkeeping.jpg',
+    requirements: [
+      'No Document Required',
+    ],
+    duration: '4-5 working days'
+  },
+  {
+    id: 'stock',
+    title: 'Stock Report',
+    price: '10,000 PKR',
+    category: 'Report',
+    description: 'Detailed stock reporting and analysis',
+    image: '/images/stock-report.jpg',
+    requirements: [
+      'Provide sale and purchase data',
+    ],
+    duration: '2-5 working days'
   }
 ];
 
@@ -264,7 +308,7 @@ export default function BusinessServices() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {businessServices.map((service) => (
-              <Link 
+              <Link
                 href={`/business/${service.id}`}
                 key={service.id}
                 className="group block"
@@ -296,7 +340,7 @@ export default function BusinessServices() {
                     <h3 className="font-bold text-xl text-[#072971] mb-2 group-hover:text-[#0040A8] transition-colors">
                       {service.title}
                     </h3>
-                    
+
                     <p className="text-[#050505] text-sm leading-relaxed mb-4 opacity-80">
                       {service.description}
                     </p>
@@ -390,7 +434,7 @@ export default function BusinessServices() {
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-[#072971] mb-4">Simple 3-Step Process</h2>
             <p className="text-[#050505]/70 mb-12">Get your tax matters sorted in just 3 easy steps</p>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center">
                 <div className="w-12 h-12 bg-[#0040A8] text-white rounded-full flex items-center justify-center mx-auto mb-4 font-bold">1</div>
@@ -423,7 +467,7 @@ export default function BusinessServices() {
               Our business experts are ready to help you choose the right services and guide you through every step of the registration process.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
+              <Link
                 href="/contact"
                 className="inline-flex items-center justify-center bg-[#FFFFFF] text-[#072971] font-semibold py-3 px-8 rounded-xl hover:bg-[#D9E8FF] transition-colors"
               >
@@ -432,7 +476,7 @@ export default function BusinessServices() {
                 </svg>
                 Get Business Consultation
               </Link>
-              <a 
+              <a
                 href="tel:+923016832064"
                 className="inline-flex items-center justify-center border-2 border-[#FFFFFF] text-[#FFFFFF] font-semibold py-3 px-8 rounded-xl hover:bg-[#FFFFFF] hover:text-[#072971] transition-colors"
               >

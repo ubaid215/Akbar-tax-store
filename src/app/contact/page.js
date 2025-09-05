@@ -233,24 +233,11 @@ export default function ContactPage() {
                     <p className="text-[#072971] mt-1 space-y-1">
                       <a href="tel:+923016832064" className="hover:underline block">0301-6832064</a>
                       <a href="tel:+923407300408" className="hover:underline block">0340-7300408</a>
-                      <a href="tel:+923248957804" className="hover:underline block">0324-8957804</a>
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-start">
-                  <div className="bg-[#D9E8FF] p-3 rounded-full mr-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#0040A8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-[#050505]">Telephone Numbers</h3>
-                    <p className="text-[#072971] mt-1">
-                      <a href="tel:+924236446766" className="hover:underline">042-36446766</a>
-                    </p>
-                  </div>
-                </div>
+                
 
                 <div className="flex items-start">
                   <div className="bg-[#D9E8FF] p-3 rounded-full mr-4">

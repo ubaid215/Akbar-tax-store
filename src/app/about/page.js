@@ -148,7 +148,7 @@ const About = () => {
           </h1>
           <p 
             ref={heroSubheadingRef}
-            className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-5xl mx-auto mb-6 sm:mb-8 lg:mb-10 leading-relaxed px-4 transition-all duration-1000 opacity-0 transform translate-y-8"
+            className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-5xl mx-auto mb-6 sm:mb-10 lg:mb-12 leading-relaxed px-4 transition-all duration-1000 opacity-0 transform translate-y-8"
           >
             Join 500+ successful clients who saved millions in taxes and grew their businesses with our expert guidance. 
             <span className="block mt-2 font-semibold text-blue-700">Get results in 24 hours, not weeks.</span>

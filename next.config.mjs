@@ -5,7 +5,7 @@ const nextConfig = {
 
   // Image Optimization (add domains if needed)
   images: {
-    domains: ["https://www.akbartaxstore.com", "cdn.yourdomain.com"], // Add your own CDN or image domains
+    domains: ["https://www.akbartaxstore.com", "akbartaxstore.com", 'images.unsplash.com'], 
   },
 
   // SEO Headers for Sitemap & Robots.txt

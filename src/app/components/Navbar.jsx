@@ -90,6 +90,7 @@ export default function Navbar() {
     { name: "HOME", href: "/" },
     { name: "SERVICES FEE", href: "/services-fees" },
     { name: "ABOUT", href: "/about" },
+    { name: "CONTACT", href: "/contact" },
     { name: "BOOK MEETING", href: "/book-meeting" }
   ];
 
@@ -185,24 +186,6 @@ export default function Navbar() {
                     onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
                   >
                     📞 0340-7300408
-                  </a>
-                   <a
-                    href="tel:+923248957804"
-                    className="block px-4 py-2 text-sm transition-all duration-200 hover:scale-105 transform"
-                    style={{ color: '#072971', backgroundColor: 'transparent' }}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = '#D9E8FF'}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
-                  >
-                    📞 0324-8957804
-                  </a>
-                  <a
-                    href="tel:+924236446766"
-                    className="block px-4 py-2 text-sm transition-all duration-200 hover:scale-105 transform"
-                    style={{ color: '#072971', backgroundColor: 'transparent' }}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = '#D9E8FF'}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
-                  >
-                    ☎️ Telephone
                   </a>
                    <a
                     href="mailto:hussnain@akbartaxstore.com"

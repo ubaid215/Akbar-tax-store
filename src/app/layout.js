@@ -18,14 +18,14 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Akbar Tax Store | Income Tax Filing, NTN Registration & SECP Company Registration Pakistan",
   description:
-    "Pakistan's trusted tax consultant in Lahore. Expert income tax filing, NTN registration, SECP company registration, business registration, and tax return services. Get filer status & save taxes today!",
+    "Pakistan's trusted tax consultant in Faisalabad. Expert income tax filing, NTN registration, SECP company registration, business registration, and tax return services. Get filer status & save taxes today!",
   keywords: [
     // High-volume tax filing keywords
     "income tax filing Pakistan",
     "tax filing services Pakistan",
     "tax return Pakistan",
     "income tax return filing",
-    "tax consultant Lahore",
+    "tax consultant Faisalabad",
     "tax advisor Pakistan",
     "filer status Pakistan",
     "non filer to filer",
@@ -35,17 +35,17 @@ export const metadata = {
     "NTN registration Pakistan",
     "SECP company registration",
     "business registration Pakistan",
-    "company registration Lahore",
+    "company registration Faisalabad",
     "single member company registration",
     "SECP eZfile registration",
     "business incorporation Pakistan",
     "startup registration Pakistan",
     
     // Location-based keywords
-    "tax services Lahore",
+    "tax services Faisalabad",
     "accounting services Pakistan",
     "tax filing Multan Road",
-    "financial consultant Lahore",
+    "financial consultant Faisalabad",
     "chartered accountant services",
     
     // Service-specific keywords
@@ -61,7 +61,7 @@ export const metadata = {
   openGraph: {
     title: "Akbar Tax Store | Expert Tax Filing & Business Registration Services Pakistan",
     description:
-      "Leading tax consultant in Lahore offering income tax filing, NTN registration, SECP company registration & business services. Trusted by 1000+ clients.",
+      "Leading tax consultant in Faisalabad offering income tax filing, NTN registration, SECP company registration & business services. Trusted by 1000+ clients.",
     url: "https://www.akbartaxstore.com",
     siteName: "Akbar Tax Store",
     images: [

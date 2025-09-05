@@ -507,7 +507,109 @@ const businessServiceDatabase = {
       name: 'Shahid Enterprises',
       text: 'Switched to their accounting services and saved 40% on our accounting costs!'
     }
-  }
+  },
+
+'accounting': {
+  title: 'Accountant and Financial Reporting',
+  price: '25,000 PKR',
+  description: 'Professional accounting and financial reporting from certified experts',
+  fullDescription: 'Our comprehensive accounting service provides expert financial reporting, compliance management, and strategic financial guidance. We prepare detailed financial statements, ensure regulatory compliance, and provide insights to improve your business performance. Our certified accountants use modern tools and follow international accounting standards.',
+  image: '/images/accounting-finance.jpg',
+  category: 'Financial Services',
+  duration: '4-5 working days',
+  requirements: [
+    'Previous Tax Return',
+    'Previous Financials',
+    'Current Year All Bank Statement',
+    'All General Ledger',
+    'Capital detail ledger',
+    'Stock detail',
+    'Administration detail ledger',
+    'HR detail ledger',
+    'Shareholder detail/paid up capital Detail'
+  ],
+  process: [
+    'Document collection and review',
+    'Financial data analysis and verification',
+    'Statement preparation using accounting standards',
+    'Compliance check and validation',
+    'Final reporting and presentation',
+    'Advisory consultation included'
+  ],
+  benefits: [
+    'Professional financial statements',
+    'Regulatory compliance assurance',
+    'Strategic financial insights',
+    'Tax optimization opportunities',
+    'Business performance analysis',
+    'Expert advisory support'
+  ]
+},
+
+'bookkeeping': {
+  title: 'Bookkeeping Service',
+  price: '7,000 PKR',
+  description: 'Professional daily bookkeeping and transaction recording services',
+  fullDescription: 'Our bookkeeping service provides systematic recording of all business transactions, maintaining accurate books of accounts. We handle daily entries, reconciliations, and provide regular financial summaries. Perfect for businesses wanting to maintain proper records without hiring full-time accounting staff.',
+  image: '/images/bookkeeping.jpg',
+  category: 'Financial Services',
+  duration: '4-5 working days setup, then ongoing',
+  requirements: [
+    'Business registration documents',
+    'Bank account details',
+    'Previous records (if available)',
+    'Transaction documents and receipts'
+  ],
+  process: [
+    'Initial setup and system configuration',
+    'Daily transaction recording',
+    'Regular account reconciliation',
+    'Monthly summary preparation',
+    'Error checking and correction',
+    'Regular backup and reporting'
+  ],
+  benefits: [
+    'Accurate daily record keeping',
+    'Time-saving automation',
+    'Regular financial summaries',
+    'Tax preparation ready records',
+    'Professional bookkeeping standards',
+    'Cost-effective solution'
+  ]
+},
+
+'stock': {
+  title: 'Stock Report',
+  price: '10,000 PKR',
+  description: 'Comprehensive stock analysis and inventory reporting',
+  fullDescription: 'Detailed stock reporting service that provides comprehensive analysis of your inventory including stock valuation, movement analysis, and optimization recommendations. Our reports help identify slow-moving items, optimize stock levels, and improve cash flow management.',
+  image: '/images/stock-report.jpg',
+  category: 'Business Analytics',
+  duration: '2-5 working days',
+  requirements: [
+    'Sale and purchase data',
+    'Current inventory records',
+    'Product/item master list',
+    'Previous stock reports (if available)',
+    'Pricing information'
+  ],
+  process: [
+    'Data collection and validation',
+    'Inventory analysis and categorization',
+    'Stock movement tracking',
+    'Valuation and costing analysis',
+    'Report generation with insights',
+    'Optimization recommendations'
+  ],
+  benefits: [
+    'Accurate stock valuation',
+    'Inventory optimization insights',
+    'Cash flow improvement',
+    'Slow-moving stock identification',
+    'Cost analysis and control',
+    'Strategic inventory planning'
+  ]
+}
 };
 
 
