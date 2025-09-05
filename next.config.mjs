@@ -34,6 +34,30 @@ const nextConfig = {
     ];
   },
 
+  // Force redirects to preferred domain (www + https)
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "akbartaxstore.com" }],
+        destination: "https://www.akbartaxstore.com/:path*",
+        permanent: true,
+      },
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "http://akbartaxstore.com" }],
+        destination: "https://www.akbartaxstore.com/:path*",
+        permanent: true,
+      },
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "http://www.akbartaxstore.com" }],
+        destination: "https://www.akbartaxstore.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
+
   trailingSlash: false,
 };
 
