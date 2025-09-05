@@ -20,17 +20,16 @@ const BookMeetingPage = () => {
   const [meetingLink, setMeetingLink] = useState('');
   const [eventId, setEventId] = useState('');
 
-  // Available time slots
+  // Available time slots with 1.5-hour intervals
   const timeSlots = [
-  '01:00 PM',
-  '02:30 PM',
-  '04:00 PM',
-  '05:30 PM',
-  '07:00 PM',
-  '08:30 PM',
-  '10:00 PM'
-];
-
+    '01:00 PM',
+    '02:30 PM',
+    '04:00 PM',
+    '05:30 PM',
+    '07:00 PM',
+    '08:30 PM',
+    '10:00 PM'
+  ];
 
   // Service types with descriptions
   const serviceTypes = [
@@ -40,7 +39,7 @@ const BookMeetingPage = () => {
     { name: 'IRS Problem Resolution', price: 'From PKR 3000', popular: false },
     { name: 'Bookkeeping Services', price: 'From PKR 7000/month', popular: false },
     { name: 'Payroll Services', price: 'Custom Quote', popular: false },
-    { name: 'General Consultation', price: 'Free 15min', popular: true }
+    { name: 'General Consultation', price: 'Free 45min', popular: true }
   ];
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -150,7 +149,6 @@ const BookMeetingPage = () => {
     
     // Not available on sunday
     if (date.getDay() === 0) return false;
-
     
     return true;
   };
@@ -240,12 +238,12 @@ const BookMeetingPage = () => {
       const time24h = convertTo24Hour(selectedTime);
       const [hours, minutes] = time24h.split(':').map(Number);
       
-      // Create start and end times
+      // Create start and end times (1.5 hours duration)
       const startTime = new Date(appointmentDate);
       startTime.setHours(hours, minutes, 0, 0);
       
       const endTime = new Date(startTime);
-      endTime.setHours(startTime.getHours() + 1);
+      endTime.setHours(startTime.getHours() + 1, startTime.getMinutes() + 30); // 1.5 hours
       
       // Prepare event data
       const eventData = {
@@ -342,6 +340,9 @@ const BookMeetingPage = () => {
             <p className="text-gray-600 mb-2">
               Client: {formData.firstName} {formData.lastName}
             </p>
+            <p className="text-sm text-gray-500 mb-2">
+              Duration: 1.5 hours
+            </p>
             {eventId && (
               <p className="text-sm text-gray-500 mb-2">
                 Event ID: {eventId}
@@ -381,7 +382,7 @@ const BookMeetingPage = () => {
         <div className="max-w-6xl mx-auto px-4 py-12">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Akbar Tax Store</h1>
-            <p className="text-xl text-blue-100 mb-6">Schedule Your Professional Tax Consultation</p>
+            <p className="text-xl text-blue-100 mb-6">Schedule Your Professional Tax Consultation (1.5 Hours)</p>
             <div className="flex items-center justify-center space-x-8 text-sm">
               <div className="flex items-center">
                 <Star className="w-5 h-5 mr-2 text-yellow-400" />
@@ -393,14 +394,14 @@ const BookMeetingPage = () => {
               </div>
               <div className="flex items-center">
                 <Clock className="w-5 h-5 mr-2" />
-                <span>Same Day Service</span>
+                <span>1.5 Hour Sessions</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-12">
+      <div className="w-full mx-auto px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
           {/* Left Column - Services */}
@@ -550,7 +551,7 @@ const BookMeetingPage = () => {
               <div className="mb-8">
                 <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
                   <Clock className="w-6 h-6 mr-3 text-blue-600" />
-                  Select Time
+                  Select Time (1.5 Hour Sessions)
                   {selectedDate && bookedSlots[selectedDate] && bookedSlots[selectedDate].length > 0 && (
                     <span className="ml-2 text-sm text-orange-600 font-normal">
                       ({bookedSlots[selectedDate].length} slots unavailable)
@@ -687,7 +688,7 @@ const BookMeetingPage = () => {
                       <p><span className="font-medium">Date:</span> {formatDateLong(selectedDate)}</p>
                     )}
                     {selectedTime && (
-                      <p><span className="font-medium">Time:</span> {selectedTime}</p>
+                      <p><span className="font-medium">Time:</span> {selectedTime} (1.5 hours)</p>
                     )}
                     {formData.firstName && formData.lastName && (
                       <p><span className="font-medium">Client:</span> {formData.firstName} {formData.lastName}</p>

@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SmoothScrolling from "./components/SmoothScrolling";
 import "./globals.css";
+import PageLoading from "./components/PageLoading";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -266,6 +267,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="bg-white text-black">
+        <PageLoading/>
         <SmoothScrolling />
         <Navbar />
         <main className="pt-16 md:pt-24 lg:pt-20">{children}</main>

@@ -1,11 +1,23 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
 
-  // Image Optimization (add domains if needed)
+  // New recommended way for external images
   images: {
-    domains: ["https://www.akbartaxstore.com", "akbartaxstore.com", 'images.unsplash.com'], 
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "www.akbartaxstore.com",
+      },
+      {
+        protocol: "https",
+        hostname: "akbartaxstore.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
   },
 
   // SEO Headers for Sitemap & Robots.txt
@@ -22,7 +34,6 @@ const nextConfig = {
     ];
   },
 
-  // Remove trailing slashes in URLs
   trailingSlash: false,
 };
 

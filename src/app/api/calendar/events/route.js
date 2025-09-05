@@ -36,7 +36,7 @@ export async function POST(request) {
 
     const calendar = google.calendar({ version: 'v3', auth });
 
-    // Simplified event without conference data
+    // Create event with proper 1.5-hour duration
     const event = {
       summary: title,
       description: description || '',
@@ -60,7 +60,7 @@ export async function POST(request) {
       resource: event
     });
 
-    // Generate a shareable calendar link - using htmlLink from Google Calendar API
+    // Generate a shareable calendar link
     const eventLink = response.data.htmlLink || 
       `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${new Date(startTime).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}//${new Date(endTime).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}&details=${encodeURIComponent(description || '')}&location=${encodeURIComponent(location || '')}`;
 
@@ -73,6 +73,24 @@ export async function POST(request) {
         pass: process.env.MAILTRAP_PASS
       }
     });
+
+    // Format start and end times for email display
+    const startDateTime = new Date(startTime);
+    const endDateTime = new Date(endTime);
+    const appointmentTimeString = `${startDateTime.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })} at ${startDateTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    })} - ${endDateTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    })} (1.5 hours)`;
 
     // Email to customer (confirmation)
     const customerMailOptions = {
@@ -118,9 +136,10 @@ export async function POST(request) {
             <!-- Appointment Details -->
             <div class="appointment-details" style="background-color: #D9E8FF; padding: 20px; border-radius: 8px; margin: 24px 0; border-left: 4px solid #0040A8;">
               <h3 style="color: #072971; margin: 0 0 16px 0; font-size: 18px;">Appointment Details</h3>
-              <p style="margin: 8px 0; font-size: 15px; color: #050505;"><strong>Date & Time:</strong> ${new Date(startTime).toLocaleString()}</p>
+              <p style="margin: 8px 0; font-size: 15px; color: #050505;"><strong>Date & Time:</strong> ${appointmentTimeString}</p>
               <p style="margin: 8px 0; font-size: 15px; color: #050505;"><strong>Service:</strong> ${serviceType}</p>
               <p style="margin: 8px 0; font-size: 15px; color: #050505;"><strong>Phone:</strong> ${phone}</p>
+              <p style="margin: 8px 0; font-size: 15px; color: #050505;"><strong>Duration:</strong> 1.5 hours</p>
             </div>
 
             <p style="font-size: 16px; color: #050505; margin: 24px 0 16px 0; text-align: center;">Add this event to your calendar:</p>
@@ -189,7 +208,7 @@ export async function POST(request) {
 
     Hello ${firstName} ${lastName},
 
-    Your ${serviceType} appointment has been scheduled for ${new Date(startTime).toLocaleString()}.
+    Your ${serviceType} appointment has been scheduled for ${appointmentTimeString}.
     We'll shortly send you the meeting link.
 
     Add to your calendar: ${eventLink}
@@ -254,8 +273,8 @@ export async function POST(request) {
                                       padding: 20px; border-radius: 8px; margin: 24px 0; border-left: 4px solid #072971;">
               <h3 style="color: #072971; margin: 0 0 16px 0; font-size: 18px;">📅 Appointment Details</h3>
               <p style="margin: 8px 0; font-size: 15px; color: #050505;"><strong>Service:</strong> ${serviceType}</p>
-              <p style="margin: 8px 0; font-size: 15px; color: #050505;"><strong>Date & Time:</strong> ${new Date(startTime).toLocaleString()}</p>
-              <p style="margin: 8px 0; font-size: 15px; color: #050505;"><strong>Duration:</strong> ${new Date(startTime).toLocaleString()} - ${new Date(endTime).toLocaleString()}</p>
+              <p style="margin: 8px 0; font-size: 15px; color: #050505;"><strong>Date & Time:</strong> ${appointmentTimeString}</p>
+              <p style="margin: 8px 0; font-size: 15px; color: #050505;"><strong>Duration:</strong> 1.5 hours</p>
               ${location ? `<p style="margin: 8px 0; font-size: 15px; color: #050505;"><strong>Location:</strong> ${location}</p>` : ''}
               ${description ? `<p style="margin: 8px 0; font-size: 15px; color: #050505;"><strong>Description:</strong> ${description}</p>` : ''}
             </div>
@@ -295,7 +314,8 @@ export async function POST(request) {
     Phone: ${phone}
     
     Service: ${serviceType}
-    Date & Time: ${new Date(startTime).toLocaleString()}
+    Date & Time: ${appointmentTimeString}
+    Duration: 1.5 hours
     
     View in calendar: ${eventLink}
     

@@ -1,3 +1,4 @@
+// app/api/calendar/bookings/route.js
 import { google } from 'googleapis';
 import { NextResponse } from 'next/server';
 
@@ -35,31 +36,60 @@ export async function GET(request) {
 
     const events = response.data.items || [];
     
+    // Define available time slots (matching frontend)
+    const availableSlots = [
+      { slot: '01:00 PM', startHour: 13, startMinute: 0 },
+      { slot: '02:30 PM', startHour: 14, startMinute: 30 },
+      { slot: '04:00 PM', startHour: 16, startMinute: 0 },
+      { slot: '05:30 PM', startHour: 17, startMinute: 30 },
+      { slot: '07:00 PM', startHour: 19, startMinute: 0 },
+      { slot: '08:30 PM', startHour: 20, startMinute: 30 },
+      { slot: '10:00 PM', startHour: 22, startMinute: 0 }
+    ];
+    
     // Process events to extract booked slots
     const bookedSlots = {};
     
     events.forEach(event => {
-      if (event.start && event.start.dateTime) {
-        const startTime = new Date(event.start.dateTime);
-        const dateString = startTime.toISOString().split('T')[0]; // YYYY-MM-DD format
+      if (event.start && event.start.dateTime && event.end && event.end.dateTime) {
+        const eventStart = new Date(event.start.dateTime);
+        const eventEnd = new Date(event.end.dateTime);
         
-        // Convert to 12-hour format
-        const hours = startTime.getHours();
-        const minutes = startTime.getMinutes();
-        const period = hours >= 12 ? 'PM' : 'AM';
-        const displayHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
-        const timeString = `${displayHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${period}`;
+        // Get the date in YYYY-MM-DD format
+        const dateString = eventStart.toISOString().split('T')[0];
         
         if (!bookedSlots[dateString]) {
           bookedSlots[dateString] = [];
         }
-        bookedSlots[dateString].push(timeString);
+
+        // Check which of our available slots conflict with this event
+        availableSlots.forEach(slotInfo => {
+          // Create the slot's time range
+          const slotStart = new Date(eventStart);
+          slotStart.setHours(slotInfo.startHour, slotInfo.startMinute, 0, 0);
+          
+          const slotEnd = new Date(slotStart);
+          slotEnd.setHours(slotStart.getHours() + 1, slotStart.getMinutes() + 30); // 1.5 hours
+          
+          // Check if the event overlaps with this slot
+          // Events overlap if: eventStart < slotEnd AND eventEnd > slotStart
+          if (eventStart < slotEnd && eventEnd > slotStart) {
+            // This slot conflicts with the event, mark it as booked
+            if (!bookedSlots[dateString].includes(slotInfo.slot)) {
+              bookedSlots[dateString].push(slotInfo.slot);
+            }
+          }
+        });
       }
     });
 
     return NextResponse.json({
       success: true,
-      bookedSlots
+      bookedSlots,
+      debug: {
+        eventsProcessed: events.length,
+        dateRange: `${startDate} to ${endDate}`
+      }
     });
 
   } catch (error) {
@@ -67,7 +97,10 @@ export async function GET(request) {
     return NextResponse.json(
       {
         error: 'Failed to fetch bookings',
-        details: error.message
+        details: error.message,
+        ...(process.env.NODE_ENV === 'development' && {
+          stack: error.stack
+        })
       },
       { status: 500 }
     );

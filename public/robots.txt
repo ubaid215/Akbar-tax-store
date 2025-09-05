@@ -1,27 +1,23 @@
+# Allow all crawlers to access public content
 User-agent: *
 Allow: /
+
+# Block only private or unnecessary routes
 Disallow: /api/
-Disallow: /_next/
 Disallow: /admin/
 
-# Major Search Engines - No crawl delay
+# Specific rules for major bots (optional, but clean)
 User-agent: Googlebot
 Allow: /
-Disallow: /api/
 
 User-agent: Bingbot
 Allow: /
-Disallow: /api/
 
 User-agent: facebookexternalhit
 Allow: /
 
 User-agent: Twitterbot
 Allow: /
-
-# General crawl delay for other bots
-User-agent: *
-Crawl-delay: 5
 
 # Sitemap location
 Sitemap: https://www.akbartaxstore.com/sitemap.xml

@@ -6,14 +6,20 @@ import Image from 'next/image';
 const ServicesFeePage = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isOpening, setIsOpening] = useState(false);
 
   const openModal = (service) => {
     setSelectedService(service);
-    setIsAnimating(true);
+    setIsOpening(true);
+    // Small delay to ensure state updates before starting animation
+    setTimeout(() => {
+      setIsAnimating(true);
+    }, 10);
   };
 
   const closeModal = () => {
     setIsAnimating(false);
+    setIsOpening(false);
     // Wait for animation to complete before hiding modal
     setTimeout(() => {
       setSelectedService(null);
@@ -534,12 +540,14 @@ const ServicesFeePage = () => {
       {selectedService && (
         <div 
           className={`fixed inset-0 z-50 transition-all duration-300 ease-out ${
-            isAnimating ? 'opacity-100' : 'opacity-0'
+            isOpening ? 'opacity-100' : 'opacity-0'
           }`}
         >
           {/* Backdrop */}
           <div 
-            className="absolute inset-0 bg-black/60 backdrop-blur-md"
+            className={`absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-300 ${
+              isAnimating ? 'opacity-100' : 'opacity-0'
+            }`}
             onClick={closeModal}
           ></div>
           
@@ -548,37 +556,28 @@ const ServicesFeePage = () => {
             <div 
               className={`bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl transform transition-all duration-300 ease-out ${
                 isAnimating 
-                  ? 'scale-100 rotate-0' 
-                  : 'scale-50 rotate-12'
+                  ? 'scale-100 opacity-100' 
+                  : 'scale-75 opacity-0'
               }`}
             >
-              {/* Modal Header with Image */}
-              <div className="relative h-64 overflow-hidden">
-                <Image
-                  src={selectedService.image}
-                  alt={selectedService.name}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+              {/* Modal Header - Removed image for cleaner UI */}
+              <div className="bg-gradient-to-r from-[#072971] to-[#0040A8] p-6 text-white relative">
                 <button
                   onClick={closeModal}
-                  className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-gray-700 hover:text-gray-900 transition-all duration-200 p-2 rounded-full hover:bg-white hover:rotate-90"
+                  className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-all duration-200 p-2 rounded-full"
                 >
                   <X className="w-6 h-6" />
                 </button>
-                <div className="absolute bottom-6 left-6 text-white">
-                  <h3 className="text-3xl font-bold mb-2">{selectedService.name}</h3>
-                  <p className="text-2xl font-semibold bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full inline-block">
+                <div className="pr-10">
+                  <h3 className="text-2xl font-bold mb-2">{selectedService.name}</h3>
+                  <p className="text-xl font-semibold bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full inline-block">
                     {selectedService.fee}
                   </p>
                 </div>
               </div>
 
               {/* Modal Content */}
-              <div className="p-6 max-h-[calc(90vh-16rem)] overflow-y-auto">
+              <div className="p-6 overflow-y-auto" style={{ maxHeight: 'calc(90vh - 10rem)' }}>
                 {/* Description */}
                 <div className="mb-6">
                   <p className="text-gray-700 text-lg">{selectedService.description}</p>
