@@ -1,4 +1,4 @@
-// app/layout.jsx (Server Component) - SEO Optimized
+// app/layout.jsx (Server Component) - SEO Optimized with Environment Support
 import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -14,6 +14,17 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+// Get the base URL based on environment
+const getBaseUrl = () => {
+  if (process.env.NODE_ENV === 'development') {
+    return 'http://localhost:3000';
+  }
+  // Always use www version as canonical
+  return 'https://www.akbartaxstore.com';
+};
+
+const baseUrl = getBaseUrl();
 
 export const metadata = {
   title: "Akbar Tax Store | Income Tax Filing, NTN Registration & SECP Company Registration Pakistan",
@@ -62,11 +73,11 @@ export const metadata = {
     title: "Akbar Tax Store | Expert Tax Filing & Business Registration Services Pakistan",
     description:
       "Leading tax consultant in Faisalabad offering income tax filing, NTN registration, SECP company registration & business services. Trusted by 1000+ clients.",
-    url: "https://www.akbartaxstore.com",
+    url: baseUrl,
     siteName: "Akbar Tax Store",
     images: [
       {
-        url: "https://www.akbartaxstore.com/images/og-image.jpg",
+        url: `${baseUrl}/images/og-image.jpg`,
         width: 1200,
         height: 630,
         alt: "Akbar Tax Store - Tax Filing & Business Registration Services Pakistan",
@@ -81,16 +92,16 @@ export const metadata = {
     title: "Akbar Tax Store | Tax Filing & Business Registration Pakistan",
     description:
       "Expert tax consultant in Lahore. Income tax filing, NTN registration, SECP company registration & business services.",
-    images: ["https://www.akbartaxstore.com/images/og-image.jpg"],
+    images: [`${baseUrl}/images/og-image.jpg`],
   },
   
-  // Additional SEO metadata
+  // Additional SEO metadata - Environment aware
   alternates: {
-    canonical: "https://www.akbartaxstore.com",
+    canonical: baseUrl,
   },
   
   other: {
-    "google-site-verification": "your-google-verification-code",
+    "google-site-verification": "your-google-verification-code", // Replace with actual code
     "geo.region": "PK-PB",
     "geo.placename": "Lahore",
     "geo.position": "31.5204;74.3587",
@@ -99,19 +110,19 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  // Structured Data for Local Business
+  // Structured Data for Local Business - Environment aware
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": "https://www.akbartaxstore.com/#business",
+    "@id": `${baseUrl}/#business`,
     name: "Akbar Tax Store",
     alternateName: "Akbar Tax Store Pakistan",
     description: "Professional tax filing, NTN registration, and business registration services in Pakistan",
     image: [
-      "https://www.akbartaxstore.com/logo.png",
-      "https://www.akbartaxstore.com/images/office.jpg"
+      `${baseUrl}/logo.png`,
+      `${baseUrl}/images/office.jpg`
     ],
-    url: "https://www.akbartaxstore.com",
+    url: baseUrl,
     telephone: "+92-301-6832064",
     priceRange: "$$",
     
@@ -141,8 +152,8 @@ export default function RootLayout({ children }) {
     
     sameAs: [
       "https://www.instagram.com/_akbar_tax_store",
-      "https://www.facebook.com/akbartaxstore", // Add if you have Facebook
-      "https://www.linkedin.com/company/akbartaxstore", // Add if you have LinkedIn
+      "https://www.facebook.com/akbartaxstore",
+      "https://www.linkedin.com/company/akbartaxstore",
     ],
     
     // Services offered
@@ -185,7 +196,7 @@ export default function RootLayout({ children }) {
       ]
     },
     
-    // Reviews (add real reviews if available)
+    // Reviews
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: "4.8",
@@ -249,8 +260,8 @@ export default function RootLayout({ children }) {
               "@context": "https://schema.org",
               "@type": "Organization",
               name: "Akbar Tax Store",
-              url: "https://www.akbartaxstore.com",
-              logo: "https://www.akbartaxstore.com/logo.png",
+              url: baseUrl,
+              logo: `${baseUrl}/logo.png`,
               sameAs: [
                 "https://www.instagram.com/_akbar_tax_store"
               ],

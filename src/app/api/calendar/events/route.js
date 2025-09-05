@@ -350,4 +350,85 @@ export async function POST(request) {
       { status: 500 }
     );
   }
+};
+
+// app/api/calendar/events/route.js (GET method)
+export async function GET(request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const range = searchParams.get('range'); // 'upcoming', 'past', or 'all'
+    
+    let timeMin, timeMax;
+    const now = new Date();
+    
+    // Set time ranges based on the requested filter
+    switch (range) {
+      case 'past':
+        // For past events: from 2 years ago until now
+        timeMax = now.toISOString();
+        const twoYearsAgo = new Date();
+        twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
+        timeMin = twoYearsAgo.toISOString();
+        break;
+        
+      case 'upcoming':
+        // For upcoming events: from now until 1 year from now
+        timeMin = now.toISOString();
+        const oneYearLater = new Date();
+        oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+        timeMax = oneYearLater.toISOString();
+        break;
+        
+      default:
+        // For all events: from 2 years ago until 1 year from now
+        const pastDate = new Date();
+        pastDate.setFullYear(pastDate.getFullYear() - 2);
+        timeMin = pastDate.toISOString();
+        
+        const futureDate = new Date();
+        futureDate.setFullYear(futureDate.getFullYear() + 1);
+        timeMax = futureDate.toISOString();
+        break;
+    }
+    
+    const calendar = google.calendar({ version: 'v3', auth });
+    
+    const response = await calendar.events.list({
+      calendarId: 'primary',
+      timeMin,
+      timeMax,
+      singleEvents: true,
+      orderBy: 'startTime',
+      maxResults: 100
+    });
+
+    const events = response.data.items.map(event => ({
+      id: event.id,
+      title: event.summary,
+      description: event.description,
+      startTime: event.start.dateTime || event.start.date,
+      endTime: event.end.dateTime || event.end.date,
+      status: event.status,
+      hangoutLink: event.hangoutLink,
+      createdAt: event.created,
+      location: event.location
+    }));
+
+    return NextResponse.json({ 
+      success: true, 
+      events,
+      debug: {
+        timeMin,
+        timeMax,
+        range,
+        eventsCount: events.length
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch events', details: error.message },
+      { status: 500 }
+    );
+  }
 }
