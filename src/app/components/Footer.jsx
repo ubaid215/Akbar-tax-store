@@ -151,7 +151,7 @@ const Footer = () => {
                   style={{ color: "#0040A8" }}
                 />
                 <span className="text-sm" style={{ color: "#D9E8FF" }}>
-                  Lahore, Punjab, Pakistan
+                  Faisalabad, Punjab, Pakistan
                 </span>
               </div>
               <div className="flex items-center gap-3">
@@ -203,7 +203,7 @@ const Footer = () => {
 
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
               <p className="text-sm" style={{ color: "#D9E8FF" }}>
-                Built with ❤️ by{" "}
+                Website Develop By{" "}
                 <span className="font-semibold text-white hover:text-cyan-600 hover:underline transition duration-200 cursor-pointer">
                   Muhammad Ubaidullah
                 </span>

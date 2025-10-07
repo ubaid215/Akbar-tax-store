@@ -49,7 +49,7 @@ export default function ContactPage() {
           subject: '',
           message: ''
         });
-        
+
         // Reset success message after 5 seconds
         setTimeout(() => {
           setSubmitSuccess(false);
@@ -237,7 +237,7 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                
+
 
                 <div className="flex items-start">
                   <div className="bg-[#D9E8FF] p-3 rounded-full mr-4">
@@ -263,8 +263,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-semibold text-[#050505]">Office Address</h3>
                     <p className="text-[#072971] mt-1">
-                      348 E5 Street, Topaz Block, Park View City Multan Road<br />
-                      Lahore, Pakistan
+                      P 82/3 ALFAYYAZ Colony, Street No 4 Satiana Road<br />
+                      Faisalabad, Pakistan
                     </p>
                   </div>
                 </div>
@@ -311,15 +311,8 @@ export default function ContactPage() {
         <div className="container mx-auto px-6">
           <h2 className="text-2xl font-bold mb-8 text-center text-[#072971]">Our Location</h2>
           <div className="rounded-xl overflow-hidden shadow-lg h-96">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6806.97835592733!2d74.19284428525114!3d31.455727071553984!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3918fe09dc680cc3%3A0x8e2840321cfd7c25!2sPark%20View%20City%20Lahore%20Topaz%20Block%20Park%20View%2C%20Lahore%2C%20Pakistan!5e0!3m2!1sen!2sus!4v1754331384731!5m2!1sen!2sus"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen=""
-              loading="lazy"
-              title="Google Maps Location"
-            ></iframe>
+
+            <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3405.6410765008327!2d73.10933427560663!3d31.396458874270884!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzHCsDIzJzQ3LjMiTiA3M8KwMDYnNDIuOSJF!5e0!3m2!1sen!2s!4v1759854773798!5m2!1sen!2s" width="100%" height="100%" style={{ border: 0 }} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Google Maps Location"></iframe>
           </div>
         </div>
       </div>

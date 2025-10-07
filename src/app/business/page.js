@@ -82,7 +82,7 @@ const businessServices = [
   {
     id: 'company-reg',
     title: 'Company Registration (SECP)',
-    price: '25,000',
+    price: '40,000',
     description: 'Private limited company registration',
     image: '/images/company-registration.jpg',
     category: 'Registration',
@@ -98,7 +98,7 @@ const businessServices = [
   {
     id: 'firm-reg',
     title: 'Firm Registration',
-    price: '25,000',
+    price: '40,000',
     description: 'Business Firm registration',
     image: '/images/firm-registration.jpg',
     category: 'Registration',

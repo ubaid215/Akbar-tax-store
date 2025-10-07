@@ -240,7 +240,7 @@ const ServicesFeePage = () => {
         {
           id: 'company-reg',
           name: 'Company Registration (SECP)',
-          fee: '25,000 PKR',
+          fee: '40,000 PKR',
           description: 'Private limited company registration',
           image: '/images/company-registration.jpg',
           requirements: [
@@ -255,7 +255,7 @@ const ServicesFeePage = () => {
         {
           id: 'firm-reg',
           name: 'Firm Registration',
-          fee: '25,000 PKR',
+          fee: '40,000 PKR',
           description: 'Business Firm registration',
           image: '/images/firm-registration.jpg',
           requirements: [

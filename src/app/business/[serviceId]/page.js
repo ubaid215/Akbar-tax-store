@@ -178,7 +178,7 @@ const businessServiceDatabase = {
 
   'company-reg': {
     title: 'Company Registration (SECP)',
-    price: '25,000 PKR',
+    price: '40,000 PKR',
     description: 'Register your private limited company with Securities and Exchange Commission',
     fullDescription: 'Our comprehensive company registration package includes name reservation, document preparation, SECP submission, and post-registration services. We handle everything from Articles of Association to NTN registration after incorporation.',
     image: '/images/secp-registration.jpg',
@@ -221,7 +221,7 @@ const businessServiceDatabase = {
 
   'firm-reg': {
     title: 'Firm Registration',
-    price: '25,000 PKR',
+    price: '40,000 PKR',
     description: 'Register your partnership firm with Registrar of Firms',
     fullDescription: 'Establish your partnership as a legal entity with our firm registration service. We handle partnership deed drafting, notarization, and submission to the Registrar of Firms. Includes post-registration NTN and business bank account assistance.',
     image: '/images/firm-registration.jpg',
