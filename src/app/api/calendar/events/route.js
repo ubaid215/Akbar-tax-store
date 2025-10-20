@@ -23,7 +23,8 @@ export async function POST(request) {
       firstName,
       lastName,
       phone,
-      serviceType
+      serviceType,
+      timezone
     } = await request.json();
 
     // Validate required fields
@@ -36,18 +37,21 @@ export async function POST(request) {
 
     const calendar = google.calendar({ version: 'v3', auth });
 
-    // Create event with proper 1.5-hour duration
+    // FIXED: Use the timezone from the client or default to Asia/Karachi
+    const clientTimezone = timezone || 'Asia/Karachi';
+
+    // Create event with proper timezone handling
     const event = {
       summary: title,
       description: description || '',
       location: location || '',
       start: {
-        dateTime: new Date(startTime).toISOString(),
-        timeZone: 'UTC'
+        dateTime: startTime, // Already in ISO format from client
+        timeZone: clientTimezone
       },
       end: {
-        dateTime: new Date(endTime).toISOString(),
-        timeZone: 'UTC'
+        dateTime: endTime, // Already in ISO format from client
+        timeZone: clientTimezone
       },
       reminders: {
         useDefault: true
@@ -62,7 +66,7 @@ export async function POST(request) {
 
     // Generate a shareable calendar link
     const eventLink = response.data.htmlLink || 
-      `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${new Date(startTime).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}//${new Date(endTime).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}&details=${encodeURIComponent(description || '')}&location=${encodeURIComponent(location || '')}`;
+      `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${new Date(startTime).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}/${new Date(endTime).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}&details=${encodeURIComponent(description || '')}&location=${encodeURIComponent(location || '')}`;
 
     // Configure Mailtrap transporter
     const transporter = nodemailer.createTransport({
@@ -74,22 +78,27 @@ export async function POST(request) {
       }
     });
 
-    // Format start and end times for email display
+    // FIXED: Format times using the client's timezone
     const startDateTime = new Date(startTime);
     const endDateTime = new Date(endTime);
+    
+    // Format with proper timezone consideration
     const appointmentTimeString = `${startDateTime.toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
+      timeZone: clientTimezone
     })} at ${startDateTime.toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: '2-digit',
-      hour12: true
+      hour12: true,
+      timeZone: clientTimezone
     })} - ${endDateTime.toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: '2-digit',
-      hour12: true
+      hour12: true,
+      timeZone: clientTimezone
     })} (1.5 hours)`;
 
     // Email to customer (confirmation)
@@ -218,8 +227,8 @@ export async function POST(request) {
     ---
     Akbar Tax Store
     Your Trusted Partner in Tax Filing & Business Services
-    Email: info@akbartaxstore.com
-    Phone: +1 (555) 123-4567
+    Email: hussnain@akbartaxstore.com
+    Phone: +923016832064
     Website: www.akbartaxstore.com
   `
     };
@@ -276,7 +285,7 @@ export async function POST(request) {
               <p style="margin: 8px 0; font-size: 15px; color: #050505;"><strong>Date & Time:</strong> ${appointmentTimeString}</p>
               <p style="margin: 8px 0; font-size: 15px; color: #050505;"><strong>Duration:</strong> 1.5 hours</p>
               ${location ? `<p style="margin: 8px 0; font-size: 15px; color: #050505;"><strong>Location:</strong> ${location}</p>` : ''}
-              ${description ? `<p style="margin: 8px 0; font-size: 15px; color: #050505;"><strong>Description:</strong> ${description}</p>` : ''}
+              ${description ? `<p style="margin: 8px 0; font-size: 15px; color: #050505;"><strong>Notes:</strong> ${description.replace(/\n/g, '<br>')}</p>` : ''}
             </div>
 
             <!-- CTA Button -->
@@ -291,7 +300,7 @@ export async function POST(request) {
 
             <div style="background-color: rgba(5, 5, 5, 0.05); padding: 16px; border-radius: 6px; margin: 24px 0;">
               <p style="margin: 0; font-size: 14px; color: #050505;"><strong>Event ID:</strong> ${response.data.id}</p>
-              <p style="margin: 8px 0 0 0; font-size: 12px; color: rgba(5, 5, 5, 0.7);">Generated on ${new Date().toLocaleString()}</p>
+              <p style="margin: 8px 0 0 0; font-size: 12px; color: rgba(5, 5, 5, 0.7);">Generated on ${new Date().toLocaleString('en-US', { timeZone: clientTimezone })}</p>
             </div>
           </div>
 
@@ -320,7 +329,7 @@ export async function POST(request) {
     View in calendar: ${eventLink}
     
     Event ID: ${response.data.id}
-    Generated on ${new Date().toLocaleString()}
+    Generated on ${new Date().toLocaleString('en-US', { timeZone: clientTimezone })}
   `
     };
 
@@ -350,21 +359,19 @@ export async function POST(request) {
       { status: 500 }
     );
   }
-};
+}
 
-// app/api/calendar/events/route.js (GET method)
+// GET method for fetching events (unchanged)
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    const range = searchParams.get('range'); // 'upcoming', 'past', or 'all'
+    const range = searchParams.get('range');
     
     let timeMin, timeMax;
     const now = new Date();
     
-    // Set time ranges based on the requested filter
     switch (range) {
       case 'past':
-        // For past events: from 2 years ago until now
         timeMax = now.toISOString();
         const twoYearsAgo = new Date();
         twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
@@ -372,7 +379,6 @@ export async function GET(request) {
         break;
         
       case 'upcoming':
-        // For upcoming events: from now until 1 year from now
         timeMin = now.toISOString();
         const oneYearLater = new Date();
         oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
@@ -380,7 +386,6 @@ export async function GET(request) {
         break;
         
       default:
-        // For all events: from 2 years ago until 1 year from now
         const pastDate = new Date();
         pastDate.setFullYear(pastDate.getFullYear() - 2);
         timeMin = pastDate.toISOString();

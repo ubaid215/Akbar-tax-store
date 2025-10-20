@@ -6,7 +6,7 @@ import { Calendar, Clock, User, Mail, Phone, MessageSquare, CheckCircle, MapPin,
 const BookMeetingPage = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
-  const [bookedSlots, setBookedSlots] = useState({}); // Store booked slots by date
+  const [bookedSlots, setBookedSlots] = useState({});
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -20,7 +20,6 @@ const BookMeetingPage = () => {
   const [meetingLink, setMeetingLink] = useState('');
   const [eventId, setEventId] = useState('');
 
-  // Available time slots with 1.5-hour intervals
   const timeSlots = [
     '01:00 PM',
     '02:30 PM',
@@ -31,7 +30,6 @@ const BookMeetingPage = () => {
     '10:00 PM'
   ];
 
-  // Service types with descriptions
   const serviceTypes = [
     { name: 'Individual Tax Preparation', price: 'From PKR 4000', popular: true },
     { name: 'Business Tax Preperation', price: 'From PKR 7000', popular: true },
@@ -44,32 +42,19 @@ const BookMeetingPage = () => {
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  // Load booked slots from localStorage on component mount
-  useEffect(() => {
-    const savedBookedSlots = localStorage.getItem('bookedSlots');
-    if (savedBookedSlots) {
-      setBookedSlots(JSON.parse(savedBookedSlots));
-    }
-  }, []);
-
   // Fetch existing bookings from server to sync with Google Calendar
   useEffect(() => {
     const fetchBookings = async () => {
       try {
         const startDate = new Date();
         const endDate = new Date();
-        endDate.setMonth(endDate.getMonth() + 3); // Fetch 3 months ahead
+        endDate.setMonth(endDate.getMonth() + 3);
         
         const response = await fetch(`/api/calendar/bookings?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`);
         const data = await response.json();
         
         if (data.success) {
-          // Merge server bookings with local storage
-          const localBookings = JSON.parse(localStorage.getItem('bookedSlots') || '{}');
-          const mergedBookings = { ...localBookings, ...data.bookedSlots };
-          
-          setBookedSlots(mergedBookings);
-          localStorage.setItem('bookedSlots', JSON.stringify(mergedBookings));
+          setBookedSlots(data.bookedSlots || {});
         }
       } catch (error) {
         console.error('Error fetching bookings:', error);
@@ -79,7 +64,7 @@ const BookMeetingPage = () => {
     fetchBookings();
   }, []);
 
-  // Helper function to format date consistently (fixes timezone issues)
+  // Helper function to format date consistently
   const formatDateForStorage = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -87,23 +72,24 @@ const BookMeetingPage = () => {
     return `${year}-${month}-${day}`;
   };
 
-  // Helper function to parse stored date back to Date object
   const parseDateFromStorage = (dateString) => {
     const [year, month, day] = dateString.split('-').map(Number);
     return new Date(year, month - 1, day);
   };
 
-  // Convert 12-hour time to 24-hour format for API
+  // FIXED: Convert 12-hour time to 24-hour format
   const convertTo24Hour = (time12h) => {
     const [time, modifier] = time12h.split(' ');
     let [hours, minutes] = time.split(':');
-    if (hours === '12') {
-      hours = '00';
+    hours = parseInt(hours, 10);
+    
+    if (modifier === 'PM' && hours !== 12) {
+      hours = hours + 12;
+    } else if (modifier === 'AM' && hours === 12) {
+      hours = 0;
     }
-    if (modifier === 'PM') {
-      hours = parseInt(hours, 10) + 12;
-    }
-    return `${String(hours).padStart(2, '0')}:${minutes}`;
+    
+    return { hours, minutes: parseInt(minutes, 10) };
   };
 
   // Generate calendar days for current month view
@@ -111,16 +97,12 @@ const BookMeetingPage = () => {
     const year = currentMonth.getFullYear();
     const month = currentMonth.getMonth();
     
-    // First day of the month
     const firstDay = new Date(year, month, 1);
-    // Last day of the month
     const lastDay = new Date(year, month + 1, 0);
     
-    // Start from the first day of the week that contains the first day of the month
     const startDate = new Date(firstDay);
     startDate.setDate(startDate.getDate() - firstDay.getDay());
     
-    // End at the last day of the week that contains the last day of the month
     const endDate = new Date(lastDay);
     endDate.setDate(endDate.getDate() + (6 - lastDay.getDay()));
     
@@ -137,7 +119,6 @@ const BookMeetingPage = () => {
 
   const calendarDays = generateCalendarDays();
 
-  // Check if a date is available (not weekend, not past, not today)
   const isDateAvailable = (date) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -146,26 +127,21 @@ const BookMeetingPage = () => {
     checkDate.setHours(0, 0, 0, 0);
     
     if (checkDate < today) return false;
-    
-    // Not available on sunday
     if (date.getDay() === 0) return false;
     
     return true;
   };
 
-  // Check if date is in current month
   const isCurrentMonth = (date) => {
     return date.getMonth() === currentMonth.getMonth() && 
            date.getFullYear() === currentMonth.getFullYear();
   };
 
-  // Check if a time slot is booked for a specific date
   const isTimeSlotBooked = (date, time) => {
     const dateString = formatDateForStorage(date);
     return bookedSlots[dateString] && bookedSlots[dateString].includes(time);
   };
 
-  // Get available time slots for selected date
   const getAvailableTimeSlots = () => {
     if (!selectedDate) return timeSlots;
     
@@ -173,7 +149,6 @@ const BookMeetingPage = () => {
     return timeSlots.filter(slot => !dateBookedSlots.includes(slot));
   };
 
-  // Navigate months
   const goToPreviousMonth = () => {
     const newMonth = new Date(currentMonth);
     newMonth.setMonth(currentMonth.getMonth() - 1);
@@ -193,7 +168,6 @@ const BookMeetingPage = () => {
     });
   };
 
-  // Generate Google Calendar URL
   const generateGoogleCalendarURL = (startTime, endTime, title, description, location) => {
     const formatDateForGoogle = (date) => {
       return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
@@ -215,7 +189,6 @@ const BookMeetingPage = () => {
   };
 
   const handleSubmit = async () => {
-    // Validate required fields
     if (!selectedDate || !selectedTime || !formData.firstName || 
         !formData.lastName || !formData.email || !formData.phone || 
         !formData.serviceType) {
@@ -223,7 +196,6 @@ const BookMeetingPage = () => {
       return;
     }
 
-    // Check if slot is still available
     if (isTimeSlotBooked(parseDateFromStorage(selectedDate), selectedTime)) {
       alert('This time slot has been booked by someone else. Please select another time.');
       setSelectedTime('');
@@ -233,17 +205,17 @@ const BookMeetingPage = () => {
     setIsSubmitting(true);
     
     try {
-      // Create appointment datetime
+      // FIXED: Create appointment datetime in local timezone
       const appointmentDate = parseDateFromStorage(selectedDate);
-      const time24h = convertTo24Hour(selectedTime);
-      const [hours, minutes] = time24h.split(':').map(Number);
+      const timeComponents = convertTo24Hour(selectedTime);
       
-      // Create start and end times (1.5 hours duration)
+      // Create start time in local timezone
       const startTime = new Date(appointmentDate);
-      startTime.setHours(hours, minutes, 0, 0);
+      startTime.setHours(timeComponents.hours, timeComponents.minutes, 0, 0);
       
+      // Create end time (1.5 hours later)
       const endTime = new Date(startTime);
-      endTime.setHours(startTime.getHours() + 1, startTime.getMinutes() + 30); // 1.5 hours
+      endTime.setMinutes(endTime.getMinutes() + 90); // 1.5 hours = 90 minutes
       
       // Prepare event data
       const eventData = {
@@ -256,10 +228,10 @@ const BookMeetingPage = () => {
         firstName: formData.firstName,
         lastName: formData.lastName,
         phone: formData.phone,
-        serviceType: formData.serviceType
+        serviceType: formData.serviceType,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone // Send timezone info
       };
 
-      // Create calendar event
       const response = await fetch('/api/calendar/events', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -269,18 +241,13 @@ const BookMeetingPage = () => {
       const data = await response.json();
       
       if (response.ok && data.success) {
-        // Mark the slot as booked
         const updatedBookedSlots = { ...bookedSlots };
         if (!updatedBookedSlots[selectedDate]) {
           updatedBookedSlots[selectedDate] = [];
         }
         updatedBookedSlots[selectedDate].push(selectedTime);
-        
-        // Save to localStorage and state
-        localStorage.setItem('bookedSlots', JSON.stringify(updatedBookedSlots));
         setBookedSlots(updatedBookedSlots);
 
-        // Generate Google Calendar URL
         const googleCalendarURL = generateGoogleCalendarURL(
           startTime.toISOString(),
           endTime.toISOString(),
@@ -377,7 +344,6 @@ const BookMeetingPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
-      {/* Hero Section */}
       <div className="bg-gradient-to-br from-[#072971] via-[#0040A8] to-[#072971] text-white">
         <div className="max-w-6xl mx-auto px-4 py-12">
           <div className="text-center">
@@ -404,7 +370,6 @@ const BookMeetingPage = () => {
       <div className="w-full mx-auto px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
-          {/* Left Column - Services */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-4">
               <h3 className="text-2xl font-bold text-gray-900 mb-6">Our Services</h3>
@@ -445,19 +410,16 @@ const BookMeetingPage = () => {
             </div>
           </div>
 
-          {/* Right Column - Booking Form */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-lg p-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">Book Your Appointment</h2>
               
-              {/* Date Selection */}
               <div className="mb-8">
                 <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
                   <Calendar className="w-6 h-6 mr-3 text-blue-600" />
                   Select Date
                 </h3>
                 
-                {/* Calendar Header */}
                 <div className="bg-gray-50 rounded-t-xl p-4 flex items-center justify-between">
                   <button
                     onClick={goToPreviousMonth}
@@ -481,9 +443,7 @@ const BookMeetingPage = () => {
                   </button>
                 </div>
 
-                {/* Calendar Grid */}
                 <div className="bg-white border border-gray-200 rounded-b-xl overflow-hidden">
-                  {/* Days of week header */}
                   <div className="grid grid-cols-7 bg-gray-100">
                     {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
                       <div key={index} className="p-3 text-center font-semibold text-gray-600 text-sm">
@@ -492,7 +452,6 @@ const BookMeetingPage = () => {
                     ))}
                   </div>
                   
-                  {/* Calendar days */}
                   <div className="grid grid-cols-7">
                     {calendarDays.map((date, index) => {
                       const isAvailable = isDateAvailable(date);
@@ -508,7 +467,7 @@ const BookMeetingPage = () => {
                           onClick={() => {
                             if (isAvailable) {
                               setSelectedDate(dateString);
-                              setSelectedTime(''); // Reset time when date changes
+                              setSelectedTime('');
                             }
                           }}
                           disabled={!isAvailable}
@@ -547,7 +506,6 @@ const BookMeetingPage = () => {
                 </div>
               </div>
 
-              {/* Time Selection */}
               <div className="mb-8">
                 <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
                   <Clock className="w-6 h-6 mr-3 text-blue-600" />
@@ -593,7 +551,6 @@ const BookMeetingPage = () => {
                 )}
               </div>
 
-              {/* Contact Information */}
               <div className="mb-8">
                 <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
                   <User className="w-6 h-6 mr-3 text-blue-600" />
@@ -676,7 +633,6 @@ const BookMeetingPage = () => {
                 </div>
               </div>
 
-              {/* Summary & Submit */}
               {(selectedDate || selectedTime || formData.serviceType) && (
                 <div className="bg-gray-50 rounded-xl p-6 mb-6">
                   <h4 className="font-semibold text-gray-900 mb-3">Appointment Summary</h4>
