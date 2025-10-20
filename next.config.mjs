@@ -18,7 +18,6 @@ const nextConfig = {
         hostname: "images.unsplash.com",
       },
     ],
-    // Enable image optimization
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 31536000, // 1 year
   },
@@ -112,7 +111,6 @@ const nextConfig = {
 
   // Optimize bundle size
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ['lucide-react'],
   },
 
@@ -121,6 +119,13 @@ const nextConfig = {
 
   // PoweredBy header removal for security
   poweredByHeader: false,
+
+  // Compiler options for production
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
+  },
 };
 
 export default nextConfig;
