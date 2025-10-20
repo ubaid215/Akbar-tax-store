@@ -1,7 +1,9 @@
 {
   "framework": "nextjs",
-  "buildCommand": "next build",
+  "buildCommand": "npm run build",
   "devCommand": "next dev",
   "installCommand": "npm install",
-  "regions": ["iad1"]
+  "regions": ["iad1"],
+  "nodeVersion": "22.x",
+  "outputDirectory": ".next"
 }
