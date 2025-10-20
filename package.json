@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=22.0.0"
-  },
+  "node": "20.x"
+},
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@lottiefiles/react-lottie-player": "^3.6.0",
-    "@studio-freight/lenis": "^1.0.42",
+    "lenis": "^1.0.42",
     "@vercel/speed-insights": "^1.2.0",
     "date-fns": "^4.1.0",
     "google-auth-library": "^10.2.1",
