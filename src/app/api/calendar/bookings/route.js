@@ -25,13 +25,14 @@ export async function GET(request) {
 
     const calendar = google.calendar({ version: 'v3', auth });
 
-    // Get events from Google Calendar
+    // Get events from Google Calendar (including past events for today)
     const response = await calendar.events.list({
       calendarId: 'primary',
       timeMin: new Date(startDate).toISOString(),
       timeMax: new Date(endDate).toISOString(),
       singleEvents: true,
-      orderBy: 'startTime'
+      orderBy: 'startTime',
+      maxResults: 250 // Increase to get more events
     });
 
     const events = response.data.items || [];
@@ -52,29 +53,32 @@ export async function GET(request) {
     
     events.forEach(event => {
       if (event.start && event.start.dateTime && event.end && event.end.dateTime) {
+        // Parse event times
         const eventStart = new Date(event.start.dateTime);
         const eventEnd = new Date(event.end.dateTime);
         
-        // Get the date in YYYY-MM-DD format
-        const dateString = eventStart.toISOString().split('T')[0];
+        // Get the date in YYYY-MM-DD format using event's local date
+        const year = eventStart.getFullYear();
+        const month = String(eventStart.getMonth() + 1).padStart(2, '0');
+        const day = String(eventStart.getDate()).padStart(2, '0');
+        const dateString = `${year}-${month}-${day}`;
         
         if (!bookedSlots[dateString]) {
           bookedSlots[dateString] = [];
         }
 
-        // Check which of our available slots conflict with this event
+        // Get event's start hour and minute
+        const eventHour = eventStart.getHours();
+        const eventMinute = eventStart.getMinutes();
+
+        // Check which slot this event corresponds to
         availableSlots.forEach(slotInfo => {
-          // Create the slot's time range
-          const slotStart = new Date(eventStart);
-          slotStart.setHours(slotInfo.startHour, slotInfo.startMinute, 0, 0);
+          // Check if event starts at this exact slot time (with 5 minute tolerance)
+          const hourMatch = eventHour === slotInfo.startHour;
+          const minuteMatch = Math.abs(eventMinute - slotInfo.startMinute) <= 5;
           
-          const slotEnd = new Date(slotStart);
-          slotEnd.setHours(slotStart.getHours() + 1, slotStart.getMinutes() + 30); // 1.5 hours
-          
-          // Check if the event overlaps with this slot
-          // Events overlap if: eventStart < slotEnd AND eventEnd > slotStart
-          if (eventStart < slotEnd && eventEnd > slotStart) {
-            // This slot conflicts with the event, mark it as booked
+          if (hourMatch && minuteMatch) {
+            // Mark this slot as booked
             if (!bookedSlots[dateString].includes(slotInfo.slot)) {
               bookedSlots[dateString].push(slotInfo.slot);
             }
@@ -88,7 +92,9 @@ export async function GET(request) {
       bookedSlots,
       debug: {
         eventsProcessed: events.length,
-        dateRange: `${startDate} to ${endDate}`
+        dateRange: `${startDate} to ${endDate}`,
+        totalBookedSlots: Object.keys(bookedSlots).reduce((sum, date) => sum + bookedSlots[date].length, 0),
+        bookedDates: Object.keys(bookedSlots)
       }
     });
 

@@ -43,24 +43,24 @@ const BookMeetingPage = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   // Fetch existing bookings from server to sync with Google Calendar
-  useEffect(() => {
-    const fetchBookings = async () => {
-      try {
-        const startDate = new Date();
-        const endDate = new Date();
-        endDate.setMonth(endDate.getMonth() + 3);
-        
-        const response = await fetch(`/api/calendar/bookings?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`);
-        const data = await response.json();
-        
-        if (data.success) {
-          setBookedSlots(data.bookedSlots || {});
-        }
-      } catch (error) {
-        console.error('Error fetching bookings:', error);
+  const fetchBookings = async () => {
+    try {
+      const startDate = new Date();
+      const endDate = new Date();
+      endDate.setMonth(endDate.getMonth() + 3);
+      
+      const response = await fetch(`/api/calendar/bookings?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`);
+      const data = await response.json();
+      
+      if (data.success) {
+        setBookedSlots(data.bookedSlots || {});
       }
-    };
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchBookings();
   }, []);
 
@@ -90,6 +90,17 @@ const BookMeetingPage = () => {
     }
     
     return { hours, minutes: parseInt(minutes, 10) };
+  };
+
+  // NEW: Check if a time slot has passed
+  const isTimeSlotPassed = (date, time) => {
+    const now = new Date();
+    const slotDateTime = new Date(date);
+    
+    const timeComponents = convertTo24Hour(time);
+    slotDateTime.setHours(timeComponents.hours, timeComponents.minutes, 0, 0);
+    
+    return slotDateTime < now;
   };
 
   // Generate calendar days for current month view
@@ -142,11 +153,15 @@ const BookMeetingPage = () => {
     return bookedSlots[dateString] && bookedSlots[dateString].includes(time);
   };
 
-  const getAvailableTimeSlots = () => {
-    if (!selectedDate) return timeSlots;
+  // UPDATED: Show all time slots but with proper disabled states
+  const getTimeSlotStatus = (date, time) => {
+    if (!date) return { isDisabled: true, isBooked: false, isPassed: false };
     
-    const dateBookedSlots = bookedSlots[selectedDate] || [];
-    return timeSlots.filter(slot => !dateBookedSlots.includes(slot));
+    const isBooked = isTimeSlotBooked(date, time);
+    const isPassed = isTimeSlotPassed(date, time);
+    const isDisabled = isBooked || isPassed;
+    
+    return { isDisabled, isBooked, isPassed };
   };
 
   const goToPreviousMonth = () => {
@@ -196,8 +211,15 @@ const BookMeetingPage = () => {
       return;
     }
 
-    if (isTimeSlotBooked(parseDateFromStorage(selectedDate), selectedTime)) {
-      alert('This time slot has been booked by someone else. Please select another time.');
+    const selectedDateObj = parseDateFromStorage(selectedDate);
+    const { isDisabled, isBooked, isPassed } = getTimeSlotStatus(selectedDateObj, selectedTime);
+    
+    if (isDisabled) {
+      if (isBooked) {
+        alert('This time slot has been booked by someone else. Please select another time.');
+      } else if (isPassed) {
+        alert('This time slot has already passed. Please select a future time.');
+      }
       setSelectedTime('');
       return;
     }
@@ -241,13 +263,10 @@ const BookMeetingPage = () => {
       const data = await response.json();
       
       if (response.ok && data.success) {
-        const updatedBookedSlots = { ...bookedSlots };
-        if (!updatedBookedSlots[selectedDate]) {
-          updatedBookedSlots[selectedDate] = [];
-        }
-        updatedBookedSlots[selectedDate].push(selectedTime);
-        setBookedSlots(updatedBookedSlots);
-
+        // Immediately refetch bookings to sync with server
+        await fetchBookings();
+        
+        // Generate Google Calendar URL
         const googleCalendarURL = generateGoogleCalendarURL(
           startTime.toISOString(),
           endTime.toISOString(),
@@ -510,16 +529,20 @@ const BookMeetingPage = () => {
                 <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
                   <Clock className="w-6 h-6 mr-3 text-blue-600" />
                   Select Time (1.5 Hour Sessions)
-                  {selectedDate && bookedSlots[selectedDate] && bookedSlots[selectedDate].length > 0 && (
-                    <span className="ml-2 text-sm text-orange-600 font-normal">
-                      ({bookedSlots[selectedDate].length} slots unavailable)
+                  {selectedDate && (
+                    <span className="ml-2 text-sm text-gray-600 font-normal">
+                      ({timeSlots.filter(time => {
+                        const selectedDateObj = parseDateFromStorage(selectedDate);
+                        const { isDisabled } = getTimeSlotStatus(selectedDateObj, time);
+                        return !isDisabled;
+                      }).length} of {timeSlots.length} slots available)
                     </span>
                   )}
                 </h3>
                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
                   {timeSlots.map((time, index) => {
-                    const isBooked = selectedDate && isTimeSlotBooked(parseDateFromStorage(selectedDate), time);
-                    const isDisabled = !selectedDate || isBooked;
+                    const selectedDateObj = selectedDate ? parseDateFromStorage(selectedDate) : null;
+                    const { isDisabled, isBooked, isPassed } = getTimeSlotStatus(selectedDateObj, time);
                     
                     return (
                       <button
@@ -530,6 +553,8 @@ const BookMeetingPage = () => {
                           isDisabled
                             ? isBooked 
                               ? 'border-red-200 bg-red-50 text-red-400 cursor-not-allowed'
+                              : isPassed
+                              ? 'border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed'
                               : 'border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed'
                             : selectedTime === time
                               ? 'border-blue-500 bg-blue-500 text-white'
@@ -542,12 +567,33 @@ const BookMeetingPage = () => {
                             ✕
                           </span>
                         )}
+                        {isPassed && !isBooked && (
+                          <span className="absolute -top-1 -right-1 text-xs bg-gray-400 text-white rounded-full w-4 h-4 flex items-center justify-center">
+                            ⌛
+                          </span>
+                        )}
                       </button>
                     );
                   })}
                 </div>
                 {!selectedDate && (
                   <p className="text-sm text-gray-500 mt-2">Please select a date first to see available time slots.</p>
+                )}
+                {selectedDate && (
+                  <div className="flex items-center justify-start space-x-4 mt-3 text-xs text-gray-500">
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+                      <span>Booked</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-gray-400 rounded-full mr-1"></div>
+                      <span>Passed</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-blue-500 rounded-full mr-1"></div>
+                      <span>Available</span>
+                    </div>
+                  </div>
                 )}
               </div>
 
