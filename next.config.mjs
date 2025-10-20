@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
 
-  // Image optimization
+  // ✅ Image Optimization
   images: {
     remotePatterns: [
       {
@@ -10,7 +10,7 @@ const nextConfig = {
         hostname: "www.akbartaxstore.com",
       },
       {
-        protocol: "https", 
+        protocol: "https",
         hostname: "akbartaxstore.com",
       },
       {
@@ -18,35 +18,41 @@ const nextConfig = {
         hostname: "images.unsplash.com",
       },
     ],
-    formats: ['image/webp', 'image/avif'],
+    formats: ["image/webp", "image/avif"],
     minimumCacheTTL: 31536000, // 1 year
   },
 
-  // IMPORTANT: Canonical URL setup - redirect non-www to www
+  // ✅ Redirect Rules (with protection for Vercel builds)
   async redirects() {
     return [
-      // Redirect non-www to www (for consistent canonical URLs)
+      // Redirect non-www to www (avoid loop on vercel.app)
       {
-        source: '/:path*',
+        source: "/:path*",
         has: [
           {
-            type: 'host',
-            value: 'akbartaxstore.com',
+            type: "host",
+            value: "akbartaxstore.com",
           },
         ],
-        destination: 'https://www.akbartaxstore.com/:path*',
-        permanent: true, // 301 redirect
-      },
-      // Redirect old URLs if you have any
-      {
-        source: '/old-services',
-        destination: '/services-fees',
+        missing: [
+          {
+            type: "host",
+            value: "www.akbartaxstore.com",
+          },
+        ],
+        destination: "https://www.akbartaxstore.com/:path*",
         permanent: true,
       },
-    ]
+      // Example redirect for old URLs
+      {
+        source: "/old-services",
+        destination: "/services-fees",
+        permanent: true,
+      },
+    ];
   },
 
-  // Enhanced SEO headers
+  // ✅ Custom Headers
   async headers() {
     return [
       // Robots.txt headers
@@ -59,72 +65,61 @@ const nextConfig = {
       },
       // Sitemap headers
       {
-        source: "/sitemap.xml", 
+        source: "/sitemap.xml",
         headers: [
           { key: "Content-Type", value: "application/xml" },
           { key: "Cache-Control", value: "public, max-age=3600" }, // 1 hour
         ],
       },
-      // General security and performance headers
+      // Security & SEO Headers (Safe for Edge Runtime)
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
-          },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "X-XSS-Protection", value: "1; mode=block" },
         ],
       },
       // Static assets caching
       {
-        source: '/_next/static/(.*)',
+        source: "/_next/static/(.*)",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable', // 1 year
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable", // 1 year
           },
         ],
       },
-      // Images caching
+      // Public images caching
       {
-        source: '/images/(.*)',
+        source: "/images/(.*)",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000', // 1 year
+            key: "Cache-Control",
+            value: "public, max-age=31536000",
           },
         ],
       },
-    ]
+    ];
   },
 
-  // Remove trailing slash for consistency
+  // ✅ General Optimizations
   trailingSlash: false,
-
-  // Optimize bundle size
-  experimental: {
-    optimizePackageImports: ['lucide-react'],
-  },
-
-  // Enable compression
   compress: true,
-
-  // PoweredBy header removal for security
   poweredByHeader: false,
 
-  // Compiler options for production
+  // ✅ Experimental (Safe for Vercel)
+  experimental: {
+    optimizePackageImports: ["lucide-react"],
+  },
+
+  // ✅ Remove console logs in production (keep errors/warnings)
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production' ? {
-      exclude: ['error', 'warn'],
-    } : false,
+    removeConsole:
+      process.env.NODE_ENV === "production"
+        ? { exclude: ["error", "warn"] }
+        : false,
   },
 };
 

@@ -1,5 +1,4 @@
 /* eslint-disable react/no-unescaped-entities */
-// This Home page of Akbar tax store
 "use client";
 
 import React, { useEffect, useRef, useState } from 'react';
