@@ -22,6 +22,7 @@ const Homepage = () => {
   });
   const [hasAnimated, setHasAnimated] = useState(false);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const typeTexts = [
     'NTN Registration',
     'Tax Return Filing',
@@ -124,7 +125,7 @@ const Homepage = () => {
     }, 100);
 
     return () => clearInterval(typeInterval);
-  }, [typeIndex]);
+  }, [typeIndex, typeTexts]);
 
   // Intersection Observer for animations
   useEffect(() => {
