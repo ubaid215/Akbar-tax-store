@@ -95,7 +95,7 @@ const ServicesFeePage = () => {
           name: 'Business File Return',
           fee: '7,000 PKR',
           description: 'Become an active tax filer',
-          image: '/images/filer-status.jpg',
+          image: '/images/tax.jpg',
           requirements: [
             'ID Card Picture',
             'Email Address',
@@ -205,7 +205,7 @@ const ServicesFeePage = () => {
           name: 'Tax Return Filing',
           fee: '4,000 PKR',
           description: 'Annual income tax return filing',
-          image: '/images/tax-return.jpg',
+          image: '/images/tax.jpg',
           requirements: [
             'Username and Password, (If Already Filer)',
             'ID Card Picture',

@@ -56,7 +56,7 @@ const businessServices = [
     title: 'Business File Return',
     price: '7,000',
     description: 'Become an active tax filer',
-    image: '/images/filer-status.jpg',
+    image: '/images/tax.jpg',
     category: 'Status',
     duration: '24-48 hours after document submission',
     requirements: [
