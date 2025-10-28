@@ -41,7 +41,14 @@ const personalServices = [
     category: 'Filing',
     duration: '24-48 hours after document submission',
     requirements: [
-      'Username and Password'
+      'Username and Password, (If Already Filer)',
+      'ID Card Picture',
+      'Email Address',
+      'Phone Number',
+      'Bank Account Details if you have Bank Account',
+      'Property Details if you own any property',
+      'Vehicle details If you own any car or bike',
+      'Salary person or Business owner'
     ]
   },
   {
@@ -161,7 +168,7 @@ export default function PersonalServices() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {personalServices.map((service) => (
-              <Link 
+              <Link
                 href={`/personal/${service.id}`}
                 key={service.id}
                 className="group block"
@@ -193,7 +200,7 @@ export default function PersonalServices() {
                     <h3 className="font-bold text-xl text-[#072971] mb-2 group-hover:text-[#0040A8] transition-colors">
                       {service.title}
                     </h3>
-                    
+
                     <p className="text-[#050505] text-sm leading-relaxed mb-4 opacity-80">
                       {service.description}
                     </p>
@@ -287,7 +294,7 @@ export default function PersonalServices() {
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-[#072971] mb-4">Simple 3-Step Process</h2>
             <p className="text-[#050505]/70 mb-12">Get your tax matters sorted in just 3 easy steps</p>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center">
                 <div className="w-12 h-12 bg-[#0040A8] text-white rounded-full flex items-center justify-center mx-auto mb-4 font-bold">1</div>
@@ -320,7 +327,7 @@ export default function PersonalServices() {
               Our tax experts are ready to help you choose the right service and guide you through every step of the process.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
+              <Link
                 href="/contact"
                 className="inline-flex items-center justify-center bg-[#FFFFFF] text-[#072971] font-semibold py-3 px-8 rounded-xl hover:bg-[#D9E8FF] transition-colors"
               >
@@ -329,7 +336,7 @@ export default function PersonalServices() {
                 </svg>
                 Get Tax Consultation
               </Link>
-              <a 
+              <a
                 href="tel:+923016832064"
                 className="inline-flex items-center justify-center border-2 border-[#FFFFFF] text-[#FFFFFF] font-semibold py-3 px-8 rounded-xl hover:bg-[#FFFFFF] hover:text-[#072971] transition-colors"
               >

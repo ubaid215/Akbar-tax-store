@@ -82,7 +82,14 @@ const serviceData = {
     description: 'Annual income tax return filing',
     fullDescription: 'Our certified tax experts prepare and file your annual income tax return with complete accuracy to ensure compliance and maximize your refunds. We analyze all eligible deductions including Zakat, insurance premiums, and charitable donations. Last year, our clients received 23% higher average refunds compared to self-filers.',
     requirements: [
-      'Username and Password'
+      'Username and Password, (If Already Filer)',
+      'ID Card Picture',
+      'Email Address',
+      'Phone Number',
+      'Bank Account Details if you have Bank Account',
+      'Property Details if you own any property',
+      'Vehicle details If you own any car or bike',
+      'Salary person or Business owner'
     ],
     process: [
       'Provide your FBR login credentials',
@@ -296,7 +303,7 @@ export default function ServiceDetail({ params }) {
               <div className="lg:col-span-2">
                 <h2 className="text-2xl font-bold text-[#072971] mb-4">Service Overview</h2>
                 <p className="text-[#050505] mb-6 leading-relaxed">{service.fullDescription || service.description}</p>
-                
+
                 {/* Special Notes */}
                 {service.urgencyNote && (
                   <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
@@ -403,7 +410,7 @@ export default function ServiceDetail({ params }) {
                     >
                       Apply Now
                     </Link>
-                    
+
                     <a
                       href="https://wa.me/923016832064"
                       target="_blank"
@@ -461,24 +468,24 @@ export default function ServiceDetail({ params }) {
           <div className="bg-[#F7FAFF] px-8 py-6 border-t border-[#D9E8FF]">
             <h3 className="text-xl font-bold text-[#072971] mb-4">Related Services</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Link 
-                href="/personal/ntn" 
+              <Link
+                href="/personal/ntn"
                 className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition duration-300 border border-[#D9E8FF]"
               >
                 <h4 className="font-semibold text-[#0040A8] mb-1">NTN Certificate</h4>
                 <p className="text-sm text-[#050505]">Get your National Tax Number certificate</p>
                 <p className="text-xs text-[#0040A8] font-medium mt-2">1,500 PKR</p>
               </Link>
-              <Link 
-                href="/personal/tax-return" 
+              <Link
+                href="/personal/tax-return"
                 className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition duration-300 border border-[#D9E8FF]"
               >
                 <h4 className="font-semibold text-[#0040A8] mb-1">Tax Return Filing</h4>
                 <p className="text-sm text-[#050505]">File your annual tax return</p>
                 <p className="text-xs text-[#0040A8] font-medium mt-2">4,000 PKR</p>
               </Link>
-              <Link 
-                href="/personal/filer" 
+              <Link
+                href="/personal/filer"
                 className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition duration-300 border border-[#D9E8FF]"
               >
                 <h4 className="font-semibold text-[#0040A8] mb-1">Filer Registration</h4>

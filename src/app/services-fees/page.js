@@ -79,7 +79,14 @@ const ServicesFeePage = () => {
           description: 'Annual income tax return filing',
           image: '/images/tax-return.jpg',
           requirements: [
-            'Username and Password',
+            'Username and Password, (If Already Filer)',
+            'ID Card Picture',
+            'Email Address',
+            'Phone Number',
+            'Bank Account Details if you have Bank Account',
+            'Property Details if you own any property',
+            'Vehicle details If you own any car or bike',
+            'Salary person or Business owner'
           ],
           process: '24-48 hours after document submission'
         },
@@ -200,7 +207,14 @@ const ServicesFeePage = () => {
           description: 'Annual income tax return filing',
           image: '/images/tax-return.jpg',
           requirements: [
-            'Username and Password',
+            'Username and Password, (If Already Filer)',
+            'ID Card Picture',
+            'Email Address',
+            'Phone Number',
+            'Bank Account Details if you have Bank Account',
+            'Property Details if you own any property',
+            'Vehicle details If you own any car or bike',
+            'Salary person or Business owner'
           ],
           process: '24-48 hours after document submission'
         },
