@@ -28,9 +28,9 @@ const getBaseUrl = () => {
 const baseUrl = getBaseUrl();
 
 export const metadata = {
-  title: "Akbar Tax Store | Income Tax Filing, NTN Registration & SECP Company Registration Pakistan",
+  title: "Akbar Tax Store | Tax Filing, NTN & Company Registration Pakistan",
   description:
-    "Pakistan's trusted tax consultant in Faisalabad. Expert income tax filing, NTN registration, SECP company registration, business registration, and tax return services. Get filer status & save taxes today!",
+    "Trusted tax consultant in Faisalabad for income tax filing, NTN registration, SECP company registration, and business setup. Become a filer and save taxes today!",
   keywords: [
     // High-volume tax filing keywords
     "income tax filing Pakistan",

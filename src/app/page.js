@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
@@ -6,7 +7,6 @@ import { ChevronLeft, ChevronRight, Phone, MessageCircle, ArrowRight, CheckCircl
 import Link from 'next/link';
 import Image from 'next/image';
 
-
 const Homepage = () => {
   const heroRef = useRef(null);
   const aboutRef = useRef(null);
@@ -14,6 +14,7 @@ const Homepage = () => {
   const ctaRef = useRef(null);
   const [currentTypeText, setCurrentTypeText] = useState('');
   const [typeIndex, setTypeIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [counters, setCounters] = useState({
     clients: 0,
     hours: 0,
@@ -22,7 +23,6 @@ const Homepage = () => {
   });
   const [hasAnimated, setHasAnimated] = useState(false);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const typeTexts = [
     'NTN Registration',
     'Tax Return Filing',
@@ -107,25 +107,45 @@ const Homepage = () => {
   const servicesCount = useCounter(11, 1800, hasAnimated);
   const legalCount = useCounter(100, 2200, hasAnimated);
 
-  // Typing animation effect
+  // Fixed Typing animation effect
   useEffect(() => {
-    const typeText = typeTexts[typeIndex];
-    let charIndex = 0;
-
-    const typeInterval = setInterval(() => {
-      if (charIndex <= typeText.length) {
-        setCurrentTypeText(typeText.substring(0, charIndex));
-        charIndex++;
+    let timeoutId;
+    let intervalId;
+    
+    const currentText = typeTexts[typeIndex];
+    
+    const type = () => {
+      if (!isDeleting) {
+        // Typing forward
+        if (currentTypeText.length < currentText.length) {
+          setCurrentTypeText(currentText.slice(0, currentTypeText.length + 1));
+        } else {
+          // Finished typing, wait then start deleting
+          timeoutId = setTimeout(() => setIsDeleting(true), 1000);
+          return;
+        }
       } else {
-        clearInterval(typeInterval);
-        setTimeout(() => {
+        // Deleting
+        if (currentTypeText.length > 0) {
+          setCurrentTypeText(currentText.slice(0, currentTypeText.length - 1));
+        } else {
+          // Finished deleting, move to next text
+          setIsDeleting(false);
           setTypeIndex((prev) => (prev + 1) % typeTexts.length);
-        }, 2000);
+          return;
+        }
       }
-    }, 100);
+    };
 
-    return () => clearInterval(typeInterval);
-  }, [typeIndex, typeTexts]);
+    // Adjust speed - faster for deleting, slower for typing
+    const speed = isDeleting ? 50 : 100;
+    intervalId = setInterval(type, speed);
+
+    return () => {
+      clearTimeout(timeoutId);
+      clearInterval(intervalId);
+    };
+  }, [currentTypeText, isDeleting, typeIndex, typeTexts]);
 
   // Intersection Observer for animations
   useEffect(() => {
@@ -146,7 +166,8 @@ const Homepage = () => {
       });
     }, observerOptions);
 
-    [aboutRef, servicesRef, ctaRef].forEach((ref) => {
+    const refs = [aboutRef, servicesRef, ctaRef];
+    refs.forEach((ref) => {
       if (ref.current) observer.observe(ref.current);
     });
 
@@ -173,11 +194,11 @@ const Homepage = () => {
               Helping Pakistan File Taxes, Businesses Register, Financial and Bookkeeping.
             </p>
 
-            {/* Typing Animation */}
+            {/* Fixed Typing Animation */}
             <div className="h-16 flex items-center justify-center mb-8">
-              <div className="text-lg sm:text-xl font-medium" style={{ color: '#0040A8' }}>
+              <div className="text-lg sm:text-xl font-medium min-h-[24px] flex items-center" style={{ color: '#0040A8' }}>
                 → {currentTypeText}
-                <span className="animate-pulse">|</span>
+                <span className="animate-pulse ml-1">|</span>
               </div>
             </div>
 
@@ -185,15 +206,13 @@ const Homepage = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link
                 href="/personal"
-                className="w-full sm:w-auto bg-transparent text-[#0040A8]  border-2 border-[#0040A8] px-8 py-4 rounded-lg font-semibold hover:opacity-90 transition-all hover:bg-[#0040A8] hover:text-white duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
-                
+                className="w-full sm:w-auto bg-transparent text-[#0040A8] border-2 border-[#0040A8] px-8 py-4 rounded-lg font-semibold hover:opacity-90 transition-all hover:bg-[#0040A8] hover:text-white duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
               >
                 <MessageCircle className="w-5 h-5" />
                 Personal
               </Link>
               <Link
                 href="/business"
-                onClick={scrollToServices}
                 className="w-full sm:w-auto border-2 px-8 py-4 rounded-lg font-semibold hover:text-white transition-all duration-300 flex items-center justify-center gap-2"
                 style={{
                   borderColor: '#0040A8',
