@@ -82,7 +82,8 @@ const serviceData = {
     description: 'Annual income tax return filing',
     fullDescription: 'Our certified tax experts prepare and file your annual income tax return with complete accuracy to ensure compliance and maximize your refunds. We analyze all eligible deductions including Zakat, insurance premiums, and charitable donations. Last year, our clients received 23% higher average refunds compared to self-filers.',
     requirements: [
-      'Username and Password, (If Already Filer)',
+      'Username and Password, (If Already Filer then only need this)',
+      'If you are new then provide 👇🏼👇🏼 below otherwise not',
       'ID Card Picture',
       'Email Address',
       'Phone Number',

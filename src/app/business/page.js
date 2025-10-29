@@ -41,7 +41,8 @@ const businessServices = [
     category: 'Filing',
     duration: '24-48 hours after document submission',
     requirements: [
-      'Username and Password, (If Already Filer)',
+      'Username and Password, (If Already Filer then only need this)',
+      'If you are new then provide 👇🏼👇🏼 below otherwise not',
       'ID Card Picture',
       'Email Address',
       'Phone Number',

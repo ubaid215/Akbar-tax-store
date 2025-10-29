@@ -79,7 +79,8 @@ const ServicesFeePage = () => {
           description: 'Annual income tax return filing',
           image: '/images/tax-return.jpg',
           requirements: [
-            'Username and Password, (If Already Filer)',
+            'Username and Password, (If Already Filer then only need this)',
+            'If you are new then provide 👇🏼👇🏼 below otherwise not',
             'ID Card Picture',
             'Email Address',
             'Phone Number',
@@ -207,7 +208,8 @@ const ServicesFeePage = () => {
           description: 'Annual income tax return filing',
           image: '/images/tax.jpg',
           requirements: [
-            'Username and Password, (If Already Filer)',
+            'Username and Password, (If Already Filer then only need this)',
+            'If you are new then provide 👇🏼👇🏼 below otherwise not',
             'ID Card Picture',
             'Email Address',
             'Phone Number',
@@ -223,7 +225,7 @@ const ServicesFeePage = () => {
           name: 'Business File Return',
           fee: '7,000 PKR',
           description: 'Become an active tax filer',
-          image: '/images/filer-status.jpg',
+          image: '/images/bookkeeping.jpg',
           requirements: [
             'ID Card Picture',
             'Email Address',

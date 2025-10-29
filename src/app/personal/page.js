@@ -41,7 +41,8 @@ const personalServices = [
     category: 'Filing',
     duration: '24-48 hours after document submission',
     requirements: [
-      'Username and Password, (If Already Filer)',
+      'Username and Password, (If Already Filer then only need this)',
+      'If you are new then provide 👇🏼👇🏼 below otherwise not',
       'ID Card Picture',
       'Email Address',
       'Phone Number',
@@ -137,8 +138,55 @@ export default function PersonalServices() {
   return (
     <div className="min-h-screen bg-[#D9E8FF]">
       <Head>
-        <title>Personal Tax Services | Akbar Tax Store</title>
-        <meta name="description" content="Personal tax services including NIN registration, NTN certificate, tax return filing and more" />
+        <title>Personal Tax Services Pakistan | NIN, NTN, Tax Return Filing - Akbar Tax Store</title>
+        <meta name="description" content="Professional personal tax services in Pakistan. NIN registration, NTN certificate, tax return filing, GST registration, FBR compliance. Fast, affordable & expert tax solutions." />
+        <meta name="keywords" content="personal tax services Pakistan, NIN registration, NTN certificate, tax return filing, income tax return, FBR tax filer, GST registration Pakistan, PRA registration, chamber of commerce, tax consultant Pakistan, FBR services, tax compliance Pakistan, individual tax filing, business tax return, tax certificate" />
+        <meta name="robots" content="index, follow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        {/* Open Graph Tags */}
+        <meta property="og:title" content="Personal Tax Services Pakistan | NIN, NTN, Tax Return Filing - Akbar Tax Store" />
+        <meta property="og:description" content="Expert personal tax services in Pakistan. NIN registration, NTN certificate, tax return filing, GST registration. Fast processing & professional guidance." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://akbartaxstore.com/personal" />
+        
+        {/* Twitter Card Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Personal Tax Services Pakistan | NIN, NTN, Tax Return Filing" />
+        <meta name="twitter:description" content="Professional tax services for individuals in Pakistan. NIN, NTN, tax return filing, GST registration and FBR compliance services." />
+        
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://akbartaxstore.com/personal" />
+        
+        {/* Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "name": "Personal Tax Services Pakistan",
+            "description": "Professional personal tax services including NIN registration, NTN certificate, tax return filing, GST registration and FBR compliance services",
+            "provider": {
+              "@type": "Organization",
+              "name": "Akbar Tax Store",
+              "url": "https://akbartaxstore.com"
+            },
+            "areaServed": "Pakistan",
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": "Personal Tax Services",
+              "itemListElement": personalServices.map(service => ({
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": service.title,
+                  "description": service.description,
+                  "price": service.price,
+                  "priceCurrency": "PKR"
+                }
+              }))
+            }
+          })}
+        </script>
       </Head>
 
       {/* Hero Section */}
@@ -146,7 +194,7 @@ export default function PersonalServices() {
         <div className="absolute inset-0 bg-[#050505]/10"></div>
         <div className="container mx-auto px-6 text-center relative z-10">
           <div className="inline-flex items-center bg-[#FFFFFF]/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-            <span className="text-sm font-medium">Personal Services</span>
+            <span className="text-sm font-medium">Personal Tax Services Pakistan</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
             Professional Tax Services
