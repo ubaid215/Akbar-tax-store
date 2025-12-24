@@ -7,7 +7,7 @@ const personalServices = [
   {
     id: 'nin',
     title: 'NIN Registration',
-    price: '1,500',
+    price: '3,000',
     description: 'National Identity Number registration for tax purposes',
     image: '/images/nin-registration.jpg',
     category: 'Registration',
@@ -21,7 +21,7 @@ const personalServices = [
   {
     id: 'ntn',
     title: 'NTN Certificate',
-    price: '1,500',
+    price: '4,000',
     description: 'National Tax Number registration',
     image: '/images/ntn-certificate.jpg',
     category: 'Certificate',
@@ -35,7 +35,7 @@ const personalServices = [
   {
     id: 'tax-return',
     title: 'Tax Return Filing',
-    price: '4,000',
+    price: '5,000',
     description: 'Annual income tax return filing',
     image: '/images/tax-return.jpg',
     category: 'Filing',
@@ -55,7 +55,7 @@ const personalServices = [
   {
     id: 'filer',
     title: 'Business File Return',
-    price: '7,000',
+    price: '20,000',
     description: 'Become an active tax filer',
     image: '/images/tax.jpg',
     category: 'Status',
@@ -73,7 +73,7 @@ const personalServices = [
   {
     id: 'gst',
     title: 'GST Registration',
-    price: '10,000',
+    price: '40,000',
     description: 'Goods and Services Tax registration',
     image: '/images/gst.jpg',
     category: 'Registration',
@@ -94,7 +94,7 @@ const personalServices = [
   {
     id: 'pra',
     title: 'PRA Registration',
-    price: '10,000',
+    price: '40,000',
     description: 'Punjab Revenue Authority registration',
     image: '/images/pra-registration.png',
     category: 'Registration',
@@ -115,7 +115,7 @@ const personalServices = [
   {
     id: 'chamber',
     title: 'Chamber of Commerce',
-    price: '18,000',
+    price: '30,000',
     description: 'Membership registration',
     image: '/images/chamber-commerce.jpg',
     category: 'Registration',

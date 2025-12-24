@@ -6,7 +6,7 @@ import Image from 'next/image';
 const businessServiceDatabase = {
   'nin': {
     title: 'NIN Registration',
-    price: '1,500 PKR',
+    price: '3,000 PKR',
     description: 'National Identity Number registration for tax purposes',
     fullDescription: 'National Identity Number (NIN) is mandatory for all tax-related activities in Pakistan. Our NIN registration service ensures quick and hassle-free registration with FBR. This number is essential for filing tax returns, opening business accounts, and various government procedures.',
     image: '/images/nin-registration.jpg',
@@ -36,7 +36,7 @@ const businessServiceDatabase = {
 
   'ntn': {
     title: 'NTN Certificate',
-    price: '1,500 PKR',
+    price: '4,000 PKR',
     description: 'National Tax Number registration with FBR',
     fullDescription: 'National Tax Number (NTN) is your unique identifier with Pakistan\'s tax system. Essential for individuals and businesses, NTN registration enables you to file tax returns, claim refunds, and comply with tax obligations. Our service ensures smooth registration with all required documentation.',
     image: '/images/ntn-certificate.jpg',
@@ -64,48 +64,9 @@ const businessServiceDatabase = {
     ]
   },
 
-  'tax-return': {
-    title: 'Tax Return Filing',
-    price: '4,000 PKR',
-    description: 'Annual income tax return filing with FBR',
-    fullDescription: 'Professional tax return filing service for individuals and businesses. Our tax experts ensure accurate calculation, maximum deductions, and timely submission to avoid penalties. We handle all types of returns including salary, business income, and capital gains.',
-    image: '/images/tax-return.jpg',
-    category: 'Filing',
-    duration: '24-48 hours after document submission',
-    requirements: [
-      'Username and Password, (If Already Filer then only need this)',
-      'If you are new then provide 👇🏼👇🏼 below otherwise not',
-      'ID Card Picture',
-      'Email Address',
-      'Phone Number',
-      'Bank Account Details if you have Bank Account',
-      'Property Details if you own any property',
-      'Vehicle details If you own any car or bike',
-      'Salary person or Business owner',
-      'Annual income statements',
-      'Tax deduction certificates',
-      'Bank statements (if required)',
-      'Previous year return copy'
-    ],
-    process: [
-      'Income and deduction analysis',
-      'Tax calculation and optimization',
-      'Return preparation and review',
-      'Online FBR submission',
-      'Acknowledgment and follow-up'
-    ],
-    benefits: [
-      'Professional tax optimization',
-      'Penalty avoidance',
-      'Maximum deduction claims',
-      'Accurate calculations',
-      'Expert guidance included'
-    ]
-  },
-
   'filer': {
     title: 'Business File Return',
-    price: '7,000 PKR',
+    price: '20,000 PKR',
     description: 'Become an active tax filer for reduced tax rates',
     fullDescription: 'Transform your tax status from non-filer to active filer and enjoy significantly reduced tax rates on various transactions. Our comprehensive filer registration service includes asset declaration, income documentation, and ongoing compliance support.',
     image: '/images/tax.jpg',
@@ -186,7 +147,7 @@ const businessServiceDatabase = {
 
   'company-reg': {
     title: 'Company Registration (SECP)',
-    price: '40,000 PKR',
+    price: '50,000 PKR',
     description: 'Register your private limited company with Securities and Exchange Commission',
     fullDescription: 'Our comprehensive company registration package includes name reservation, document preparation, SECP submission, and post-registration services. We handle everything from Articles of Association to NTN registration after incorporation.',
     image: '/images/secp-registration.jpg',
@@ -229,7 +190,7 @@ const businessServiceDatabase = {
 
   'firm-reg': {
     title: 'Firm Registration',
-    price: '40,000 PKR',
+    price: '50,000 PKR',
     description: 'Register your partnership firm with Registrar of Firms',
     fullDescription: 'Establish your partnership as a legal entity with our firm registration service. We handle partnership deed drafting, notarization, and submission to the Registrar of Firms. Includes post-registration NTN and business bank account assistance.',
     image: '/images/firm-registration.jpg',
@@ -262,7 +223,7 @@ const businessServiceDatabase = {
 
   'trademark-reg': {
     title: 'Trademark Registration',
-    price: '20,000 PKR',
+    price: '80,000 PKR',
     description: 'Protect your brand identity with official trademark registration',
     fullDescription: 'Safeguard your brand name, logo, and intellectual property with our trademark registration service. We conduct comprehensive searches, prepare applications, and handle all correspondence with the Trademark Registry until registration is complete.',
     image: '/images/trademark.jpg',
@@ -298,7 +259,7 @@ const businessServiceDatabase = {
 
   'import-export': {
     title: 'Import/Export License',
-    price: '20,000 PKR',
+    price: '40,000 PKR',
     description: 'Obtain license for international trade activities',
     fullDescription: 'We facilitate complete import/export license registration including IEC (Import Export Code) and membership with relevant trade associations. Our service includes guidance on customs procedures and duty drawbacks.',
     image: '/images/import-export.jpg',
@@ -331,7 +292,7 @@ const businessServiceDatabase = {
 
   'gst-reg': {
     title: 'GST Registration',
-    price: '10,000 PKR',
+    price: '40,000 PKR',
     description: 'Register for Goods and Services Tax with Punjab Revenue Authority',
     fullDescription: 'Mandatory for service providers with annual turnover above Rs. 10 million, our GST registration package includes complete documentation, PRA liaison, and first-return filing assistance. We ensure correct business categorization and tax period selection.',
     image: '/images/gst.jpg',
@@ -366,7 +327,7 @@ const businessServiceDatabase = {
 
   'pra': {
     title: 'PRA Registration',
-    price: '10,000 PKR',
+    price: '40,000 PKR',
     description: 'Punjab Revenue Authority registration for provincial tax compliance',
     fullDescription: 'Register with Punjab Revenue Authority for provincial tax compliance. Essential for service providers operating in Punjab. Our comprehensive service includes documentation, submission, and ongoing compliance support to ensure you meet all PRA requirements.',
     image: '/images/pra-registration.jpg',
@@ -403,7 +364,7 @@ const businessServiceDatabase = {
 
   'chamber': {
     title: 'Chamber of Commerce',
-    price: '18,000 PKR',
+    price: '30,000 PKR',
     description: 'Membership registration with Chamber of Commerce',
     fullDescription: 'Join your local Chamber of Commerce to enhance business credibility and access valuable networking opportunities. Our service includes complete membership processing, documentation, and guidance on chamber benefits and services.',
     image: '/images/chamber-commerce.jpg',
@@ -439,7 +400,7 @@ const businessServiceDatabase = {
 
   'dnfbp': {
     title: 'DNFBP Registration',
-    price: '10,000 PKR',
+    price: '15,000 PKR',
     description: 'Register as Designated Non-Financial Business/Profession',
     fullDescription: 'Mandatory for businesses like real estate, dealers in precious metals/stones, and other designated professions. We ensure complete compliance with FIA regulations including AML/CFT requirements.',
     image: '/images/dnfbp.jpg',
@@ -474,7 +435,7 @@ const businessServiceDatabase = {
 
   'accounting-services': {
     title: 'Accounting Services',
-    price: '15,000 PKR/month',
+    price: '50,000 PKR/month',
     description: 'Professional bookkeeping and financial reporting',
     fullDescription: 'Our monthly accounting services include complete bookkeeping, financial statement preparation, and tax compliance support. We provide cloud-based accounting with real-time access to your financial data.',
     image: '/images/accounting.jpg',
@@ -519,7 +480,7 @@ const businessServiceDatabase = {
 
   'accounting': {
     title: 'Accountant and Financial Reporting',
-    price: '25,000 PKR',
+    price: '50,000 PKR',
     description: 'Professional accounting and financial reporting from certified experts',
     fullDescription: 'Our comprehensive accounting service provides expert financial reporting, compliance management, and strategic financial guidance. We prepare detailed financial statements, ensure regulatory compliance, and provide insights to improve your business performance. Our certified accountants use modern tools and follow international accounting standards.',
     image: '/images/accounting-finance.jpg',
@@ -556,7 +517,7 @@ const businessServiceDatabase = {
 
   'bookkeeping': {
     title: 'Bookkeeping Service',
-    price: '7,000 PKR',
+    price: '20,000 PKR',
     description: 'Professional daily bookkeeping and transaction recording services',
     fullDescription: 'Our bookkeeping service provides systematic recording of all business transactions, maintaining accurate books of accounts. We handle daily entries, reconciliations, and provide regular financial summaries. Perfect for businesses wanting to maintain proper records without hiring full-time accounting staff.',
     image: '/images/bookkeeping.jpg',
@@ -588,7 +549,7 @@ const businessServiceDatabase = {
 
   'stock': {
     title: 'Stock Report',
-    price: '10,000 PKR',
+    price: '20,000 PKR',
     description: 'Comprehensive stock analysis and inventory reporting',
     fullDescription: 'Detailed stock reporting service that provides comprehensive analysis of your inventory including stock valuation, movement analysis, and optimization recommendations. Our reports help identify slow-moving items, optimize stock levels, and improve cash flow management.',
     image: '/images/stock-report.jpg',

@@ -7,7 +7,7 @@ const businessServices = [
   {
     id: 'nin',
     title: 'NIN Registration',
-    price: '1,500',
+    price: '3,000',
     description: 'National Identity Number registration for tax purposes',
     image: '/images/nin-registration.jpg',
     category: 'Registration',
@@ -21,7 +21,7 @@ const businessServices = [
   {
     id: 'ntn',
     title: 'NTN Certificate',
-    price: '1,500',
+    price: '4,000',
     description: 'National Tax Number registration',
     image: '/images/ntn-certificate.jpg',
     category: 'Certificate',
@@ -33,29 +33,9 @@ const businessServices = [
     ]
   },
   {
-    id: 'tax-return',
-    title: 'Tax Return Filing',
-    price: '4,000',
-    description: 'Annual income tax return filing',
-    image: '/images/tax-return.jpg',
-    category: 'Filing',
-    duration: '24-48 hours after document submission',
-    requirements: [
-      'Username and Password, (If Already Filer then only need this)',
-      'If you are new then provide 👇🏼👇🏼 below otherwise not',
-      'ID Card Picture',
-      'Email Address',
-      'Phone Number',
-      'Bank Account Details if you have Bank Account',
-      'Property Details if you own any property',
-      'Vehicle details If you own any car or bike',
-      'Salary person or Business owner'
-    ]
-  },
-  {
     id: 'filer',
     title: 'Business File Return',
-    price: '7,000',
+    price: '20,000',
     description: 'Become an active tax filer',
     image: '/images/tax.jpg',
     category: 'Status',
@@ -90,7 +70,7 @@ const businessServices = [
   {
     id: 'company-reg',
     title: 'Company Registration (SECP)',
-    price: '40,000',
+    price: '50,000',
     description: 'Private limited company registration',
     image: '/images/company-registration.jpg',
     category: 'Registration',
@@ -106,7 +86,7 @@ const businessServices = [
   {
     id: 'firm-reg',
     title: 'Firm Registration',
-    price: '40,000',
+    price: '50,000',
     description: 'Business Firm registration',
     image: '/images/firm-registration.jpg',
     category: 'Registration',
@@ -122,7 +102,7 @@ const businessServices = [
   {
     id: 'trademark',
     title: 'Trademark Registration',
-    price: '20,000',
+    price: '80,000',
     description: 'Brand name/logo protection',
     image: '/images/trademark.jpg',
     category: 'Protection',
@@ -141,7 +121,7 @@ const businessServices = [
   {
     id: 'import-export',
     title: 'Import/Export License',
-    price: '20,000',
+    price: '40,000',
     description: 'License for international trade',
     image: '/images/import-export.jpg',
     category: 'License',
@@ -177,7 +157,7 @@ const businessServices = [
   {
     id: 'pra',
     title: 'PRA Registration',
-    price: '10,000',
+    price: '40,000',
     description: 'Punjab Revenue Authority registration',
     image: '/images/pra-registration.png',
     category: 'Registration',
@@ -198,7 +178,7 @@ const businessServices = [
   {
     id: 'chamber',
     title: 'Chamber of Commerce',
-    price: '18,000',
+    price: '30,000',
     description: 'Membership registration',
     image: '/images/chamber-commerce.jpg',
     category: 'Registration',
@@ -218,7 +198,7 @@ const businessServices = [
   {
     id: 'dnfbp',
     title: 'DNFBP Registration',
-    price: '10,000',
+    price: '15,000',
     description: 'Designated Non-Financial Business registration',
     image: '/images/dnfbp.png',
     category: 'Compliance',
@@ -238,7 +218,7 @@ const businessServices = [
   {
     id: 'accounting',
     title: 'Accountant and Financial Reporting',
-    price: '25,000 PKR',
+    price: '50,000 PKR',
     category: 'Accounting',
     description: 'Accountant and financial reporting from experts',
     image: '/images/accounting-finance.jpg',
@@ -258,7 +238,7 @@ const businessServices = [
   {
     id: 'bookkeeping',
     title: 'Bookkeeping Service',
-    price: '7,000 PKR',
+    price: '20,000 PKR',
     category: 'Bookkeeping',
     description: 'Professional bookkeeping services',
     image: '/images/bookkeeping.jpg',
@@ -270,7 +250,7 @@ const businessServices = [
   {
     id: 'stock',
     title: 'Stock Report',
-    price: '10,000 PKR',
+    price: '20,000 PKR',
     category: 'Report',
     description: 'Detailed stock reporting and analysis',
     image: '/images/stock-report.jpg',

@@ -5,7 +5,7 @@ import Link from 'next/link';
 const serviceData = {
   'nin': {
     title: 'NIN Registration',
-    price: '1,500 PKR',
+    price: '3,000 PKR',
     description: 'National Identity Number registration for tax purposes',
     fullDescription: 'The National Identity Number (NIN) is a mandatory requirement that links your CNIC with Pakistan\'s tax system. Our experts ensure quick and hassle-free registration so you can comply with FBR requirements and avoid penalties. With over 5,000 successful registrations processed, we guarantee 100% approval when documents are submitted correctly.',
     requirements: [
@@ -47,7 +47,7 @@ const serviceData = {
   },
   'ntn': {
     title: 'NTN Certificate',
-    price: '1,500 PKR',
+    price: '4,000 PKR',
     description: 'National Tax Number registration',
     fullDescription: 'Your NTN Certificate is the official proof of your tax registration in Pakistan. We specialize in fast-track NTN registrations with same-day submission to FBR. Our team handles all paperwork and follow-ups, ensuring you get your certificate without visiting any tax office. Perfect for salaried individuals, freelancers, and property owners who need to comply with tax regulations.',
     requirements: [
@@ -78,7 +78,7 @@ const serviceData = {
   },
   'tax-return': {
     title: 'Tax Return Filing',
-    price: '4,000 PKR',
+    price: '5,000 PKR',
     description: 'Annual income tax return filing',
     fullDescription: 'Our certified tax experts prepare and file your annual income tax return with complete accuracy to ensure compliance and maximize your refunds. We analyze all eligible deductions including Zakat, insurance premiums, and charitable donations. Last year, our clients received 23% higher average refunds compared to self-filers.',
     requirements: [
@@ -113,7 +113,7 @@ const serviceData = {
   },
   'filer': {
     title: 'Business File Return',
-    price: '7,000 PKR',
+    price: '20,000 PKR',
     description: 'Become an active tax filer',
     fullDescription: 'Being a filer provides significant advantages including lower tax rates, property transaction benefits, and better banking terms. Our complete filer package includes NTN registration (if needed), NIN linkage, and first-year tax return filing. We guarantee your active filer status will reflect in FBR\'s system within 15 working days or we refund 50% of our fee.',
     requirements: [
@@ -152,7 +152,7 @@ const serviceData = {
   },
   'gst': {
     title: 'GST Registration',
-    price: '10,000 PKR',
+    price: '40,000 PKR',
     description: 'Goods and Services Tax registration',
     fullDescription: 'Mandatory for businesses with 10M+ annual turnover, our GST registration service includes complete documentation preparation, PRA liaison, and post-registration guidance. We handle the entire process electronically, including business categorization and tax period selection. Includes first-month return filing assistance at no extra cost.',
     requirements: [
@@ -187,7 +187,7 @@ const serviceData = {
   },
   'pra': {
     title: 'PRA Registration',
-    price: '10,000 PKR',
+    price: '40,000 PKR',
     description: 'Punjab Revenue Authority registration',
     fullDescription: 'Professional registration with PRA for service providers including doctors, lawyers, consultants, and other professionals. Our package includes tax advice on optimal registration category, complete documentation, and first-quarter return filing assistance. We maintain the highest success rate in Lahore with 99% first-time approvals.',
     requirements: [
@@ -222,7 +222,7 @@ const serviceData = {
   },
   'chamber': {
     title: 'Chamber of Commerce',
-    price: '18,000 PKR',
+    price: '30,000 PKR',
     description: 'Membership registration',
     fullDescription: 'Boost your business credibility with LCCI membership that provides networking opportunities, trade facilitation, and government liaison services. Our premium package includes document preparation, sponsorship arrangement (if needed), and fast-track processing. Members receive export/import certificates, trade references, and participation in international trade fairs.',
     requirements: [
