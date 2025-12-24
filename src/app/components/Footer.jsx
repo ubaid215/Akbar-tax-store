@@ -1,13 +1,7 @@
 import React from "react";
-import {
-  Phone,
-  Mail,
-  MapPin,
-  Instagram,
-} from "lucide-react";
-import Link from 'next/link';
-import Image from 'next/image';
-
+import { Phone, Mail, MapPin, Instagram } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -23,12 +17,12 @@ const Footer = () => {
           {/* Brand & Tagline */}
           <div className="lg:col-span-1">
             <Image
-                    src="/logo-1.png" 
-                    alt="Logo"
-                    width={70}
-                    height={70}
-                    priority 
-                  />
+              src="/logo-1.png"
+              alt="Logo"
+              width={70}
+              height={70}
+              priority
+            />
             <p
               className="text-sm leading-relaxed mb-4"
               style={{ color: "#D9E8FF" }}
@@ -38,7 +32,6 @@ const Footer = () => {
             </p>
             {/* Social Media Icons */}
             <div className="flex space-x-3">
-              
               <a
                 href="#"
                 className="p-2 rounded-full transition-all duration-300 hover:scale-110"
@@ -95,7 +88,6 @@ const Footer = () => {
                   Contact
                 </a>
               </li>
-             
             </ul>
           </div>
 
@@ -151,17 +143,18 @@ const Footer = () => {
                   style={{ color: "#0040A8" }}
                 />
                 <span className="text-sm" style={{ color: "#D9E8FF" }}>
-                  Faisalabad, Punjab, Pakistan
+                  P 82/3 ALFAYYAZ Colony, Street No 4 Satiana Road Faisalabad,
+                  Pakistan
                 </span>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4" style={{ color: "#0040A8" }} />
                 <a
-                  href="tel:03016832064"
+                  href="tel:03407300408"
                   className="text-sm transition-colors duration-300 hover:text-white"
                   style={{ color: "#D9E8FF" }}
                 >
-                  03016832064
+                  03407300408
                 </a>
               </div>
               <div className="flex items-center gap-3">

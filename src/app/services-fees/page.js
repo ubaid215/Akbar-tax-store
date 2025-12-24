@@ -49,7 +49,7 @@ const ServicesFeePage = () => {
         {
           id: 'personal-nin',
           name: 'NIN Registration',
-          fee: '1,500 PKR',
+          fee: '3,000 PKR',
           description: 'National Identity Number registration for tax purposes',
           image: '/images/nin-registration.jpg',
           requirements: [
@@ -62,7 +62,7 @@ const ServicesFeePage = () => {
         {
           id: 'personal-ntn',
           name: 'NTN Certificate',
-          fee: '1,500 PKR',
+          fee: '4,000 PKR',
           description: 'National Tax Number registration',
           image: '/images/ntn-certificate.jpg',
           requirements: [
@@ -75,7 +75,7 @@ const ServicesFeePage = () => {
         {
           id: 'personal-tax-return',
           name: 'Tax Return Filing',
-          fee: '4,000 PKR',
+          fee: '5,000 PKR',
           description: 'Annual income tax return filing',
           image: '/images/tax-return.jpg',
           requirements: [
@@ -94,7 +94,7 @@ const ServicesFeePage = () => {
         {
           id: 'personal-filer',
           name: 'Business File Return',
-          fee: '7,000 PKR',
+          fee: '20,000 PKR',
           description: 'Become an active tax filer',
           image: '/images/tax.jpg',
           requirements: [
@@ -111,7 +111,7 @@ const ServicesFeePage = () => {
         {
           id: 'personal-gst',
           name: 'GST Registration',
-          fee: '10,000 PKR',
+          fee: '40,000 PKR',
           description: 'Goods and Services Tax registration',
           image: '/images/gst.jpg',
           requirements: [
@@ -131,7 +131,7 @@ const ServicesFeePage = () => {
         {
           id: 'personal-pra',
           name: 'PRA Registration',
-          fee: '10,000 PKR',
+          fee: '40,000 PKR',
           description: 'Punjab Revenue Authority registration',
           image: '/images/pra-registration.png',
           requirements: [
@@ -151,7 +151,7 @@ const ServicesFeePage = () => {
         {
           id: 'personal-chamber',
           name: 'Chamber of Commerce',
-          fee: '18,000 PKR',
+          fee: '30,000 PKR',
           description: 'Membership registration',
           image: '/images/chamber-commerce.jpg',
           requirements: [
@@ -178,7 +178,7 @@ const ServicesFeePage = () => {
         {
           id: 'business-nin',
           name: 'NIN Registration',
-          fee: '1,500 PKR',
+          fee: '3,000 PKR',
           description: 'National Identity Number registration for tax purposes',
           image: '/images/nin-registration.jpg',
           requirements: [
@@ -191,7 +191,7 @@ const ServicesFeePage = () => {
         {
           id: 'business-ntn',
           name: 'NTN Certificate',
-          fee: '1,500 PKR',
+          fee: '4,000 PKR',
           description: 'National Tax Number registration',
           image: '/images/ntn-certificate.jpg',
           requirements: [
@@ -202,28 +202,9 @@ const ServicesFeePage = () => {
           process: '24 Hours'
         },
         {
-          id: 'business-tax-return',
-          name: 'Tax Return Filing',
-          fee: '4,000 PKR',
-          description: 'Annual income tax return filing',
-          image: '/images/tax.jpg',
-          requirements: [
-            'Username and Password, (If Already Filer then only need this)',
-            'If you are new then provide 👇🏼👇🏼 below otherwise not',
-            'ID Card Picture',
-            'Email Address',
-            'Phone Number',
-            'Bank Account Details if you have Bank Account',
-            'Property Details if you own any property',
-            'Vehicle details If you own any car or bike',
-            'Salary person or Business owner'
-          ],
-          process: '24-48 hours after document submission'
-        },
-        {
           id: 'business-filer',
           name: 'Business File Return',
-          fee: '7,000 PKR',
+          fee: '20,000 PKR',
           description: 'Become an active tax filer',
           image: '/images/bookkeeping.jpg',
           requirements: [
@@ -256,7 +237,7 @@ const ServicesFeePage = () => {
         {
           id: 'company-reg',
           name: 'Company Registration (SECP)',
-          fee: '40,000 PKR',
+          fee: '50,000 PKR',
           description: 'Private limited company registration',
           image: '/images/company-registration.jpg',
           requirements: [
@@ -271,7 +252,7 @@ const ServicesFeePage = () => {
         {
           id: 'firm-reg',
           name: 'Firm Registration',
-          fee: '40,000 PKR',
+          fee: '50,000 PKR',
           description: 'Business Firm registration',
           image: '/images/firm-registration.jpg',
           requirements: [
@@ -286,7 +267,7 @@ const ServicesFeePage = () => {
         {
           id: 'trademark',
           name: 'Trademark Registration',
-          fee: '20,000 PKR',
+          fee: '80,000 PKR',
           description: 'Brand name/logo protection',
           image: '/images/trademark.jpg',
           requirements: [
@@ -304,7 +285,7 @@ const ServicesFeePage = () => {
         {
           id: 'import-export',
           name: 'Import/Export License',
-          fee: '20,000 PKR',
+          fee: '40,000 PKR',
           description: 'License for international trade',
           image: '/images/import-export.jpg',
           requirements: [
@@ -338,7 +319,7 @@ const ServicesFeePage = () => {
         {
           id: 'business-pra',
           name: 'PRA Registration',
-          fee: '10,000 PKR',
+          fee: '40,000 PKR',
           description: 'Punjab Revenue Authority registration',
           image: '/images/pra-registration.png',
           requirements: [
@@ -358,7 +339,7 @@ const ServicesFeePage = () => {
         {
           id: 'business-chamber',
           name: 'Chamber of Commerce',
-          fee: '18,000 PKR',
+          fee: '30,000 PKR',
           description: 'Membership registration',
           image: '/images/chamber-commerce.jpg',
           requirements: [
@@ -377,7 +358,7 @@ const ServicesFeePage = () => {
         {
           id: 'dnfbp',
           name: 'DNFBP Registration',
-          fee: '10,000 PKR',
+          fee: '15,000 PKR',
           description: 'Designated Non-Financial Business registration',
           image: '/images/dnfbp.png',
           requirements: [
@@ -396,7 +377,7 @@ const ServicesFeePage = () => {
         {
           id: 'accounting',
           name: 'Accountant and Financial Reporting',
-          fee: '25,000 PKR',
+          fee: '50,000 PKR',
           description: 'Accountant and financial reporting from experts',
           image: '/images/accounting-finance.jpg',
           requirements: [
@@ -415,7 +396,7 @@ const ServicesFeePage = () => {
         {
           id: 'bookkeeping',
           name: 'Bookkeeping Service',
-          fee: '7,000 PKR',
+          fee: '20,000 PKR',
           description: 'Professional bookkeeping services',
           image: '/images/bookkeeping.jpg',
           requirements: [
@@ -426,7 +407,7 @@ const ServicesFeePage = () => {
         {
           id: 'stock',
           name: 'Stock Report',
-          fee: '10,000 PKR',
+          fee: '20,000 PKR',
           description: 'Detailed stock reporting and analysis',
           image: '/images/stock-report.jpg',
           requirements: [
