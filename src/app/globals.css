@@ -1,41 +1,265 @@
 @import "tailwindcss";
+@source "../src";
 
+/* ═══════════════════════════════════════════════════════════
+   BRAND TOKENS
+═══════════════════════════════════════════════════════════ */
+:root {
+  --brand-900:  #0B1E3D;
+  --brand-700:  #072971;
+  --brand-600:  #0040A8;
+  --brand-500:  #0059F5;
+  --brand-100:  #EEF4FF;
+  --brand-50:   #F8FBFF;
 
+  --text-primary:   #0B1E3D;
+  --text-secondary: #5D7A96;
+  --text-muted:     #A0BBCF;
 
-clipPath{
-    circle: circle(0% at 100% 0%);
-}
-button{
-    cursor: pointer;
-}
+  --border-subtle: rgba(0,64,168,0.08);
+  --border-soft:   rgba(0,64,168,0.14);
 
-
-
-* {
-  box-sizing: border-box;
-}
-
-/* Improve animation performance */
-.animate-transform {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000px;
-}
-
-/* Custom scrollbar for webkit browsers */
-::-webkit-scrollbar {
-  width: 8px;
+  --shadow-card: 0 1px 8px rgba(0,64,168,0.06), 0 0 0 1px rgba(0,64,168,0.05);
+  --shadow-btn:  0 1px 4px rgba(0,64,168,0.12);
+  --shadow-blue: 0 4px 14px rgba(0,64,168,0.28);
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
+/* ═══════════════════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
+body {
+  color: var(--text-primary);
+  /* No background here — each layout group owns its own bg */
+}
+
+button { cursor: pointer; }
+
+input::placeholder { color: var(--text-muted); opacity: 1; }
+
+/* ═══════════════════════════════════════════════════════════
+   KEYFRAME ANIMATIONS
+   Defined once here so component <style> tags are NOT needed.
+   Prevents FOUC caused by React hydration removing/re-injecting
+   inline <style> tags during reconciliation.
+═══════════════════════════════════════════════════════════ */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ANIMATION UTILITY CLASSES
+   Used by components via className — no inline style needed.
+═══════════════════════════════════════════════════════════ */
+.anim-spin        { animation: spin     0.8s linear     infinite; }
+.anim-pulse       { animation: pulse    1.5s ease-in-out infinite; }
+.anim-shimmer     { animation: shimmer  1.6s ease-in-out infinite; }
+.anim-fade-in     { animation: fadeIn   0.2s ease forwards; }
+
+/* ═══════════════════════════════════════════════════════════
+   SIDEBAR — RESPONSIVE VISIBILITY
+   Controlled here so Tailwind scanning isn't needed.
+═══════════════════════════════════════════════════════════ */
+.desktop-sidebar   { display: none; }
+.desktop-only-flex { display: none; }
+.mobile-only       { display: block; }
+
+@media (min-width: 1024px) {
+  .desktop-sidebar   { display: flex !important; flex-direction: column; }
+  .desktop-only-flex { display: flex !important; }
+  .mobile-only       { display: none  !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LOGIN PAGE — RESPONSIVE LAYOUT
+═══════════════════════════════════════════════════════════ */
+.login-root  { flex-direction: column; }
+.login-left  { display: none; }
+.mobile-logo { display: none; }
+
+@media (min-width: 1024px) {
+  .login-root  { flex-direction: row; }
+  .login-left  { display: flex !important; flex-direction: column; width: 52%; }
+  .mobile-logo { display: none  !important; }
+}
+
+@media (max-width: 1023px) {
+  .login-left  { display: none  !important; }
+  .mobile-logo { display: flex  !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DASHBOARD — RESPONSIVE GRIDS
+   Avoids inline <style> tags in DashboardPage component.
+═══════════════════════════════════════════════════════════ */
+.stats-grid    { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.chart-grid    { grid-template-columns: minmax(0,1fr); }
+.bookings-grid { grid-template-columns: minmax(0,1fr); }
+.services-grid { grid-template-columns: minmax(0,1fr); }
+
+@media (min-width: 1024px) {
+  .stats-grid    { grid-template-columns: repeat(4, minmax(0,1fr)); }
+  .services-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+
+@media (min-width: 1280px) {
+  .chart-grid    { grid-template-columns: 2fr 1fr; }
+  .bookings-grid { grid-template-columns: 2fr 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SIDEBAR TOOLTIP
+═══════════════════════════════════════════════════════════ */
+a:hover .sidebar-tooltip { opacity: 1 !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   SCROLLBAR
+═══════════════════════════════════════════════════════════ */
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--brand-50); }
 ::-webkit-scrollbar-thumb {
-  background: #0040A8;
-  border-radius: 4px;
+  background:    var(--brand-600);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--brand-700); }
+
+/* ═══════════════════════════════════════════════════════════
+   SKELETON
+═══════════════════════════════════════════════════════════ */
+.skeleton {
+  background: linear-gradient(90deg, #EEF4FF 25%, #E0ECFF 50%, #EEF4FF 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+  border-radius: 0.5rem;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #072971;
+/* ═══════════════════════════════════════════════════════════
+   FOCUS RING (accessibility)
+═══════════════════════════════════════════════════════════ */
+:focus-visible {
+  outline:        2px solid var(--brand-500);
+  outline-offset: 2px;
+  border-radius:  6px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PERFORMANCE
+═══════════════════════════════════════════════════════════ */
+.animate-transform {
+  transform:            translateZ(0);
+  backface-visibility:  hidden;
+  perspective:          1000px;
+  will-change:          transform;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   AVAILABILITY PAGE — BENTO GRID
+   Collapses to single column on mobile/tablet
+═══════════════════════════════════════════════════════════ */
+.avail-bento-grid {
+  grid-template-columns: 1fr !important;
+}
+
+@media (min-width: 1024px) {
+  .avail-bento-grid {
+    grid-template-columns: 1fr 340px !important;
+  }
+}
+
+/* Availability day row config fields: 2-col mobile → 4-col desktop */
+.day-row-grid      { grid-template-columns: repeat(2, minmax(0,1fr)); }
+@media (min-width: 768px) {
+  .day-row-grid    { grid-template-columns: repeat(4, minmax(0,1fr)); }
+}
+
+/* Slot preview cards: 2-col → 3-col → 4-col */
+.slot-preview-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+@media (min-width: 640px)  { .slot-preview-grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@media (min-width: 1024px) { .slot-preview-grid { grid-template-columns: repeat(4, minmax(0,1fr)); } }
+
+/* ═══════════════════════════════════════════════════════════
+   SERVICES PAGE — GRIDS
+═══════════════════════════════════════════════════════════ */
+.services-grid       { grid-template-columns: minmax(0,1fr); }
+.services-stats-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+
+@media (min-width: 640px) {
+  .services-grid       { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .services-stats-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PUBLIC BOOKING PAGE
+═══════════════════════════════════════════════════════════ */
+/* Two-column layout: service sidebar + main */
+.booking-layout { grid-template-columns: minmax(0,1fr) !important; }
+@media (min-width: 768px) {
+  .booking-layout { grid-template-columns: 280px 1fr !important; }
+}
+
+/* Form grid: 2-col on tablet+ */
+.form-grid { grid-template-columns: minmax(0,1fr) !important; }
+@media (min-width: 540px) {
+  .form-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* Time slot grid: 2-col → 3-col → 4-col */
+.slots-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+@media (min-width: 480px) { .slots-grid { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+@media (min-width: 768px) { .slots-grid { grid-template-columns: repeat(4,minmax(0,1fr)); } }
+
+
+
+.anim-spin {
+  animation: spin 1s linear infinite;
+}
+.anim-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+  .booking-layout {
+    grid-template-columns: 1fr !important;
+  }
+  .form-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .slots-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
 }

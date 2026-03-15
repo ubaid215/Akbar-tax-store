@@ -2,48 +2,25 @@
 const nextConfig = {
   reactStrictMode: true,
 
-  // ✅ Image Optimization
+  // Image Optimization
   images: {
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "www.akbartaxstore.com",
-      },
-      {
-        protocol: "https",
-        hostname: "akbartaxstore.com",
-      },
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-      },
+      { protocol: "https", hostname: "www.akbartaxstore.com" },
+      { protocol: "https", hostname: "akbartaxstore.com" },
+      { protocol: "https", hostname: "images.unsplash.com" },
     ],
     formats: ["image/webp", "image/avif"],
-    minimumCacheTTL: 31536000, // 1 year
+    minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
   },
 
-  // ✅ Redirect Rules (with protection for Vercel builds)
   async redirects() {
     return [
-      // Redirect non-www to www (avoid loop on vercel.app)
       {
         source: "/:path*",
-        has: [
-          {
-            type: "host",
-            value: "akbartaxstore.com",
-          },
-        ],
-        missing: [
-          {
-            type: "host",
-            value: "www.akbartaxstore.com",
-          },
-        ],
+        has: [{ type: "host", value: "akbartaxstore.com" }],
         destination: "https://www.akbartaxstore.com/:path*",
         permanent: true,
       },
-      // Example redirect for old URLs
       {
         source: "/old-services",
         destination: "/services-fees",
@@ -52,48 +29,33 @@ const nextConfig = {
     ];
   },
 
-  // ✅ Custom Headers
   async headers() {
     return [
-      // Robots.txt headers
       {
         source: "/robots.txt",
         headers: [
           { key: "Content-Type", value: "text/plain" },
-          { key: "Cache-Control", value: "public, max-age=86400" }, // 24 hours
+          { key: "Cache-Control", value: "public, max-age=86400" },
         ],
       },
-      // Sitemap headers
       {
         source: "/sitemap.xml",
         headers: [
           { key: "Content-Type", value: "application/xml" },
-          { key: "Cache-Control", value: "public, max-age=3600" }, // 1 hour
+          { key: "Cache-Control", value: "public, max-age=3600" },
         ],
       },
-      // Security & SEO Headers (Safe for Edge Runtime)
       {
-        source: "/(.*)",
-        headers: [
-          { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "X-Frame-Options", value: "DENY" },
-          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-          { key: "X-XSS-Protection", value: "1; mode=block" },
-        ],
-      },
-      // Static assets caching
-      {
-        source: "/_next/static/(.*)",
+        source: "/_next/static/:path*",
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=31536000, immutable", // 1 year
+            value: "public, max-age=31536000, immutable",
           },
         ],
       },
-      // Public images caching
       {
-        source: "/images/(.*)",
+        source: "/images/:path*",
         headers: [
           {
             key: "Cache-Control",
@@ -101,30 +63,31 @@ const nextConfig = {
           },
         ],
       },
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "X-XSS-Protection", value: "1; mode=block" },
+        ],
+      },
     ];
   },
 
-  // ✅ General Optimizations
   trailingSlash: false,
   compress: true,
   poweredByHeader: false,
 
-  // ✅ Experimental (Safe for Vercel)
   experimental: {
     optimizePackageImports: ["lucide-react"],
   },
 
-  // ✅ Remove console logs in production (keep errors/warnings)
   compiler: {
     removeConsole:
       process.env.NODE_ENV === "production"
         ? { exclude: ["error", "warn"] }
         : false,
-  },
-
-  // ✅ Disable ESLint during build (for Vercel build stability)
-  eslint: {
-    ignoreDuringBuilds: true,
   },
 };
 

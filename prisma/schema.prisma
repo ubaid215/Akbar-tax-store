@@ -1,0 +1,571 @@
+// ============================================================
+// BOOKING SYSTEM — schema.prisma
+// PostgreSQL | Prisma ORM
+// Scalable, production-ready, Google Calendar OAuth ready
+// ============================================================
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [uuidOssp(map: "uuid-ossp"), pgcrypto]
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  STAFF // future: allow staff to manage bookings
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+enum BookingStatus {
+  PENDING     // just created, awaiting confirmation
+  CONFIRMED   // admin confirmed
+  CANCELLED   // cancelled by admin or client
+  COMPLETED   // meeting done
+  NO_SHOW     // client didn't show up
+  RESCHEDULED // rescheduled to another slot
+}
+
+enum NotificationType {
+  NEW_BOOKING
+  BOOKING_CONFIRMED
+  BOOKING_CANCELLED
+  BOOKING_RESCHEDULED
+  REMINDER_10MIN
+  REMINDER_24HR
+  BOOKING_COMPLETED
+}
+
+enum NotificationChannel {
+  EMAIL
+  PUSH
+  SMS // future
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+  SKIPPED
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
+  EXPORT
+  VIEW
+}
+
+enum ServiceStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+enum SlotStatus {
+  AVAILABLE
+  BOOKED
+  BLOCKED   // admin manually blocked
+  BUFFER    // buffer time slot
+}
+
+// ============================================================
+// USER (Admin Dashboard Access)
+// ============================================================
+
+model User {
+  id            String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email         String     @unique
+  name          String
+  password      String     // hashed with bcrypt
+  role          UserRole   @default(ADMIN)
+  status        UserStatus @default(ACTIVE)
+  avatar        String?
+  phone         String?
+
+  // Push notification token (FCM / web push)
+  pushToken     String?
+  pushEnabled   Boolean    @default(true)
+
+  // Email notification preferences
+  emailEnabled  Boolean    @default(true)
+
+  // Google Calendar OAuth — ready for future integration
+  googleCalendarConnected Boolean   @default(false)
+  googleAccessToken       String?   // encrypted
+  googleRefreshToken      String?   // encrypted
+  googleCalendarId        String?
+  googleTokenExpiry       DateTime?
+
+  // Timestamps
+  lastLoginAt   DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  deletedAt     DateTime?  // soft delete
+
+  // Relations
+  availabilities  Availability[]
+  services        Service[]
+  bookings        Booking[]       @relation("AdminBookings")
+  notifications   Notification[]
+  auditLogs       AuditLog[]
+
+  @@index([email])
+  @@index([role, status])
+  @@map("users")
+}
+
+// ============================================================
+// AVAILABILITY — Admin defines when they are available
+// Set once, like Calendly. Recurring weekly schedule.
+// ============================================================
+
+model Availability {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  adminId       String    @db.Uuid
+  admin         User      @relation(fields: [adminId], references: [id])
+
+  dayOfWeek     DayOfWeek
+  startTime     String    // "09:00" — 24hr format
+  endTime       String    // "17:00"
+  isActive      Boolean   @default(true)
+
+  // Slot duration in minutes (e.g. 30, 60)
+  slotDuration  Int       @default(60)
+
+  // Buffer time in minutes between appointments
+  bufferTime    Int       @default(10)
+
+  // Max bookings per slot (1 = one-on-one, >1 = group)
+  maxBookings   Int       @default(1)
+
+  // Timezone
+  timezone      String    @default("UTC")
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([adminId, dayOfWeek])
+  @@index([adminId, isActive])
+  @@map("availabilities")
+}
+
+// ============================================================
+// AVAILABILITY OVERRIDE — Block specific dates (holidays, vacations)
+// ============================================================
+
+model AvailabilityOverride {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  adminId   String   @db.Uuid
+
+  date      DateTime @db.Date   // specific date to block or open
+  isBlocked Boolean  @default(true)
+
+  // Optional: custom hours for this specific date
+  startTime String?  // null = full day blocked
+  endTime   String?
+
+  reason    String?  // "Holiday", "Vacation", etc.
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([adminId, date])
+  @@index([adminId, date])
+  @@map("availability_overrides")
+}
+
+// ============================================================
+// SERVICE — Admin adds services with optional charges
+// Displayed on public booking page ONLY if active
+// ============================================================
+
+model Service {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  adminId       String        @db.Uuid
+  admin         User          @relation(fields: [adminId], references: [id])
+
+  name          String
+  description   String?
+  status        ServiceStatus @default(ACTIVE)
+
+  // Pricing — optional (null = free)
+  price         Decimal?      @db.Decimal(10, 2)
+  currency      String?       @default("USD")
+
+  // Duration in minutes — overrides availability slot duration if set
+  duration      Int?
+
+  // Buffer override per service
+  bufferTime    Int?
+
+  // Display order on public page
+  sortOrder     Int           @default(0)
+
+  // Color for calendar display
+  color         String?       @default("#3B82F6")
+
+  // Icon or image
+  icon          String?
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  deletedAt     DateTime?     // soft delete
+
+  // Relations
+  bookings      Booking[]
+
+  @@index([adminId, status])
+  @@index([adminId, sortOrder])
+  @@map("services")
+}
+
+// ============================================================
+// SLOT — Generated time slots from availability
+// Pre-generated for performance (can be cron-generated)
+// ============================================================
+
+model Slot {
+  id          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  adminId     String     @db.Uuid
+
+  date        DateTime   @db.Date
+  startTime   DateTime   // full datetime with timezone
+  endTime     DateTime   // includes buffer time
+  bufferEnd   DateTime?  // actual buffer end time
+
+  status      SlotStatus @default(AVAILABLE)
+
+  // How many bookings this slot can hold
+  capacity    Int        @default(1)
+  booked      Int        @default(0) // current bookings count
+
+  // Google Calendar event ID — for future sync
+  googleEventId String?
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  bookings    Booking[]
+
+  @@unique([adminId, startTime])
+  @@index([adminId, date, status])
+  @@index([adminId, startTime])
+  @@map("slots")
+}
+
+// ============================================================
+// BOOKING — Core booking record
+// ============================================================
+
+model Booking {
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookingRef      String        @unique // human-readable: "BK-2024-0001"
+
+  // Admin who owns this booking
+  adminId         String        @db.Uuid
+  admin           User          @relation("AdminBookings", fields: [adminId], references: [id])
+
+  // Slot
+  slotId          String        @db.Uuid
+  slot            Slot          @relation(fields: [slotId], references: [id])
+
+  // Service (optional — null if no services defined)
+  serviceId       String?       @db.Uuid
+  service         Service?      @relation(fields: [serviceId], references: [id])
+
+  // Client info (no auth required for clients)
+  clientName      String
+  clientEmail     String
+  clientPhone     String?
+  clientTimezone  String        @default("UTC")
+  clientNotes     String?       // notes from client during booking
+
+  // Booking details
+  status          BookingStatus @default(PENDING)
+  startTime       DateTime
+  endTime         DateTime
+  bufferEndTime   DateTime?     // includes buffer
+
+  // Price snapshot at time of booking
+  pricePaid       Decimal?      @db.Decimal(10, 2)
+  currency        String?       @default("USD")
+
+  // Admin notes
+  adminNotes      String?
+
+  // Cancellation
+  cancelledAt     DateTime?
+  cancelledBy     String?       // "admin" | "client"
+  cancellationReason String?
+
+  // Reschedule tracking
+  rescheduledFrom String?       @db.Uuid // previous booking id
+  rescheduledAt   DateTime?
+
+  // Google Calendar sync
+  googleEventId   String?
+  googleMeetLink  String?       // auto-generated meet link (future)
+
+  // Reminder tracking
+  reminder10MinSent  Boolean    @default(false)
+  reminder24HrSent   Boolean    @default(false)
+
+  // Timestamps
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  history         BookingHistory[]
+  notifications   Notification[]
+
+  @@index([adminId, status])
+  @@index([adminId, startTime])
+  @@index([clientEmail])
+  @@index([bookingRef])
+  @@index([slotId])
+  @@index([status, startTime]) // for reminder cron queries
+  @@map("bookings")
+}
+
+// ============================================================
+// BOOKING HISTORY — Every state change recorded
+// Immutable log — never update, only insert
+// ============================================================
+
+model BookingHistory {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookingId   String        @db.Uuid
+  booking     Booking       @relation(fields: [bookingId], references: [id])
+
+  fromStatus  BookingStatus?
+  toStatus    BookingStatus
+
+  changedBy   String        // "admin" | "client" | "system"
+  changedById String?       @db.Uuid // admin user id if changed by admin
+
+  reason      String?
+  metadata    Json?         // any extra data about the change
+
+  createdAt   DateTime      @default(now())
+
+  @@index([bookingId])
+  @@index([createdAt])
+  @@map("booking_history")
+}
+
+// ============================================================
+// NOTIFICATION — Push + Email log
+// ============================================================
+
+model Notification {
+  id          String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  // Who receives it
+  adminId     String?             @db.Uuid
+  admin       User?               @relation(fields: [adminId], references: [id])
+
+  // Client email (no auth)
+  clientEmail String?
+  clientName  String?
+
+  // Booking reference
+  bookingId   String?             @db.Uuid
+  booking     Booking?            @relation(fields: [bookingId], references: [id])
+
+  type        NotificationType
+  channel     NotificationChannel
+  status      NotificationStatus  @default(PENDING)
+
+  // Content
+  subject     String?             // email subject
+  body        String              // email body or push message
+
+  // Scheduling
+  scheduledAt DateTime            @default(now()) // when to send
+  sentAt      DateTime?           // when actually sent
+  failedAt    DateTime?
+  failReason  String?
+
+  // Retry
+  retryCount  Int                 @default(0)
+  maxRetries  Int                 @default(3)
+
+  // External IDs
+  externalId  String?             // email provider message ID, push ID
+
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@index([bookingId])
+  @@index([adminId, type])
+  @@index([status, scheduledAt]) // for notification worker queue
+  @@index([clientEmail])
+  @@map("notifications")
+}
+
+// ============================================================
+// AUDIT LOG — Every admin action tracked
+// ============================================================
+
+model AuditLog {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String      @db.Uuid
+  user        User        @relation(fields: [userId], references: [id])
+
+  action      AuditAction
+  entity      String      // "Booking" | "Service" | "Availability" | "User"
+  entityId    String?     // the ID of the record affected
+
+  // What changed
+  oldValues   Json?       // snapshot before change
+  newValues   Json?       // snapshot after change
+
+  // Request context
+  ipAddress   String?
+  userAgent   String?
+  endpoint    String?     // API route that triggered this
+
+  createdAt   DateTime    @default(now())
+
+  @@index([userId])
+  @@index([entity, entityId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// ============================================================
+// ANALYTICS — Pre-aggregated for dashboard performance
+// Updated by background jobs, not real-time queries
+// ============================================================
+
+model AnalyticsDailySnapshot {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  adminId         String   @db.Uuid
+  date            DateTime @db.Date
+
+  // Booking metrics
+  totalBookings   Int      @default(0)
+  confirmed       Int      @default(0)
+  cancelled       Int      @default(0)
+  completed       Int      @default(0)
+  noShows         Int      @default(0)
+  rescheduled     Int      @default(0)
+  pending         Int      @default(0)
+
+  // Revenue
+  totalRevenue    Decimal  @default(0) @db.Decimal(12, 2)
+  currency        String   @default("USD")
+
+  // Slot metrics
+  totalSlots      Int      @default(0)
+  bookedSlots     Int      @default(0)
+  availableSlots  Int      @default(0)
+  blockedSlots    Int      @default(0)
+
+  // Utilization rate (0-100)
+  utilizationRate Decimal  @default(0) @db.Decimal(5, 2)
+
+  // Notifications
+  emailsSent      Int      @default(0)
+  pushSent        Int      @default(0)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([adminId, date])
+  @@index([adminId, date])
+  @@map("analytics_daily_snapshots")
+}
+
+model AnalyticsServiceSnapshot {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  adminId       String   @db.Uuid
+  serviceId     String   @db.Uuid
+  date          DateTime @db.Date
+
+  bookings      Int      @default(0)
+  revenue       Decimal  @default(0) @db.Decimal(12, 2)
+  cancellations Int      @default(0)
+  completions   Int      @default(0)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([adminId, serviceId, date])
+  @@index([adminId, date])
+  @@map("analytics_service_snapshots")
+}
+
+// ============================================================
+// WEBHOOK CONFIG — For future integrations (Zapier, etc.)
+// ============================================================
+
+model WebhookConfig {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  adminId     String   @db.Uuid
+
+  url         String
+  secret      String   // HMAC secret for verification
+  isActive    Boolean  @default(true)
+
+  // Which events to fire on
+  events      String[] // ["booking.created", "booking.cancelled"]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  logs        WebhookLog[]
+
+  @@index([adminId, isActive])
+  @@map("webhook_configs")
+}
+
+model WebhookLog {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  webhookId    String        @db.Uuid
+  webhook      WebhookConfig @relation(fields: [webhookId], references: [id])
+
+  event        String
+  payload      Json
+  statusCode   Int?
+  response     String?
+  success      Boolean       @default(false)
+  attemptCount Int           @default(1)
+
+  sentAt       DateTime      @default(now())
+
+  @@index([webhookId])
+  @@index([event])
+  @@map("webhook_logs")
+}
