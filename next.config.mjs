@@ -79,6 +79,7 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
 
+  serverExternalPackages: ["@prisma/client", "bcryptjs"],
   experimental: {
     optimizePackageImports: ["lucide-react"],
   },
