@@ -6,7 +6,8 @@ import AdminSidebar         from '@/app/components/admin/AdminSidebar';
 import AdminHeader          from '@/app/components/admin/AdminHeader';
 
 export const metadata = {
-  title: { template: '%s | Admin Dashboard', default: 'Admin Dashboard' },
+  title:    { template: '%s | Admin Dashboard', default: 'Admin Dashboard' },
+  manifest: '/admin-manifest.json', 
 };
 
 export default async function AdminLayout({ children }) {
@@ -22,17 +23,16 @@ export default async function AdminLayout({ children }) {
       height: '100vh',
       width: '100vw',
       overflow: 'hidden',
-      position: 'relative',   // stacking context for mobile drawer z-index
+      position: 'relative',
       background: '#F0F5FF',
     }}>
       <AdminSidebar user={session.user} />
 
-      {/* Main column */}
       <div style={{
         display: 'flex',
         flexDirection: 'column',
         flex: 1,
-        minWidth: 0,          // prevents flex child from overflowing
+        minWidth: 0,
         overflow: 'hidden',
       }}>
         <AdminHeader user={session.user} />
