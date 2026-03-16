@@ -1,4 +1,5 @@
 // src/app/api/availability/route.js
+
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
@@ -9,7 +10,10 @@ const DAY_MAP = {
   THURSDAY: 4, FRIDAY: 5, SATURDAY: 6, SUNDAY: 0,
 };
 
-// ── SAFE date helpers ─────────────────────────────────────────
+// Pakistan Standard Time is UTC+5 — no DST
+const PKT_OFFSET_HOURS = 5;
+
+// ── Date helpers ──────────────────────────────────────────────
 
 function localStartOfToday() {
   const d = new Date();
@@ -17,68 +21,66 @@ function localStartOfToday() {
   return d;
 }
 
-/**
- * Add days to a date (returns new Date)
- */
 function addDays(date, n) {
   const d = new Date(date);
   d.setDate(d.getDate() + n);
   return d;
 }
 
-
-function parseLocalDate(dateStr) {
-  const [y, m, d] = dateStr.split('-').map(Number);
-  return new Date(y, m - 1, d, 0, 0, 0, 0); // local midnight ✅
-}
-
-/**
- * Return local midnight of a given Date object
- */
 function localMidnight(date) {
   const d = new Date(date);
   d.setHours(0, 0, 0, 0);
   return d;
 }
 
+/**
+ * Build a slot DateTime from a calendar date + time string in PKT.
+ * Uses setUTCHours so the result is correct regardless of server timezone.
+ *
+ * "09:00" PKT on 2026-03-17
+ * = 9am PKT - 5h = 4am UTC
+ * = 2026-03-17T04:00:00Z  ✅ stored correctly on both local PKT and Vercel UTC
+ *
+ * @param {Date}   calendarDate - local midnight date for the day
+ * @param {string} timeStr      - "HH:MM" in PKT (admin's configured time)
+ * @returns {Date}
+ */
+function buildPKTTime(calendarDate, timeStr) {
+  const [h, m] = timeStr.split(':').map(Number);
+  const d = new Date(calendarDate);
+  // Use setUTCHours: subtract PKT offset so we store the correct UTC value
+  d.setUTCHours(h - PKT_OFFSET_HOURS, m, 0, 0);
+  return d;
+}
+
 // ── Slot generator ────────────────────────────────────────────
 async function generateSlots(adminId, availabilities, daysAhead = 60) {
-  const today    = localStartOfToday();
+  const today     = localStartOfToday();
   const slotsData = [];
 
   for (let i = 0; i < daysAhead; i++) {
     const date      = addDays(today, i);
-    const dayOfWeek = date.getDay(); // 0=Sun…6=Sat in LOCAL time ✅
+    const dayOfWeek = date.getDay(); // local day — fine for calendar matching
 
     const avail = availabilities.find(
       a => DAY_MAP[a.dayOfWeek] === dayOfWeek && a.isActive
     );
     if (!avail) continue;
 
-    // Check for a blocked override on this local calendar date
-    const dayMidnight = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())); // store UTC midnight ✅
+    // Check blocked override
+    const dayMidnight = localMidnight(date);
     const override = await prisma.availabilityOverride.findFirst({
       where: {
         adminId,
-        // Match any override record whose date column falls on this calendar day
-        date: {
-          gte: dayMidnight,
-          lt:  addDays(dayMidnight, 1),
-        },
+        date:      { gte: dayMidnight, lt: addDays(dayMidnight, 1) },
         isBlocked: true,
       },
     });
     if (override) continue;
 
-    const [startH, startM] = avail.startTime.split(':').map(Number);
-    const [endH,   endM]   = avail.endTime.split(':').map(Number);
-
-    // Build slot times using local calendar date
-    const dayStart = new Date(date);
-    dayStart.setHours(startH, startM, 0, 0);
-
-    const dayEnd = new Date(date);
-    dayEnd.setHours(endH, endM, 0, 0);
+    // ✅ Build slot times in PKT using setUTCHours
+    const dayStart = buildPKTTime(date, avail.startTime);
+    const dayEnd   = buildPKTTime(date, avail.endTime);
 
     let cursor = new Date(dayStart);
     while (true) {
@@ -88,7 +90,7 @@ async function generateSlots(adminId, availabilities, daysAhead = 60) {
 
       slotsData.push({
         adminId,
-        date:      dayMidnight,   // store exact UTC midnight so Prisma @db.Date doesn't shift it
+        date:      dayMidnight,
         startTime: new Date(cursor),
         endTime:   new Date(slotEnd),
         bufferEnd: new Date(bufferEnd),
@@ -111,8 +113,6 @@ export async function GET() {
     if (!session?.user?.id) {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
     }
-
-    const now = new Date();
 
     const [availabilities, overrides] = await Promise.all([
       prisma.availability.findMany({
@@ -142,7 +142,7 @@ export async function POST(request) {
 
     const adminId        = session.user.id;
     const body           = await request.json();
-    const { days, timezone = 'UTC' } = body;
+    const { days, timezone = 'Asia/Karachi' } = body;
 
     if (!Array.isArray(days) || days.length === 0) {
       return NextResponse.json({ success: false, message: 'days array is required' }, { status: 400 });
@@ -150,7 +150,7 @@ export async function POST(request) {
 
     const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
     for (const day of days) {
-      if (!day.isActive) continue; // skip validation for inactive days
+      if (!day.isActive) continue;
       if (!timeRegex.test(day.startTime) || !timeRegex.test(day.endTime)) {
         return NextResponse.json({ success: false, message: `Invalid time format for ${day.dayOfWeek}` }, { status: 400 });
       }
@@ -191,7 +191,7 @@ export async function POST(request) {
 
     const savedAvailabilities = await prisma.$transaction(upsertOps);
 
-    // Delete future available slots and regenerate
+    // Delete future available slots and regenerate with correct PKT times
     await prisma.slot.deleteMany({
       where: { adminId, status: 'AVAILABLE', startTime: { gte: new Date() } },
     });

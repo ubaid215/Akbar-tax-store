@@ -4,163 +4,99 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-// ── SAFE date helpers ─────────────────────────────────────────
-// THE BUG: new Date("2026-03-24") parses as UTC midnight
-// In UTC+5 (Pakistan) this becomes March 23 at 19:00 local = March 23 calendar day
-// Fix: always parse date strings manually into LOCAL midnight
+const PKT_OFFSET_HOURS = 5;
 
-function parseUTCDate(dateStr) {
+function parseLocalDate(dateStr) {
   const [y, m, d] = dateStr.split('-').map(Number);
-  return new Date(Date.UTC(y, m - 1, d)); // exact UTC midnight ✅
+  return new Date(y, m - 1, d, 0, 0, 0, 0);
 }
-
-function localMidnight(date) {
-  const d = new Date(date);
-  d.setHours(0, 0, 0, 0);
-  return d;
-}
-
 function addDays(date, n) {
-  const d = new Date(date);
-  d.setDate(d.getDate() + n);
-  return d;
+  const d = new Date(date); d.setDate(d.getDate() + n); return d;
 }
-
 function localStartOfToday() {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
+  const d = new Date(); d.setHours(0, 0, 0, 0); return d;
+}
+
+// ✅ Build time using UTC hours so PKT "09:00" = T04:00:00Z on any server
+function buildPKTTime(calendarDate, timeStr) {
+  const [h, m] = timeStr.split(':').map(Number);
+  const d = new Date(calendarDate);
+  d.setUTCHours(h - PKT_OFFSET_HOURS, m, 0, 0);
   return d;
 }
 
-// ── GET ───────────────────────────────────────────────────────
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
-    }
+    if (!session?.user?.id) return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
 
     const overrides = await prisma.availabilityOverride.findMany({
       where:   { adminId: session.user.id, date: { gte: localStartOfToday() } },
       orderBy: { date: 'asc' },
     });
-
     return NextResponse.json({ success: true, data: overrides });
   } catch (error) {
-    console.error('[GET /api/availability/overrides]', error);
     return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
   }
 }
 
-// ── POST (block a date) ───────────────────────────────────────
 export async function POST(request) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
-    }
+    if (!session?.user?.id) return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
 
-    const adminId      = session.user.id;
-    const body         = await request.json();
-    const { date, reason } = body;
+    const adminId = session.user.id;
+    const { date, reason } = await request.json();
+    if (!date) return NextResponse.json({ success: false, message: 'date is required' }, { status: 400 });
 
-    if (!date) {
-      return NextResponse.json({ success: false, message: 'date is required' }, { status: 400 });
-    }
-
-    // ✅ Parse as UTC date
-    const parsedDate = parseUTCDate(date);
-
+    const parsedDate = parseLocalDate(date);
     if (parsedDate < localStartOfToday()) {
       return NextResponse.json({ success: false, message: 'Cannot block dates in the past' }, { status: 400 });
     }
 
-    // Upsert the override record
     const override = await prisma.availabilityOverride.upsert({
       where:  { adminId_date: { adminId, date: parsedDate } },
       create: { adminId, date: parsedDate, isBlocked: true, reason: reason ?? null },
       update: { isBlocked: true, reason: reason ?? null },
     });
 
-    // Delete available slots on this calendar day
-    // Use a date range to be safe across timezone storage differences
     await prisma.slot.deleteMany({
-      where: {
-        adminId,
-        status: 'AVAILABLE',
-        date: parsedDate,
-      },
+      where: { adminId, status: 'AVAILABLE', date: { gte: parsedDate, lt: addDays(parsedDate, 1) } },
     });
 
-    return NextResponse.json({
-      success: true,
-      message: 'Date blocked successfully',
-      data:    override,
-    });
+    return NextResponse.json({ success: true, message: 'Date blocked successfully', data: override });
   } catch (error) {
-    console.error('[POST /api/availability/overrides]', error);
     return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
   }
 }
 
-// ── DELETE (unblock a date) ───────────────────────────────────
 export async function DELETE(request) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
-    }
+    if (!session?.user?.id) return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
 
-    const adminId        = session.user.id;
-    const { searchParams } = new URL(request.url);
-    const dateParam      = searchParams.get('date');
+    const adminId   = session.user.id;
+    const dateParam = new URL(request.url).searchParams.get('date');
+    if (!dateParam) return NextResponse.json({ success: false, message: 'date query param required' }, { status: 400 });
 
-    if (!dateParam) {
-      return NextResponse.json({ success: false, message: 'date query param required' }, { status: 400 });
-    }
+    const parsedDate = parseLocalDate(dateParam);
 
-    // ✅ Parse as UTC date
-    const parsedDate = parseUTCDate(dateParam);
-
-    // Delete using a date-range query to handle any timezone storage variation
-    const deleted = await prisma.availabilityOverride.deleteMany({
-      where: {
-        adminId,
-        date: parsedDate,
-      },
+    await prisma.availabilityOverride.deleteMany({
+      where: { adminId, date: { gte: parsedDate, lt: addDays(parsedDate, 1) } },
     });
 
-    if (deleted.count === 0) {
-      // Try to find what's actually in the DB around this date for debugging
-      const nearby = await prisma.availabilityOverride.findMany({
-        where: { adminId },
-        orderBy: { date: 'asc' },
-        take: 5,
-      });
-      console.warn('[DELETE /overrides] No record found for', parsedDate, '- nearby records:', nearby.map(o => o.date));
-    }
-
-    // Re-generate slots for this date if an availability rule exists
-    const dayOfWeek = parsedDate.getDay(); // local day ✅
+    // Re-generate slots for this date using correct PKT times
+    const dayOfWeek = parsedDate.getDay();
     const dayNames  = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
 
     const avail = await prisma.availability.findFirst({
-      where: {
-        adminId,
-        dayOfWeek: dayNames[dayOfWeek],
-        isActive:  true,
-      },
+      where: { adminId, dayOfWeek: dayNames[dayOfWeek], isActive: true },
     });
 
     if (avail) {
-      const [startH, startM] = avail.startTime.split(':').map(Number);
-      const [endH,   endM]   = avail.endTime.split(':').map(Number);
-
-      const dayStart = new Date(parsedDate);
-      dayStart.setHours(startH, startM, 0, 0);
-
-      const dayEnd = new Date(parsedDate);
-      dayEnd.setHours(endH, endM, 0, 0);
+      // ✅ Use buildPKTTime so times are correct on Vercel UTC server
+      const dayStart = buildPKTTime(parsedDate, avail.startTime);
+      const dayEnd   = buildPKTTime(parsedDate, avail.endTime);
 
       const slotsData = [];
       let cursor = new Date(dayStart);
@@ -188,7 +124,6 @@ export async function DELETE(request) {
 
     return NextResponse.json({ success: true, message: 'Date unblocked and slots restored' });
   } catch (error) {
-    console.error('[DELETE /api/availability/overrides]', error);
     return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
   }
 }
