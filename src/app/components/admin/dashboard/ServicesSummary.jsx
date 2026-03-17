@@ -91,7 +91,7 @@ export default function ServicesSummary({ services = [], loading = false }) {
                           background: 'rgba(16,185,129,0.08)',
                           padding: '2px 7px', borderRadius: 99,
                         }}>
-                          ${service.price}
+                          Rs {service.price}
                         </span>
                       )}
                     </div>

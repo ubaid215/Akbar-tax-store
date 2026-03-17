@@ -7,25 +7,25 @@ import {
   CheckCircle2, RefreshCw, TrendingUp, Sparkles,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import StatsCard        from '@/app/components/admin/dashboard/StatsCard';
-import RecentBookings   from '@/app/components/admin/dashboard/RecentBookings';
-import UpcomingToday    from '@/app/components/admin/dashboard/UpcomingToday';
-import AnalyticsChart   from '@/app/components/admin/dashboard/AnalyticsChart';
-import ServicesSummary  from '@/app/components/admin/dashboard/ServicesSummary';
+import StatsCard from '@/app/components/admin/dashboard/StatsCard';
+import RecentBookings from '@/app/components/admin/dashboard/RecentBookings';
+import UpcomingToday from '@/app/components/admin/dashboard/UpcomingToday';
+import AnalyticsChart from '@/app/components/admin/dashboard/AnalyticsChart';
+import ServicesSummary from '@/app/components/admin/dashboard/ServicesSummary';
 import BookingBreakdown from '@/app/components/admin/dashboard/BookingBreakdown';
 
 /* ── Design tokens ──────────────────────────────────────── */
 const T = {
-  navy:       '#0B1E3D',
-  brand:      '#0040A8',
+  navy: '#0B1E3D',
+  brand: '#0040A8',
   brandLight: '#0059F5',
-  text2:      '#5D7A96',
-  text3:      '#7A9AB8',
-  muted:      '#A0BBCF',
-  border:     'rgba(0,64,168,0.08)',
+  text2: '#5D7A96',
+  text3: '#7A9AB8',
+  muted: '#A0BBCF',
+  border: 'rgba(0,64,168,0.08)',
   borderSoft: 'rgba(0,64,168,0.12)',
-  cardBg:     '#fff',
-  pageBg:     'linear-gradient(160deg,#F0F5FF 0%,#F8FBFF 60%,#EEF4FF 100%)',
+  cardBg: '#fff',
+  pageBg: 'linear-gradient(160deg,#F0F5FF 0%,#F8FBFF 60%,#EEF4FF 100%)',
 };
 
 const card = {
@@ -36,10 +36,10 @@ const card = {
 };
 
 const QUICK_ACTIONS = [
-  { label: 'New Booking',      href: '/bookings/new',          emoji: '📅', hoverBg: 'rgba(0,64,168,0.04)',  hoverBorder: 'rgba(0,64,168,0.25)' },
-  { label: 'Add Service',      href: '/services/new',          emoji: '➕', hoverBg: 'rgba(16,185,129,0.06)', hoverBorder: '#6ee7b7' },
+  { label: 'New Booking', href: '/bookings/new', emoji: '📅', hoverBg: 'rgba(0,64,168,0.04)', hoverBorder: 'rgba(0,64,168,0.25)' },
+  { label: 'Add Service', href: '/services/new', emoji: '➕', hoverBg: 'rgba(16,185,129,0.06)', hoverBorder: '#6ee7b7' },
   { label: 'Set Availability', href: '/settings/availability', emoji: '🕐', hoverBg: 'rgba(245,158,11,0.06)', hoverBorder: '#fcd34d' },
-  { label: 'View Analytics',   href: '/analytics',             emoji: '📊', hoverBg: 'rgba(139,92,246,0.06)', hoverBorder: '#c4b5fd' },
+  { label: 'View Analytics', href: '/analytics', emoji: '📊', hoverBg: 'rgba(139,92,246,0.06)', hoverBorder: '#c4b5fd' },
 ];
 
 /* ── Responsive grid helper ─────────────────────────────── */
@@ -95,16 +95,16 @@ function QuickActionCard({ label, href, emoji, hoverBg, hoverBorder }) {
 
 /* ── Main page ──────────────────────────────────────────── */
 export default function DashboardPage() {
-  const [data,       setData]       = useState(null);
-  const [loading,    setLoading]    = useState(true);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [refreshHovered, setRefreshHovered] = useState(false);
 
   const fetchDashboard = useCallback(async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true);
-    else           setLoading(true);
+    else setLoading(true);
     try {
-      const res  = await fetch('/api/dashboard');
+      const res = await fetch('/api/dashboard');
       if (!res.ok) throw new Error('Failed to fetch dashboard data');
       const json = await res.json();
       if (!json.success) throw new Error(json.message);
@@ -122,9 +122,9 @@ export default function DashboardPage() {
 
   const stats = data?.stats ?? {};
 
-  const hour     = new Date().getHours();
+  const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-  const today    = new Date().toLocaleDateString('en-US', {
+  const today = new Date().toLocaleDateString('en-US', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
   });
 
@@ -207,7 +207,7 @@ export default function DashboardPage() {
           icon={DollarSign}
           iconBg="bg-emerald-50"
           iconColor="text-emerald-600"
-          prefix="$"
+          prefix="Rs."
           trend={loading ? undefined : stats.revenueTrend}
           trendLabel="vs prev 30 days"
           loading={loading}
@@ -245,7 +245,7 @@ export default function DashboardPage() {
         className="bookings-grid"
       >
         <RecentBookings bookings={data?.recentBookings ?? []} loading={loading} />
-        <UpcomingToday  bookings={data?.upcomingToday  ?? []} loading={loading} />
+        <UpcomingToday bookings={data?.upcomingToday ?? []} loading={loading} />
       </div>
 
       {/* ── Services + Quick Actions ───────────────────── */}

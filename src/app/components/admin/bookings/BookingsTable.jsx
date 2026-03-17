@@ -229,7 +229,7 @@ function BookingRow({ booking, onAction, isLast }) {
       <td style={TD}>
         {booking.pricePaid != null ? (
           <span style={{ fontSize: 12, fontWeight: 700, color: '#059669' }}>
-            ${Number(booking.pricePaid).toFixed(2)}
+            Rs {Number(booking.pricePaid).toFixed(2)}
           </span>
         ) : (
           <span style={{ fontSize: 12, color: T.muted }}>Free</span>
