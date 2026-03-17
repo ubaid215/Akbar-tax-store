@@ -7,7 +7,6 @@ import AdminHeader          from '@/app/components/admin/AdminHeader';
 
 export const metadata = {
   title:    { template: '%s | Admin Dashboard', default: 'Admin Dashboard' },
-  manifest: '/admin-manifest.json', 
 };
 
 export default async function AdminLayout({ children }) {

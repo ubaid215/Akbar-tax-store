@@ -1,6 +1,4 @@
 // src/app/api/push/subscribe/route.js
-// POST /api/push/subscribe — save browser push subscription for admin
-// GET  /api/push/subscribe — get VAPID public key for client
 
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
@@ -28,7 +26,17 @@ export async function POST(request) {
       return NextResponse.json({ success: false, message: 'Invalid subscription object' }, { status: 400 });
     }
 
-    // Store the full subscription JSON in pushToken field
+    // ✅ Verify the user exists before updating
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { id: true },
+    });
+
+    if (!user) {
+      console.error('[POST /api/push/subscribe] User not found. Session ID:', session.user.id, '| Type:', typeof session.user.id);
+      return NextResponse.json({ success: false, message: 'User not found' }, { status: 404 });
+    }
+
     await prisma.user.update({
       where: { id: session.user.id },
       data: {
@@ -49,6 +57,17 @@ export async function DELETE(request) {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    }
+
+    // ✅ Same guard for DELETE
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { id: true },
+    });
+
+    if (!user) {
+      console.error('[DELETE /api/push/subscribe] User not found. Session ID:', session.user.id, '| Type:', typeof session.user.id);
+      return NextResponse.json({ success: false, message: 'User not found' }, { status: 404 });
     }
 
     await prisma.user.update({

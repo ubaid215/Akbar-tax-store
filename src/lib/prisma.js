@@ -1,4 +1,3 @@
-// src/lib/prisma.js  ← create this file once, import everywhere
 import { PrismaClient } from '@prisma/client';
 
 const globalForPrisma = globalThis;
