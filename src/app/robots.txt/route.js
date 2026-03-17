@@ -1,29 +1,29 @@
-// app/robots.txt/route.js - ONLY robots.txt content
+// app/robots.txt/route.js
 export function GET() {
   return new Response(
     `User-agent: *
 Allow: /
 
-# Block admin and API routes
+# Block non-public routes
 Disallow: /api/
 Disallow: /admin/
 Disallow: /_next/
 Disallow: /private/
+Disallow: /book-meeting/cancel
+Disallow: /book-meeting/confirm
 
-# Allow important files
+# Allow static assets & sitemap API
 Allow: /api/sitemap.xml
 Allow: /_next/static/
+Allow: /_next/image
 
-# Sitemap location
-Sitemap: https://www.akbartaxstore.com/sitemap.xml
-
-# Crawl delay for better server performance
-Crawl-delay: 1`,
+# Sitemap
+Sitemap: https://www.akbartaxstore.com/sitemap.xml`,
     {
       headers: {
         'Content-Type': 'text/plain',
-        'Cache-Control': 'public, max-age=86400', // Cache for 24 hours
+        'Cache-Control': 'public, max-age=86400',
       },
     }
-  )
+  );
 }

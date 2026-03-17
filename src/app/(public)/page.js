@@ -1,402 +1,395 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/no-unescaped-entities */
-"use client";
+// src/app/page.jsx
 
-import React, { useEffect, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Phone, MessageCircle, ArrowRight, CheckCircle, Building, FileText, Shield, Users, Eye } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import HomepageClient from '@/app/components/HomepageClient';
+import {
+  HOME_STATS,
+  HOME_SERVICES,
+  HOME_FEATURES,
+  HOME_FAQS,
+  HOME_GUIDES,
+  SITE_CONFIG,
+} from '@/constants';
 
-const Homepage = () => {
-  const heroRef = useRef(null);
-  const aboutRef = useRef(null);
-  const servicesRef = useRef(null);
-  const ctaRef = useRef(null);
-  const [currentTypeText, setCurrentTypeText] = useState('');
-  const [typeIndex, setTypeIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [counters, setCounters] = useState({
-    clients: 0,
-    hours: 0,
-    services: 0,
-    legal: 0
-  });
-  const [hasAnimated, setHasAnimated] = useState(false);
+// ── Page-level metadata ───────────────────────────────────────────────────────
+// Overrides root layout for this route only.
+// Rendered title: "FBR Tax Filing & NTN Registration Services in Pakistan | Akbar Tax Store"
+export const metadata = {
+  title: 'FBR Tax Filing & NTN Registration Services in Pakistan',
+  description:
+    'Akbar Tax Store — expert FBR tax filing, NTN registration, and SECP company registration in Faisalabad, Pakistan. Become an active filer in 24 hours. 500+ happy clients.',
+  alternates: {
+    canonical: 'https://www.akbartaxstore.com',
+  },
+  openGraph: {
+    title: 'FBR Tax Filing & NTN Registration Services in Pakistan | Akbar Tax Store',
+    description:
+      'Professional FBR tax filing, NTN registration, SECP company registration, GST and trademark services in Pakistan. Get results in 24 hours.',
+    url: 'https://www.akbartaxstore.com',
+  },
+};
 
-  const typeTexts = [
-    'NTN Registration',
-    'Tax Return Filing',
-    'Company & Trademark Registration',
-    'GST & PRA Made Simple',
-    'Financial And Bookkeeping'
-  ];
+// ── FAQPage schema builder ────────────────────────────────────────────────────
+// Reads from HOME_FAQS so the visible FAQ section and schema stay in sync.
+// Any edit to HOME_FAQS in constants/index.js updates both automatically.
+const buildFaqSchema = (faqs) => ({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.q,
+    acceptedAnswer: { '@type': 'Answer', text: faq.a },
+  })),
+});
 
-  const services = [
-    {
-      title: 'NTN Registration',
-      description: 'Get your National Tax Number (NTN) issued quickly and efficiently. We handle all the paperwork and government submissions.',
-      image: '/images/ntn-registration.jpg',
-      icon: <FileText className="w-5 h-5" />
-    },
-    {
-      title: 'Business Registration',
-      description: 'Start your business legally with complete SECP or FBR registration services and end-to-end support.',
-      image: '/images/business-registration.jpg',
-      icon: <Building className="w-5 h-5" />
-    },
-    {
-      title: 'Company Registration',
-      description: 'Register your private limited company with SECP including complete legal documentation and approvals.',
-      image: '/images/company-registration.jpg',
-      icon: <Building className="w-5 h-5" />
-    },
-    {
-      title: 'Trademark Registration',
-      description: 'Protect your brand identity with comprehensive trademark registration services and IP protection.',
-      image: '/images/trademark-registration.jpg',
-      icon: <Shield className="w-5 h-5" />
-    },
-    {
-      title: 'Tax Return Filing',
-      description: 'Professional tax return preparation and filing services for individuals and businesses with accuracy.',
-      image: '/images/tax-filing.jpg',
-      icon: <FileText className="w-5 h-5" />
-    },
-    {
-      title: 'GST Registration',
-      description: 'Complete GST registration and compliance services for businesses with ongoing support.',
-      image: '/images/gst-registration.jpg',
-      icon: <Shield className="w-5 h-5" />
-    }
-  ];
-
-  // Counter animation hook
-  const useCounter = (end, duration = 2000, shouldStart = false) => {
-    const [count, setCount] = useState(0);
-
-    useEffect(() => {
-      if (!shouldStart) return;
-
-      let startTime;
-      let animationFrame;
-
-      const animate = (timestamp) => {
-        if (!startTime) startTime = timestamp;
-        const progress = timestamp - startTime;
-        const percentage = Math.min(progress / duration, 1);
-
-        // Easing function for smooth animation
-        const easeOutQuart = 1 - Math.pow(1 - percentage, 4);
-        setCount(Math.floor(end * easeOutQuart));
-
-        if (percentage < 1) {
-          animationFrame = requestAnimationFrame(animate);
-        }
-      };
-
-      animationFrame = requestAnimationFrame(animate);
-      return () => cancelAnimationFrame(animationFrame);
-    }, [end, duration, shouldStart]);
-
-    return count;
-  };
-
-  // Individual counters
-  const clientsCount = useCounter(500, 2000, hasAnimated);
-  const hoursCount = useCounter(24, 1500, hasAnimated);
-  const servicesCount = useCounter(11, 1800, hasAnimated);
-  const legalCount = useCounter(100, 2200, hasAnimated);
-
-  // Fixed Typing animation effect
-  useEffect(() => {
-    let timeoutId;
-    let intervalId;
-    
-    const currentText = typeTexts[typeIndex];
-    
-    const type = () => {
-      if (!isDeleting) {
-        // Typing forward
-        if (currentTypeText.length < currentText.length) {
-          setCurrentTypeText(currentText.slice(0, currentTypeText.length + 1));
-        } else {
-          // Finished typing, wait then start deleting
-          timeoutId = setTimeout(() => setIsDeleting(true), 1000);
-          return;
-        }
-      } else {
-        // Deleting
-        if (currentTypeText.length > 0) {
-          setCurrentTypeText(currentText.slice(0, currentTypeText.length - 1));
-        } else {
-          // Finished deleting, move to next text
-          setIsDeleting(false);
-          setTypeIndex((prev) => (prev + 1) % typeTexts.length);
-          return;
-        }
-      }
-    };
-
-    // Adjust speed - faster for deleting, slower for typing
-    const speed = isDeleting ? 50 : 100;
-    intervalId = setInterval(type, speed);
-
-    return () => {
-      clearTimeout(timeoutId);
-      clearInterval(intervalId);
-    };
-  }, [currentTypeText, isDeleting, typeIndex, typeTexts]);
-
-  // Intersection Observer for animations
-  useEffect(() => {
-    const observerOptions = {
-      threshold: 0.3,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate-fade-up');
-          // Trigger counter animation when about section is visible
-          if (entry.target === aboutRef.current) {
-            setHasAnimated(true);
-          }
-        }
-      });
-    }, observerOptions);
-
-    const refs = [aboutRef, servicesRef, ctaRef];
-    refs.forEach((ref) => {
-      if (ref.current) observer.observe(ref.current);
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
-  const scrollToServices = () => {
-    servicesRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
+// ─────────────────────────────────────────────────────────────────────────────
+export default function HomePage() {
   return (
-    <div className="min-h-screen bg-white text-gray-900">
-      {/* Hero Section */}
-      <section ref={heroRef} className="pt-16 pb-16 px-4 sm:px-6 lg:px-8" style={{ background: 'linear-gradient(135deg, #D9E8FF 0%, #FFFFFF 100%)' }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight" style={{ color: '#050505' }}>
-              We're <span style={{ color: '#0040A8' }}>Akbar Tax Store</span>.
-              <br />
-              <span style={{ color: '#072971' }} className="font-medium">Accounting That Actually Helps You Grow.</span>
-            </h1>
+    <>
+      {/* FAQPage schema injected into <head> by Next.js */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqSchema(HOME_FAQS)) }}
+      />
 
-            <p className="text-xl sm:text-2xl mb-8" style={{ color: '#072971' }}>
-              Helping Pakistan File Taxes, Businesses Register, Financial and Bookkeeping.
-            </p>
+      {/* ════════════════════════════════════════════════════════════════════
+          HERO
+          H1 = primary keyword target ("FBR Tax Filing" + "NTN Registration")
+          Brand tagline sits below as a sub-heading — personality preserved
+          without wasting the H1 on an unsearchable phrase.
+      ════════════════════════════════════════════════════════════════════ */}
+      <section
+        className="pt-16 pb-16 px-4 sm:px-6 lg:px-8"
+        style={{ background: 'linear-gradient(135deg, #D9E8FF 0%, #FFFFFF 100%)' }}
+      >
+        <div className="max-w-4xl mx-auto text-center">
+          <h1
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight"
+            style={{ color: '#050505' }}
+          >
+            <span style={{ color: '#0040A8' }}>FBR Tax Filing</span> &amp;{' '}
+            <span style={{ color: '#0040A8' }}>NTN Registration</span>{' '}
+            Services in Pakistan
+          </h1>
 
-            {/* Fixed Typing Animation */}
-            <div className="h-16 flex items-center justify-center mb-8">
-              <div className="text-lg sm:text-xl font-medium min-h-[24px] flex items-center" style={{ color: '#0040A8' }}>
-                → {currentTypeText}
-                <span className="animate-pulse ml-1">|</span>
-              </div>
-            </div>
+          <p className="text-xl sm:text-2xl mb-4 font-medium" style={{ color: '#072971' }}>
+            {SITE_CONFIG.name} — {SITE_CONFIG.tagline}
+          </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link
-                href="/personal"
-                className="w-full sm:w-auto bg-transparent text-[#0040A8] border-2 border-[#0040A8] px-8 py-4 rounded-lg font-semibold hover:opacity-90 transition-all hover:bg-[#0040A8] hover:text-white duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
-              >
-                <MessageCircle className="w-5 h-5" />
-                Personal
-              </Link>
-              <Link
-                href="/business"
-                className="w-full sm:w-auto border-2 px-8 py-4 rounded-lg font-semibold hover:text-white transition-all duration-300 flex items-center justify-center gap-2"
-                style={{
-                  borderColor: '#0040A8',
-                  color: '#0040A8',
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = '#0040A8';
-                  e.target.style.color = 'white';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = 'transparent';
-                  e.target.style.color = '#0040A8';
-                }}
-              >
-                <Building className="w-5 h-5" />
-                Business
-              </Link>
-            </div>
+          <p className="text-lg mb-8 max-w-2xl mx-auto leading-relaxed" style={{ color: '#4B5563' }}>
+            Professional FBR tax filing, NTN registration, SECP company registration, GST,
+            and trademark services across Pakistan. Become an active filer in 24 hours —
+            all from the comfort of your home.
+          </p>
+
+          {/* Typing animation — client-only, decorative, not crawled by Google */}
+          <HomepageClient section="hero-typing" />
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
+            <Link
+              href="/personal"
+              className="w-full sm:w-auto text-[#0040A8] border-2 border-[#0040A8] px-8 py-4 rounded-lg font-semibold hover:bg-[#0040A8] hover:text-white transition-all duration-300 flex items-center justify-center gap-2"
+            >
+              Personal Tax Services
+            </Link>
+            <Link
+              href="/business"
+              className="w-full sm:w-auto bg-[#0040A8] text-white border-2 border-[#0040A8] px-8 py-4 rounded-lg font-semibold hover:bg-[#072971] transition-all duration-300 flex items-center justify-center gap-2"
+            >
+              Business Tax Services
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* About Section */}
-      <section ref={aboutRef} id="about" className="py-16 px-4 sm:px-6 lg:px-8 opacity-0 translate-y-10 transition-all duration-700">
+      {/* ════════════════════════════════════════════════════════════════════
+          ABOUT
+          H2 = local keyword ("Tax Consultant in Faisalabad, Pakistan")
+          Body copy includes FBR, IRIS, ATL, NTN, SECP — real search terms.
+          Stats: static HTML values visible to Google; animations applied
+          on top via HomepageClient (client-side only).
+      ════════════════════════════════════════════════════════════════════ */}
+      <section id="about" className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
+
             <div>
               <h2 className="text-3xl sm:text-4xl font-bold mb-6" style={{ color: '#050505' }}>
-                About <span style={{ color: '#0040A8' }}>Akbar Tax Store</span>
+                Trusted{' '}
+                <span style={{ color: '#0040A8' }}>Tax Consultant in Faisalabad</span>,
+                Pakistan
               </h2>
-              <p className="text-lg mb-6 leading-relaxed" style={{ color: '#072971' }}>
-                Akbar Tax Store is a modern tax consultancy service based in Pakistan. We specialize in helping individuals, startups, and businesses become tax-compliant, register their companies, and secure their brand identity — all from the comfort of their home.
+
+              <p className="text-lg mb-5 leading-relaxed" style={{ color: '#072971' }}>
+                Akbar Tax Store is a modern tax consultancy based in Faisalabad, Pakistan.
+                We specialise in helping individuals, freelancers, and businesses file their
+                FBR income tax returns, obtain an NTN (National Tax Number), and appear on
+                the Active Taxpayer List (ATL) — all handled directly on the FBR IRIS portal
+                by our certified team.
               </p>
               <p className="text-lg mb-8 leading-relaxed" style={{ color: '#072971' }}>
-                Whether you need an NTN Certificate, want to become a Filer, or register your Business or Trademark, we've got you covered from A to Z. We handle all paperwork, legal processes, and government portal submissions so you can focus on what matters most — growing your business.
+                From SECP company registration and GST enrollment to trademark registration
+                and bookkeeping, we handle all government portal submissions and legal
+                paperwork so you can focus on growing your business. Our clients across
+                Pakistan receive results in as little as 24 hours.
               </p>
+
               <div className="p-6 rounded-lg mb-8" style={{ backgroundColor: '#D9E8FF' }}>
-                <p className="font-semibold mb-2" style={{ color: '#0040A8' }}>Want to talk to an expert?</p>
-                <p style={{ color: '#072971' }}>Let's connect today.</p>
+                <p className="font-semibold mb-1" style={{ color: '#0040A8' }}>
+                  Free consultation — no obligations.
+                </p>
+                <p style={{ color: '#072971' }}>
+                  Talk to a tax expert today in Urdu or English.
+                </p>
               </div>
+
               <Link
                 href="/contact"
-                className="text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-colors flex items-center gap-2"
+                className="inline-flex items-center gap-2 text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-colors"
                 style={{ backgroundColor: '#0040A8' }}
               >
-                Contact Now
-                <ArrowRight className="w-5 h-5" />
+                Contact Now →
               </Link>
             </div>
+
+            {/* Stats — static values rendered in HTML (visible to Google crawler).
+                Counter animation fires on scroll-into-view via HomepageClient. */}
             <div className="grid grid-cols-2 gap-6">
-              <div className="p-6 rounded-lg text-center" style={{ backgroundColor: '#D9E8FF' }}>
-                <div className="text-3xl font-bold mb-2" style={{ color: '#0040A8' }}>{clientsCount}+</div>
-                <div style={{ color: '#072971' }}>Happy Clients</div>
-              </div>
-              <div className="p-6 rounded-lg text-center" style={{ backgroundColor: '#D9E8FF' }}>
-                <div className="text-3xl font-bold mb-2" style={{ color: '#0040A8' }}>{hoursCount}hrs</div>
-                <div style={{ color: '#072971' }}>Fast Service</div>
-              </div>
-              <div className="p-6 rounded-lg text-center" style={{ backgroundColor: '#D9E8FF' }}>
-                <div className="text-3xl font-bold mb-2" style={{ color: '#0040A8' }}>{servicesCount}+</div>
-                <div style={{ color: '#072971' }}>Services</div>
-              </div>
-              <div className="p-6 rounded-lg text-center" style={{ backgroundColor: '#D9E8FF' }}>
-                <div className="text-3xl font-bold mb-2" style={{ color: '#0040A8' }}>{legalCount}%</div>
-                <div style={{ color: '#072971' }}>Legal</div>
-              </div>
+              {HOME_STATS.map((stat) => (
+                <div
+                  key={stat.id}
+                  className="p-6 rounded-lg text-center"
+                  style={{ backgroundColor: '#D9E8FF' }}
+                >
+                  <div
+                    id={stat.id}
+                    className="text-3xl font-bold mb-2"
+                    style={{ color: '#0040A8' }}
+                  >
+                    {stat.value}
+                  </div>
+                  <div style={{ color: '#072971' }}>{stat.label}</div>
+                </div>
+              ))}
             </div>
+
+            {/* Mounts the IntersectionObserver for counter animation — renders nothing */}
+            <HomepageClient section="counters" />
+
           </div>
         </div>
       </section>
 
-      {/* Services Section */}
-      <section ref={servicesRef} id="services" className="py-16 px-4 sm:px-6 lg:px-8 opacity-0 translate-y-10 transition-all duration-700" style={{ backgroundColor: '#D9E8FF' }}>
+      {/* ════════════════════════════════════════════════════════════════════
+          SERVICES
+          H2 contains primary + location keywords.
+          Cards link to individual SEO landing pages, not the generic
+          /services-fees page, so each service can rank on its own.
+      ════════════════════════════════════════════════════════════════════ */}
+      <section
+        id="services"
+        className="py-16 px-4 sm:px-6 lg:px-8"
+        style={{ backgroundColor: '#D9E8FF' }}
+      >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4" style={{ color: '#050505' }}>
-              Our <span style={{ color: '#0040A8' }}>Services</span>
+              FBR Tax &amp;{' '}
+              <span style={{ color: '#0040A8' }}>Business Registration Services</span>{' '}
+              in Pakistan
             </h2>
-            <p className="text-xl" style={{ color: '#072971' }}>Complete tax and business solutions for Pakistan</p>
+            <p className="text-xl" style={{ color: '#072971' }}>
+              Complete tax compliance and business setup solutions — for individuals and
+              companies across Pakistan.
+            </p>
           </div>
 
-          {/* Services Grid - More responsive and minimal */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-            {services.slice(0, 4).map((service, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 hover:transform hover:scale-105 max-w-sm mx-auto w-full">
+            {HOME_SERVICES.map((service) => (
+              <Link
+                key={service.href}
+                href={service.href}
+                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-105 max-w-sm mx-auto w-full block"
+              >
                 <div className="h-32 overflow-hidden">
                   <Image
                     src={service.image}
-                    alt={service.title}
+                    alt={service.alt}
                     width={400}
                     height={300}
                     className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                    priority={index < 4} 
+                    loading="lazy"
                   />
                 </div>
                 <div className="p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="p-2 rounded-md" style={{ backgroundColor: '#D9E8FF', color: '#0040A8' }}>
-                      {service.icon}
-                    </div>
-                    <h3 className="text-lg font-semibold truncate" style={{ color: '#050505' }}>{service.title}</h3>
-                  </div>
-                  <p className="mb-4 leading-relaxed text-sm line-clamp-3" style={{ color: '#072971' }}>{service.description}</p>
-                  <Link href='/services-fees'>
-                  <button
-                    className="w-full text-white px-3 py-2 rounded-md hover:opacity-90 transition-colors text-sm font-medium"
+                  <h3 className="text-lg font-semibold mb-2" style={{ color: '#050505' }}>
+                    {service.title}
+                  </h3>
+                  <p className="mb-4 leading-relaxed text-sm line-clamp-3" style={{ color: '#072971' }}>
+                    {service.description}
+                  </p>
+                  <span
+                    className="inline-block w-full text-center text-white px-3 py-2 rounded-md text-sm font-medium"
                     style={{ backgroundColor: '#0040A8' }}
                   >
-                    Get Started
-                  </button>
-                  </Link>
+                    Learn More →
+                  </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
-          {/* View All Button */}
           <div className="text-center mt-8">
-            <Link href="/services-fees">
-            <button
-              className="text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 mx-auto"
+            <Link
+              href="/services-fees"
+              className="inline-flex items-center justify-center gap-2 text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-all duration-300 hover:scale-105"
               style={{ backgroundColor: '#072971' }}
             >
-              <Eye className="w-5 h-5" />
-              View All Services
-            </button>
+              View All Services &amp; Fees
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Final CTA Section */}
-      <section ref={ctaRef} className="py-16 px-4 sm:px-6 lg:px-8 opacity-0 translate-y-10 transition-all duration-700" style={{ background: 'linear-gradient(135deg, #0040A8 0%, #072971 100%)' }}>
+      {/* ════════════════════════════════════════════════════════════════════
+          WHY CHOOSE US
+          E-E-A-T trust signals — required for YMYL pages (tax/finance).
+      ════════════════════════════════════════════════════════════════════ */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FFFFFF' }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4" style={{ color: '#050505' }}>
+              Why 500+ Clients Choose{' '}
+              <span style={{ color: '#0040A8' }}>Akbar Tax Store</span>
+            </h2>
+            <p className="text-xl" style={{ color: '#072971' }}>
+              FBR-verified processes. Transparent pricing. Results in 24 hours.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {HOME_FEATURES.map((item) => (
+              <div
+                key={item.title}
+                className="p-6 rounded-xl border"
+                style={{ borderColor: '#D9E8FF', backgroundColor: '#FAFCFF' }}
+              >
+                <div className="text-3xl mb-3">{item.icon}</div>
+                <h3 className="text-lg font-semibold mb-2" style={{ color: '#050505' }}>
+                  {item.title}
+                </h3>
+                <p className="text-sm leading-relaxed" style={{ color: '#4B5563' }}>
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════════════
+          FAQ
+          Schema built dynamically from HOME_FAQS — visible content and
+          JSON-LD always in sync. <details>/<summary> renders without JS.
+      ════════════════════════════════════════════════════════════════════ */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#F8FAFF' }}>
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold mb-3" style={{ color: '#050505' }}>
+              Frequently Asked Questions
+            </h2>
+            <p style={{ color: '#072971' }}>
+              Common questions about FBR tax filing and business registration in Pakistan.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {HOME_FAQS.map((faq, i) => (
+              <details
+                key={i}
+                className="group rounded-xl border p-5 cursor-pointer"
+                style={{ borderColor: '#D9E8FF', backgroundColor: '#FFFFFF' }}
+              >
+                <summary
+                  className="font-semibold text-base list-none flex justify-between items-center"
+                  style={{ color: '#050505' }}
+                >
+                  {faq.q}
+                  <span className="ml-4 text-xl font-light text-[#0040A8] group-open:rotate-45 transition-transform inline-block">
+                    +
+                  </span>
+                </summary>
+                <p className="mt-3 text-sm leading-relaxed" style={{ color: '#4B5563' }}>
+                  {faq.a}
+                </p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════════════
+          GUIDE LINKS
+          Internal <Link>s from the homepage pass PageRank to guide pages.
+      ════════════════════════════════════════════════════════════════════ */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FFFFFF' }}>
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl font-bold mb-8 text-center" style={{ color: '#050505' }}>
+            Free Guides &amp;{' '}
+            <span style={{ color: '#0040A8' }}>Tax Resources</span>
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {HOME_GUIDES.map((guide) => (
+              <Link
+                key={guide.href}
+                href={guide.href}
+                className="p-4 rounded-lg border text-sm font-medium hover:border-blue-400 transition-colors"
+                style={{ borderColor: '#D9E8FF', color: '#0040A8', backgroundColor: '#F8FAFF' }}
+              >
+                📄 {guide.title} →
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════════════
+          CTA
+          Internal route → Link. External WhatsApp URL → <a>.
+      ════════════════════════════════════════════════════════════════════ */}
+      <section
+        className="py-16 px-4 sm:px-6 lg:px-8"
+        style={{ background: 'linear-gradient(135deg, #0040A8 0%, #072971 100%)' }}
+      >
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-            Start Your Tax Journey Today
+            File Your FBR Tax Return Today
           </h2>
           <p className="text-xl mb-8 leading-relaxed" style={{ color: '#D9E8FF' }}>
-            No queues. No paperwork stress. Just simple, fast, and reliable tax services.
-            Whether you're an individual, freelancer, or business owner — Akbar Tax Store is your partner in legal success.
+            No queues. No paperwork stress. Just fast, reliable FBR tax filing and NTN
+            registration services — for individuals and businesses across Pakistan.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link href='/services-fees' className="w-full sm:w-auto bg-white px-8 py-4 rounded-lg font-semibold hover:opacity-90 transition-colors flex items-center justify-center gap-2" style={{ color: '#0040A8' }}>
-              <Building className="w-5 h-5" />
-              Explore Services
-            </Link>
-            <a
-            href="https://wa.me/923016832064"
-                target="_blank"
-                rel="noopener noreferrer">
-            <button className="w-full sm:w-auto border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white transition-colors flex items-center justify-center gap-2"
-              onMouseEnter={(e) => e.target.style.color = '#0040A8'}
-              onMouseLeave={(e) => e.target.style.color = 'white'}
+            <Link
+              href="/services-fees"
+              className="w-full sm:w-auto bg-white px-8 py-4 rounded-lg font-semibold hover:opacity-90 transition-colors flex items-center justify-center gap-2"
+              style={{ color: '#0040A8' }}
             >
-              <MessageCircle className="w-5 h-5" />
+              Explore Services &amp; Fees
+            </Link>
+            {/* External URL — <a> is correct, not Link */}
+            <a
+              href={SITE_CONFIG.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-[#0040A8] transition-colors flex items-center justify-center gap-2"
+            >
               WhatsApp Us Now
-            </button>
             </a>
           </div>
         </div>
       </section>
-
-      {/* Custom CSS for animations and line-clamp */}
-      <style jsx>{`
-        .animate-fade-up {
-          opacity: 1 !important;
-          transform: translateY(0) !important;
-        }
-        
-        .line-clamp-3 {
-          display: -webkit-box;
-          -webkit-line-clamp: 3;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-        
-        @media (prefers-reduced-motion: reduce) {
-          .animate-fade-up {
-            transition: none;
-          }
-        }
-      `}</style>
-    </div>
+    </>
   );
-};
-
-export default Homepage;
+}

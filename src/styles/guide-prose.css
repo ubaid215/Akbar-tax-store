@@ -1,0 +1,183 @@
+/* src/styles/guide-prose.css
+   ─────────────────────────────────────────────────────────────────────────────
+   Styles scoped to .guide-prose — used by GuideLayout.jsx.
+   Plain CSS imported in the Server Component directly.
+   No styled-jsx, no 'use client' required.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.guide-prose h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #050505;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #D9E8FF;
+  scroll-margin-top: 80px;
+}
+
+.guide-prose h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #0040A8;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+  scroll-margin-top: 80px;
+}
+
+.guide-prose p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #374151;
+  margin-bottom: 1.1rem;
+}
+
+/* ── Lists ─────────────────────────────────────────────────────────────────── */
+
+.guide-prose ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.25rem;
+}
+
+.guide-prose ul li {
+  padding: 0.4rem 0 0.4rem 1.5rem;
+  position: relative;
+  color: #374151;
+  font-size: 0.975rem;
+  line-height: 1.7;
+}
+
+.guide-prose ul li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #0040A8;
+  font-weight: 700;
+}
+
+.guide-prose ol {
+  counter-reset: guide-counter;
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.25rem;
+}
+
+.guide-prose ol li {
+  counter-increment: guide-counter;
+  padding: 0.5rem 0 0.5rem 2.25rem;
+  position: relative;
+  color: #374151;
+  font-size: 0.975rem;
+  line-height: 1.7;
+}
+
+.guide-prose ol li::before {
+  content: counter(guide-counter);
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: #0040A8;
+  color: white;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.5rem;
+  text-align: center;
+}
+
+/* ── Inline elements ───────────────────────────────────────────────────────── */
+
+.guide-prose a {
+  color: #0040A8;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.guide-prose strong {
+  color: #050505;
+  font-weight: 600;
+}
+
+/* ── Callout boxes ─────────────────────────────────────────────────────────── */
+
+.guide-prose .callout,
+.guide-prose .callout-warning,
+.guide-prose .callout-success {
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+.guide-prose .callout {
+  background: #F0F6FF;
+  border-left: 4px solid #0040A8;
+  color: #1e3a5f;
+}
+
+.guide-prose .callout-warning {
+  background: #FFFBEB;
+  border-left: 4px solid #F59E0B;
+  color: #78350F;
+}
+
+.guide-prose .callout-success {
+  background: #F0FDF4;
+  border-left: 4px solid #16A34A;
+  color: #14532D;
+}
+
+/* ── Tables ────────────────────────────────────────────────────────────────── */
+
+.guide-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+}
+
+.guide-prose table th {
+  background: #0040A8;
+  color: white;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.guide-prose table td {
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid #E5E7EB;
+  color: #374151;
+}
+
+.guide-prose table tr:nth-child(even) td {
+  background: #F9FAFB;
+}
+
+.guide-prose table tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── Mobile ────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .guide-prose h2 {
+    font-size: 1.3rem;
+  }
+
+  /* Tables scroll horizontally on small screens */
+  .guide-prose table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
