@@ -37,7 +37,6 @@ import {
   NAV_CONTACT_DROPDOWN,
   NAV_PERSONAL_DROPDOWN,
   NAV_BUSINESS_DROPDOWN,
-  NAV_INTERNATIONAL_DROPDOWN,
 } from '@/constants';
 
 // ── SVG icon components ───────────────────────────────────────────────────────
@@ -255,16 +254,6 @@ export default function Navbar() {
               onLeave={() => setBusinessDropdown(false)}
               onItemClick={() => setBusinessDropdown(false)}
             />
-            <NavDropdown
-              triggerHref="/international-financial-services"
-              triggerIcon={<IconGlobe />}
-              triggerLabel="Global Services"
-              items={NAV_INTERNATIONAL_DROPDOWN}
-              isOpen={internationalDropdown}
-              onEnter={() => setInternationalDropdown(true)}
-              onLeave={() => setInternationalDropdown(false)}
-              onItemClick={() => setInternationalDropdown(false)}
-            />
           </div>
         </div>
       </div>
@@ -377,15 +366,6 @@ export default function Navbar() {
               Business
             </Link>
           </div>
-          <Link
-            href="/international-financial-services"
-            onClick={handleLinkClick}
-            className="flex items-center gap-2 text-base font-semibold hover:scale-110 transform transition-all duration-200 px-4 py-2 rounded-full"
-            style={{ color: '#fff', backgroundColor: '#0040A8' }}
-          >
-            <IconGlobe />
-            Global Services
-          </Link>
         </div>
 
         {/* Main nav links */}

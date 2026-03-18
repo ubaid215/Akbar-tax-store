@@ -125,14 +125,14 @@ export default function HomePage() {
                 Akbar Tax Store is a modern tax consultancy based in Faisalabad, Pakistan.
                 We specialise in helping individuals, freelancers, and businesses file their
                 FBR income tax returns, obtain an NTN (National Tax Number), and appear on
-                the Active Taxpayer List (ATL) — all handled directly on the FBR IRIS portal
+                the Active Taxpayer List (ATL) — Late Filler — all handled directly on the FBR IRIS portal
                 by our certified team.
               </p>
               <p className="text-lg mb-8 leading-relaxed" style={{ color: '#072971' }}>
-                From SECP company registration and GST enrollment to trademark registration
+                From SECP company registration and GST enrollment to trademark registration, Financials
                 and bookkeeping, we handle all government portal submissions and legal
                 paperwork so you can focus on growing your business. Our clients across
-                Pakistan receive results in as little as 24 hours.
+                Pakistan receive results in as little as 48 hours.
               </p>
 
               <div className="p-6 rounded-lg mb-8" style={{ backgroundColor: '#D9E8FF' }}>
@@ -260,7 +260,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4" style={{ color: '#050505' }}>
-              Why 500+ Clients Choose{' '}
+              Why 200+ Clients Choose{' '}
               <span style={{ color: '#0040A8' }}>Akbar Tax Store</span>
             </h2>
             <p className="text-xl" style={{ color: '#072971' }}>

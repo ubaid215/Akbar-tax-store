@@ -107,13 +107,11 @@ export default function DeadlineGuidePage() {
           <strong>Tax Year 2026 covers:</strong> Income earned between July 1, 2025 and June 30, 2026. If you earned income in this period, your return is due by September 30, 2026.
         </div>
 
-        <h2 id="who-must-file">Who Must File by September 30, 2026?</h2>
+        <h2 id="who-must-file">Who Must File by September 30, 2026 - 2025?</h2>
         <p>You are required to file an income tax return by September 30, 2026 if any of the following apply to you for the period July 1, 2025 to June 30, 2026:</p>
         <ul>
-          <li>Your annual income exceeded <strong>PKR 600,000</strong> (PKR 50,000/month)</li>
           <li>You owned land, a house, or any other immovable property</li>
           <li>You owned a motor vehicle</li>
-          <li>You had a bank balance exceeding PKR 500,000 at any point</li>
           <li>You are a subscriber of any mobile phone connection</li>
           <li>You received any foreign remittance (including freelance payments from abroad)</li>
           <li>You want to maintain your <strong>Active Filer / ATL status</strong></li>
@@ -122,7 +120,7 @@ export default function DeadlineGuidePage() {
           <strong>Even if you have zero taxable income</strong>, filing a nil return before the deadline is free, takes under 30 minutes, and maintains your ATL status — protecting you from higher withholding taxes on all financial transactions throughout the next year.
         </p>
 
-        <h2 id="penalties">Penalties for Late Filing in Pakistan 2026</h2>
+        <h2 id="penalties">Penalties for Late Filing in Pakistan 2026 - 2025</h2>
         <p>
           Missing the September 30, 2026 deadline has serious financial consequences under Pakistan's Income Tax Ordinance, 2001:
         </p>
@@ -133,7 +131,7 @@ export default function DeadlineGuidePage() {
           <tbody>
             <tr>
               <td>Late filing penalty</td>
-              <td>PKR 1,000 per day of default, minimum PKR 10,000 for individuals</td>
+              <td>PKR 1,000 per month of default, minimum PKR 10,000 for individuals</td>
             </tr>
             <tr>
               <td>Removal from ATL</td>
@@ -176,27 +174,13 @@ export default function DeadlineGuidePage() {
             <tr><td>Company</td><td>PKR 20,000</td></tr>
           </tbody>
         </table>
-        <p>To pay the ATL surcharge:</p>
-        <ol>
-          <li>Log into your IRIS account at iris.fbr.gov.pk</li>
-          <li>Go to <strong>e-Payments → Income Tax → Misc</strong></li>
-          <li>Select your taxpayer type (CNIC for individuals)</li>
-          <li>Enter Tax Payment Section code <strong>920601 – 182(A) – Surcharge for ATL</strong></li>
-          <li>Enter the surcharge amount (PKR 1,000 for individuals)</li>
-          <li>A PSID (9-digit Payment Slip ID) will be generated</li>
-          <li>Pay via internet banking, ATM, or at any bank branch</li>
-          <li>Your ATL status updates within 24–72 hours after payment</li>
-        </ol>
-        <div className="callout-warning">
-          <strong>Note on late-filer status:</strong> Even after paying the ATL surcharge and appearing on the ATL, you are classified as a <strong>Late Filer</strong> — not an Active Filer. Late filers face a higher 6% advance tax on property sales (Section 236C) compared to 3% for active filers. To fully restore Active Filer status, file on time before September 30.
-        </div>
 
         <h2 id="what-if-missed">What If You Already Missed the Deadline?</h2>
         <p>
           If you have already missed the September 30 filing deadline, here is the correct course of action:
         </p>
         <ol>
-          <li><strong>File immediately</strong> — do not wait further. Every additional day increases your PKR 1,000/day penalty.</li>
+          <li><strong>File immediately</strong> — do not wait further. Every additional day increases your PKR 1,000/month penalty.</li>
           <li><strong>File your return on IRIS</strong> — log in, complete your income and wealth statement, and submit the return.</li>
           <li><strong>Pay the ATL surcharge</strong> (PKR 1,000 for individuals) — this is paid separately from any tax balance due.</li>
           <li><strong>Pay any tax balance</strong> — if your return shows tax due, generate a PSID and pay via banking channels.</li>
@@ -205,22 +189,6 @@ export default function DeadlineGuidePage() {
         <div className="callout">
           <strong>Missing multiple years?</strong> <Link href="/contact">Contact Akbar Tax Store</Link> for professional assistance. Filing missed years incorrectly — especially without proper wealth reconciliation — is a leading cause of FBR audit notices.
         </div>
-
-        <h2 id="extension">Will FBR Extend the 2026 Deadline?</h2>
-        <p>
-          FBR has extended the income tax return deadline in some previous years — for example, the Tax Year 2024 deadline was extended from September 30 to October 31, 2024. However, extensions are:
-        </p>
-        <ul>
-          <li>Not guaranteed every year</li>
-          <li>Announced by FBR close to the original deadline date</li>
-          <li>Sometimes only for specific categories of taxpayers</li>
-        </ul>
-        <p>
-          <strong>The safe approach is always to file by September 30</strong> and treat any extension as a bonus. Waiting for a possible extension and then missing it results in penalties that far outweigh the inconvenience of early filing.
-        </p>
-        <p>
-          To stay updated on official FBR deadline announcements, monitor <strong>fbr.gov.pk</strong> or follow the FBR's official social media channels.
-        </p>
 
         <h2 id="how-to-file-fast">How to File Your Return Before the 2026 Deadline</h2>
         <p>

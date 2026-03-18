@@ -58,7 +58,7 @@ export const SITE_CONFIG = {
 export const NAV_LINKS = [
   { label: 'HOME',           href: '/' },
   { label: 'SERVICES FEE',   href: '/services-fees' },
-  { label: 'GLOBAL SERVICES',href: '/international-financial-services' },
+  // { label: 'GLOBAL SERVICES',href: '/international-financial-services' },
   { label: 'ABOUT',          href: '/about' },
   { label: 'CONTACT',        href: '/contact' },
   { label: 'BOOK MEETING',   href: '/book-meeting' },
@@ -156,10 +156,10 @@ export const HERO_TYPING_TEXTS = [
 // Static values rendered in HTML for Google crawler visibility.
 // Client-side counter animations run on top of these.
 export const HOME_STATS = [
-  { id: 'stat-clients',  value: '500+',  label: 'Happy Clients',   animateTo: 500 },
+  { id: 'stat-clients',  value: '200+',  label: 'Happy Clients',   animateTo: 500 },
   { id: 'stat-hours',    value: '24hrs', label: 'Fast Service',     animateTo: 24  },
   { id: 'stat-services', value: '15+',   label: 'Services',         animateTo: 15  },
-  { id: 'stat-legal',    value: '100%',  label: 'Legal Compliance', animateTo: 100 },
+  { id: 'stat-legal',    value: '99%',  label: 'Legal Compliance', animateTo: 100 },
 ];
 
 // ── Homepage service cards ────────────────────────────────────────────────────
@@ -214,7 +214,7 @@ export const HOME_FEATURES = [
   { icon: '⚡', title: '24-Hour Turnaround',           desc: 'Most services including NTN registration and income tax return filing are completed within 24–48 hours of receiving your documents.' },
   { icon: '💰', title: 'Transparent Pricing',          desc: 'No hidden fees. You see exactly what you pay before we start. NTN registration from PKR 4,000. Tax return filing from PKR 5,000.' },
   { icon: '📱', title: '100% Online — No Office Visit',desc: 'Submit your documents via WhatsApp or email. We handle all government portal submissions. Clients across all of Pakistan served remotely.' },
-  { icon: '🏆', title: '5+ Years of Experience',       desc: 'Our team has deep expertise in Pakistani tax law, SECP regulations, and FBR compliance — keeping your business on the right side of the law.' },
+  { icon: '🏆', title: '5+ Years of Experience',       desc: 'Our team has deep expertise in Pakistani tax law, Accounting Services, and FBR compliance — keeping your business on the right side of the law.' },
   { icon: '🌐', title: 'Serving All of Pakistan',      desc: 'Based in Faisalabad, we serve clients from Lahore, Karachi, Islamabad, Rawalpindi, and every city across Pakistan.' },
 ];
 
@@ -242,14 +242,13 @@ export const HOME_FAQS = [
   },
   {
     q: 'How do I register a company in Pakistan through SECP?',
-    a: 'SECP company registration involves choosing a company name, preparing the Memorandum and Articles of Association, paying the registration fee, and obtaining your Certificate of Incorporation through the SECP eServices portal. Akbar Tax Store completes this entire process for PKR 50,000 within 24–48 hours.',
+    a: 'SECP company registration involves choosing a company name, preparing the Memorandum and Articles of Association, paying the registration fee, and obtaining your Certificate of Incorporation through the SECP eServices portal.',
   },
 ];
 
 // ── Homepage guide/resource links ─────────────────────────────────────────────
 export const HOME_GUIDES = [
-  { title: 'How to Get NTN in Pakistan',          href: '/guides/how-to-get-ntn-pakistan' },
-  { title: 'How to Become a Filer (2026 Guide)',   href: '/guides/how-to-become-filer-pakistan' },
+  { title: 'How to Get NTN in Pakistan',          href: '/guides/how-to-become-filer-pakistan' },
   { title: 'FBR Tax Return Deadline 2026',         href: '/guides/fbr-tax-return-deadline-2026' },
   { title: 'Filer vs Non-Filer: Key Differences',  href: '/guides/filer-vs-non-filer-benefits' },
 ];
