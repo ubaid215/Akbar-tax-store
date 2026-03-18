@@ -1,6 +1,32 @@
 'use client';
 
 // src/components/Navbar.jsx
+// ─────────────────────────────────────────────────────────────────────────────
+// Changes from original:
+//
+// 1. All hardcoded arrays (navigation items, dropdown items) removed.
+//    Data now imported from @/constants:
+//      NAV_LINKS               → desktop + mobile main nav
+//      NAV_CONTACT_DROPDOWN    → phone / email quick-links
+//      NAV_PERSONAL_DROPDOWN   → personal service links
+//      NAV_BUSINESS_DROPDOWN   → business service links
+//      SITE_CONFIG             → phone numbers, WhatsApp URL, social links
+//
+// 2. Dropdown items rendered with a shared <DropdownItem> helper that
+//    chooses <Link> (internal) or <a> (external/tel/mailto) based on the
+//    `external` flag in constants — no repeated className boilerplate.
+//
+// 3. onMouseEnter / onMouseLeave inline style mutations replaced with
+//    Tailwind hover classes (hover:bg-[#D9E8FF]) — cleaner and avoids
+//    direct DOM style writes inside React render.
+//
+// 4. Social icon hrefs pulled from SITE_CONFIG.social instead of being
+//    hardcoded — change the URL once in constants and both desktop + mobile
+//    icons update automatically.
+//
+// 5. All logic (burger animation, clip-path toggle, handleLinkClick) is
+//    untouched — behaviour is identical to the original.
+// ─────────────────────────────────────────────────────────────────────────────
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -11,6 +37,7 @@ import {
   NAV_CONTACT_DROPDOWN,
   NAV_PERSONAL_DROPDOWN,
   NAV_BUSINESS_DROPDOWN,
+  NAV_INTERNATIONAL_DROPDOWN,
 } from '@/constants';
 
 // ── SVG icon components ───────────────────────────────────────────────────────
@@ -47,6 +74,12 @@ const IconPerson = () => (
 const IconBusiness = () => (
   <svg width={20} height={20} viewBox="0 0 24 24" fill="currentColor">
     <path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z" />
+  </svg>
+);
+
+const IconGlobe = () => (
+  <svg width={20} height={20} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
   </svg>
 );
 
@@ -101,10 +134,11 @@ function NavDropdown({ triggerHref, triggerIcon, triggerLabel, items, isOpen, on
 
 // ── Main Navbar ───────────────────────────────────────────────────────────────
 export default function Navbar() {
-  const [menuOpen,          setMenuOpen]          = useState(false);
-  const [contactDropdown,   setContactDropdown]   = useState(false);
-  const [personalDropdown,  setPersonalDropdown]  = useState(false);
-  const [businessDropdown,  setBusinessDropdown]  = useState(false);
+  const [menuOpen,              setMenuOpen]              = useState(false);
+  const [contactDropdown,       setContactDropdown]       = useState(false);
+  const [personalDropdown,      setPersonalDropdown]      = useState(false);
+  const [businessDropdown,      setBusinessDropdown]      = useState(false);
+  const [internationalDropdown, setInternationalDropdown] = useState(false);
 
   const menuRef        = useRef(null);
   const linksRef       = useRef([]);
@@ -221,6 +255,16 @@ export default function Navbar() {
               onLeave={() => setBusinessDropdown(false)}
               onItemClick={() => setBusinessDropdown(false)}
             />
+            <NavDropdown
+              triggerHref="/international-financial-services"
+              triggerIcon={<IconGlobe />}
+              triggerLabel="Global Services"
+              items={NAV_INTERNATIONAL_DROPDOWN}
+              isOpen={internationalDropdown}
+              onEnter={() => setInternationalDropdown(true)}
+              onLeave={() => setInternationalDropdown(false)}
+              onItemClick={() => setInternationalDropdown(false)}
+            />
           </div>
         </div>
       </div>
@@ -333,6 +377,15 @@ export default function Navbar() {
               Business
             </Link>
           </div>
+          <Link
+            href="/international-financial-services"
+            onClick={handleLinkClick}
+            className="flex items-center gap-2 text-base font-semibold hover:scale-110 transform transition-all duration-200 px-4 py-2 rounded-full"
+            style={{ color: '#fff', backgroundColor: '#0040A8' }}
+          >
+            <IconGlobe />
+            Global Services
+          </Link>
         </div>
 
         {/* Main nav links */}
