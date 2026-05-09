@@ -282,7 +282,7 @@ export default function FilerVsNonFilerPage() {
           </li>
         </ol>
         <p>
-          If you want to skip the IRIS portal process entirely, <Link href="/services/filer-status">Akbar Tax Store handles the complete filer registration for you within 24 hours</Link> — you just send your documents via WhatsApp.
+          If you want to skip the IRIS portal process entirely, <Link href="/personal/filer">Akbar Tax Store handles the complete filer registration for you within 24 hours</Link> — you just send your documents via WhatsApp.
         </p>
 
         <h2 id="faq">Frequently Asked Questions</h2>

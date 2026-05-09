@@ -1,10 +1,10 @@
 // src/app/layout.jsx  — Root Layout (Server Component)
 
 import { Geist, Geist_Mono } from 'next/font/google';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { ClerkProvider } from '@clerk/nextjs';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Providers from '@/context/Providers';
+import BreadcrumbSchema from '@/app/components/schemas/BreadcrumbSchema';
 import './globals.css';
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
@@ -71,13 +71,15 @@ export const metadata = {
 const structuredData = [
   {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',           // Could narrow to 'AccountingService'
+    '@type': ['LocalBusiness', 'ProfessionalService', 'AccountingService'],
     '@id': `${BASE_URL}/#business`,
     name: 'Akbar Tax Store',
     alternateName: 'ATS Tax Services',
     url: BASE_URL,
-    telephone: '+92-301-6832064',
-    email: 'hussnain@akbartaxstore.com',
+    telephone: '+923016832064',
+    email: 'info@akbartaxstore.com',
+    foundingDate: '2019',
+    currenciesAccepted: 'PKR',
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'P 82/3 Al-Fayyaz Colony, Street No 4, Satiana Road',
@@ -88,7 +90,7 @@ const structuredData = [
     },
     geo: {
       '@type': 'GeoCoordinates',
-      latitude: 31.4504,   
+      latitude: 31.4504,
       longitude: 73.1350,
     },
     openingHoursSpecification: [
@@ -96,42 +98,41 @@ const structuredData = [
         '@type': 'OpeningHoursSpecification',
         dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
         opens: '09:00',
-        closes: '18:00',
+        closes: '21:00',
       },
     ],
-    // Helps Google show you for regional searches across Pakistan
     areaServed: [
+      { '@type': 'Country', name: 'Pakistan' },
       { '@type': 'City', name: 'Faisalabad' },
       { '@type': 'City', name: 'Lahore' },
       { '@type': 'City', name: 'Karachi' },
       { '@type': 'City', name: 'Islamabad' },
-      { '@type': 'Country', name: 'Pakistan' },
+      { '@type': 'City', name: 'Rawalpindi' },
+      { '@type': 'City', name: 'Multan' },
+      { '@type': 'City', name: 'Peshawar' },
     ],
-    serviceType: [
-      'FBR Tax Filing',
-      'NTN Registration',
-      'SECP Company Registration',
-      'GST Registration',
-      'PRA Registration',
-      'Trademark Registration',
-      'Business Registration',
-      'Bookkeeping Services',
-    ],
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Tax & Business Registration Services',
+      itemListElement: [
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'NTN Registration' }, price: '4000', priceCurrency: 'PKR' },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'FBR Tax Return Filing' }, price: '5000', priceCurrency: 'PKR' },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'SECP Company Registration' }, price: '50000', priceCurrency: 'PKR' },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'GST Registration' }, price: '40000', priceCurrency: 'PKR' },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Trademark Registration' }, price: '80000', priceCurrency: 'PKR' },
+      ],
+    },
     priceRange: 'PKR 3,000 – PKR 80,000',
-    // Conservative — align with your actual Google review count
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: '4.8',
-      reviewCount: '50',   // CHANGE to your real verified count
+      reviewCount: '50',
       bestRating: '5',
       worstRating: '1',
     },
-    // Fill these in once profiles are created/verified
     sameAs: [
-      // 'https://www.facebook.com/akbartaxstore',
-      // 'https://www.instagram.com/akbartaxstore',
-      // 'https://www.linkedin.com/company/akbar-tax-store',
-      // 'https://www.youtube.com/@akbartaxstore',
+      'https://www.instagram.com/_akbar_tax_store',
+      'https://wa.me/923016832064',
     ],
     image: `${BASE_URL}/images/og-image.jpg`,
     logo: {
@@ -162,9 +163,7 @@ const structuredData = [
 ];
 
 // ── Root Layout ───────────────────────────────────────────────────────────────
-export default async function RootLayout({ children }) {
-  const session = await getServerSession(authOptions);
-
+export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
@@ -222,11 +221,14 @@ export default async function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className="antialiased">
-        <Providers session={session}>
-          {children}
-          <SpeedInsights />
-        </Providers>
+      <body className="antialiased" suppressHydrationWarning>
+        <ClerkProvider>
+          <Providers>
+            <BreadcrumbSchema />
+            {children}
+            <SpeedInsights />
+          </Providers>
+        </ClerkProvider>
       </body>
     </html>
   );

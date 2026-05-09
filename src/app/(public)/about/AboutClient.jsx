@@ -366,7 +366,7 @@ export default function AboutClient() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
               {/* Internal route — Link */}
               <Link
-                href="/book-meeting"
+                href="/booking"
                 className="w-full sm:w-auto bg-white text-[#072971] font-bold px-8 py-4 rounded-xl hover:bg-blue-50 transition-colors shadow-lg text-base"
               >
                 Start Free Consultation

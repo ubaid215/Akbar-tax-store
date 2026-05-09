@@ -202,7 +202,7 @@ export default function PrivacyPolicy() {
             If you have any questions, concerns, or requests regarding your privacy, please contact us at:
           </p>
           <ul className="mt-2 space-y-1">
-            <li><a href="mailto:hussnain@akbartaxstore.com" className="text-[#0040A8] hover:underline">📧 hussnain@akbartaxstore.com</a></li>
+            <li><a href="mailto:info@akbartaxstore.com" className="text-[#0040A8] hover:underline">📧 info@akbartaxstore.com</a></li>
             <li>📞 +92 301-6832064</li>
             <li>🏢 Office Address: 348 E5 Street, Topaz Block, Park View City Multan Road<br />
                       Lahore, Pakistan</li>

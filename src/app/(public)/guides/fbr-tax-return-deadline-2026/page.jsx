@@ -202,7 +202,7 @@ export default function DeadlineGuidePage() {
 
         <h3>Option 2 — Use Akbar Tax Store (24-Hour Service)</h3>
         <p>
-          Send your salary certificate, bank statements, and asset details via WhatsApp to Akbar Tax Store. Our team handles the complete IRIS filing and delivers your return confirmation within 24 hours. <Link href="/services/tax-filing">Tax return filing starts from PKR 5,000</Link>.
+          Send your salary certificate, bank statements, and asset details via WhatsApp to Akbar Tax Store. Our team handles the complete IRIS filing and delivers your return confirmation within 24 hours. <Link href="/personal/tax-return">Tax return filing starts from PKR 5,000</Link>.
         </p>
 
         <h2 id="faq">Frequently Asked Questions</h2>
@@ -219,7 +219,7 @@ export default function DeadlineGuidePage() {
 
         <h3>Can I file my tax return for free?</h3>
         <p>
-          Yes. Filing directly on the IRIS portal (iris.fbr.gov.pk) is completely free. The FBR Tax Asaan mobile app also allows free filing for simple salaried returns. Professional tax consultants charge a service fee — <Link href="/services/tax-filing">Akbar Tax Store charges from PKR 5,000</Link> for individual tax return filing.
+          Yes. Filing directly on the IRIS portal (iris.fbr.gov.pk) is completely free. The FBR Tax Asaan mobile app also allows free filing for simple salaried returns. Professional tax consultants charge a service fee — <Link href="/personal/tax-return">Akbar Tax Store charges from PKR 5,000</Link> for individual tax return filing.
         </p>
 
         <h3>What documents do I need to file my tax return?</h3>

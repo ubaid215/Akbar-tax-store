@@ -1,8 +1,8 @@
 // public/sw.js — Service Worker for Push Notifications + PWA
 // Handles: push events, notification clicks, fetch caching
 
-const CACHE_NAME = 'ats-v1';
-const STATIC_ASSETS = ['/', '/book-meeting', '/manifest.json'];
+const CACHE_NAME = 'ats-v2';
+const STATIC_ASSETS = ['/', '/booking', '/manifest.json'];
 
 // ── Install: cache static assets ─────────────────────────────
 self.addEventListener('install', (event) => {
@@ -83,6 +83,8 @@ self.addEventListener('notificationclick', (event) => {
 self.addEventListener('fetch', (event) => {
   // Only handle GET requests
   if (event.request.method !== 'GET') return;
+  // Don't cache full documents/pages to avoid stale UI after deploys
+  if (event.request.mode === 'navigate' || event.request.destination === 'document') return;
   // Skip API and Next.js internal requests
   if (
     event.request.url.includes('/api/') ||

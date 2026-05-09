@@ -267,26 +267,37 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop nav links */}
-        <div className="hidden md:flex gap-8">
-          {NAV_LINKS.map((item, i) => (
-            <Link
-              key={item.href}
-              ref={(el) => { if (el) desktopLinksRef.current[i] = el; }}
-              href={item.href}
-              className="transition-all duration-300 relative group hover:scale-105 transform font-medium"
-              style={{ color: '#072971' }}
-            >
-              {item.label}
-              <span
-                className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-500 ease-out"
-                style={{ backgroundColor: '#0040A8' }}
-              />
-              <span
-                className="absolute bottom-0 right-0 h-[2px] w-full group-hover:w-0 transition-all duration-500 ease-out"
-                style={{ backgroundColor: '#D9E8FF' }}
-              />
-            </Link>
-          ))}
+        <div className="hidden md:flex md:items-center md:gap-6 lg:gap-8">
+          {NAV_LINKS.map((item, i) =>
+            item.cta ? (
+              <Link
+                key={item.href}
+                ref={(el) => { if (el) desktopLinksRef.current[i] = el; }}
+                href={item.href}
+                className="relative inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg bg-[#0040A8] px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white shadow-md transition-all duration-300 hover:scale-105 hover:bg-[#072971] hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0040A8]"
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <Link
+                key={item.href}
+                ref={(el) => { if (el) desktopLinksRef.current[i] = el; }}
+                href={item.href}
+                className="relative group transform text-sm font-medium transition-all duration-300 hover:scale-105 lg:text-base"
+                style={{ color: '#072971' }}
+              >
+                {item.label}
+                <span
+                  className="absolute bottom-0 left-0 h-[2px] w-0 transition-all duration-500 ease-out group-hover:w-full"
+                  style={{ backgroundColor: '#0040A8' }}
+                />
+                <span
+                  className="absolute bottom-0 right-0 h-[2px] w-full transition-all duration-500 ease-out group-hover:w-0"
+                  style={{ backgroundColor: '#D9E8FF' }}
+                />
+              </Link>
+            ),
+          )}
         </div>
 
         {/* Burger button */}
@@ -369,22 +380,34 @@ export default function Navbar() {
         </div>
 
         {/* Main nav links */}
-        {NAV_LINKS.map((item, i) => (
-          <Link
-            key={item.href}
-            ref={(el) => { if (el) linksRef.current[i] = el; }}
-            href={item.href}
-            onClick={handleLinkClick}
-            className="text-2xl font-bold relative group hover:scale-110 transform transition-all duration-200"
-            style={{ color: '#050505' }}
-          >
-            {item.label}
-            <span
-              className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-300 ease-out"
-              style={{ backgroundColor: '#0040A8' }}
-            />
-          </Link>
-        ))}
+        {NAV_LINKS.map((item, i) =>
+          item.cta ? (
+            <Link
+              key={item.href}
+              ref={(el) => { if (el) linksRef.current[i] = el; }}
+              href={item.href}
+              onClick={handleLinkClick}
+              className="relative inline-flex min-h-[52px] min-w-[240px] transform items-center justify-center rounded-xl bg-[#0040A8] px-8 py-4 text-lg font-bold uppercase tracking-wide text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-[#072971] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              {item.label}
+            </Link>
+          ) : (
+            <Link
+              key={item.href}
+              ref={(el) => { if (el) linksRef.current[i] = el; }}
+              href={item.href}
+              onClick={handleLinkClick}
+              className="group relative transform text-2xl font-bold transition-all duration-200 hover:scale-110"
+              style={{ color: '#050505' }}
+            >
+              {item.label}
+              <span
+                className="absolute bottom-0 left-0 h-[2px] w-0 transition-all duration-300 ease-out group-hover:w-full"
+                style={{ backgroundColor: '#0040A8' }}
+              />
+            </Link>
+          ),
+        )}
       </div>
 
     </nav>

@@ -38,7 +38,7 @@
     {
       "name": "Book Appointment",
       "short_name": "Book",
-      "url": "/book-meeting",
+      "url": "/booking",
       "icons": [{ "src": "/web-app-manifest-192x192.png", "sizes": "192x192" }]
     }
   ]

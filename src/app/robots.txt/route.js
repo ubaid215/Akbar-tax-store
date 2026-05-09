@@ -10,10 +10,15 @@ Disallow: /admin/
 Disallow: /_next/
 Disallow: /private/
 Disallow: /book-meeting/cancel
-Disallow: /book-meeting/confirm
+Disallow: /booking/cancel
+Disallow: /booking/confirm
 
-# Allow static assets & sitemap API
-Allow: /api/sitemap.xml
+# Allow important content — never block these
+Allow: /calculators/
+Allow: /services/
+Allow: /guides/
+Allow: /personal/
+Allow: /business/
 Allow: /_next/static/
 Allow: /_next/image
 

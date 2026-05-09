@@ -10,7 +10,7 @@ export default function ContactCard() {
   const contactInfo = {
     name: 'Akbar Tax Store',
     phone: '+923407300408',
-    email: 'hussnain@akbartaxstore.com',
+    email: 'info@akbartaxstore.com',
     website: 'https://www.akbartaxstore.com',
     description: 'Fast, reliable tax filing & business registration services in Pakistan. Transparent pricing, expert guidance, stress-free process.',
   };

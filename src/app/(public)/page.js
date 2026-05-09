@@ -252,6 +252,8 @@ export default function HomePage() {
         </div>
       </section>
 
+     
+
       {/* ════════════════════════════════════════════════════════════════════
           WHY CHOOSE US
           E-E-A-T trust signals — required for YMYL pages (tax/finance).
@@ -260,7 +262,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4" style={{ color: '#050505' }}>
-              Why 200+ Clients Choose{' '}
+              Why 500+ Clients Choose{' '}
               <span style={{ color: '#0040A8' }}>Akbar Tax Store</span>
             </h2>
             <p className="text-xl" style={{ color: '#072971' }}>
@@ -324,6 +326,88 @@ export default function HomePage() {
                   {faq.a}
                 </p>
               </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════════════
+          FREE TAX CALCULATORS
+          Internal links to calculator tools — passes PageRank and targets
+          high-volume "calculator" keywords from the homepage.
+      ════════════════════════════════════════════════════════════════════ */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FFFFFF' }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4" style={{ color: '#050505' }}>
+              Free Pakistan Tax Calculators —{' '}
+              <span style={{ color: '#0040A8' }}>No Registration Required</span>
+            </h2>
+            <p className="text-lg max-w-2xl mx-auto" style={{ color: '#072971' }}>
+              Instantly calculate your income tax, GST, withholding tax, and freelancer tax
+              using our free, updated Finance Act 2025-26 calculators.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                icon: '💼',
+                title: 'Income Tax Calculator Pakistan',
+                desc: 'Calculate salary tax and take-home pay using updated FBR 2025-26 income tax slabs.',
+                href: '/calculators/income-tax-pakistan',
+              },
+              {
+                icon: '⚖️',
+                title: 'Filer vs Non-Filer Calculator',
+                desc: 'See exactly how much tax you save on property, bank, and vehicle transactions as an active filer.',
+                href: '/calculators/filer-vs-non-filer',
+              },
+              {
+                icon: '🧾',
+                title: 'GST Calculator Pakistan',
+                desc: 'Calculate Federal GST (18%), PRA (16%), and SRB (15%) for goods, services, and digital transactions.',
+                href: '/calculators/gst-calculator-pakistan',
+              },
+              {
+                icon: '🏦',
+                title: 'Withholding Tax Calculator',
+                desc: 'Calculate Pakistan WHT rates for filers and non-filers across all 2025-26 categories.',
+                href: '/calculators/withholding-tax-pakistan',
+              },
+              {
+                icon: '💻',
+                title: 'Freelancer Tax Calculator',
+                desc: 'PSEB 0.25% vs normal slabs for Upwork, Fiverr, and remote income. Optimise your freelance tax.',
+                href: '/calculators/freelancer-tax-pakistan',
+              },
+              {
+                icon: '✅',
+                title: 'Should I File a Tax Return?',
+                desc: 'Answer 5 quick questions to find out if you need to file an FBR income tax return in Pakistan.',
+                href: '/calculators/should-i-file-quiz',
+              },
+            ].map(({ icon, title, desc, href }) => (
+              <Link
+                key={href}
+                href={href}
+                className="p-6 rounded-xl border hover:shadow-md transition-all duration-300 hover:scale-[1.02] flex flex-col"
+                style={{ borderColor: '#D9E8FF', backgroundColor: '#F8FAFF' }}
+              >
+                <div className="text-3xl mb-3">{icon}</div>
+                <h3 className="text-base font-bold mb-2" style={{ color: '#050505' }}>
+                  {title}
+                </h3>
+                <p className="text-sm leading-relaxed flex-1 mb-4" style={{ color: '#4B5563' }}>
+                  {desc}
+                </p>
+                <span
+                  className="inline-block text-center text-white px-4 py-2 rounded-md text-sm font-semibold"
+                  style={{ backgroundColor: '#0040A8' }}
+                >
+                  Calculate Now →
+                </span>
+              </Link>
             ))}
           </div>
         </div>

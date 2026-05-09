@@ -231,7 +231,6 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-semibold text-[#050505]">Phone Numbers</h3>
                     <p className="text-[#072971] mt-1 space-y-1">
-                      <a href="tel:+923016832064" className="hover:underline block">0301-6832064</a>
                       <a href="tel:+923407300408" className="hover:underline block">0340-7300408</a>
                     </p>
                   </div>
@@ -248,7 +247,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-semibold text-[#050505]">Email</h3>
                     <p className="text-[#072971] mt-1">
-                      <a href="mailto:hussnain@akbartaxstore.com" className="hover:underline">hussnain@akbartaxstore.com</a>
+                      <a href="mailto:info@akbartaxstore.com" className="hover:underline">info@akbartaxstore.com</a>
                     </p>
                   </div>
                 </div>
@@ -312,7 +311,7 @@ export default function ContactPage() {
           <h2 className="text-2xl font-bold mb-8 text-center text-[#072971]">Our Location</h2>
           <div className="rounded-xl overflow-hidden shadow-lg h-96">
 
-            <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3405.6410765008327!2d73.10933427560663!3d31.396458874270884!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzHCsDIzJzQ3LjMiTiA3M8KwMDYnNDIuOSJF!5e0!3m2!1sen!2s!4v1759854773798!5m2!1sen!2s" width="100%" height="100%" style={{ border: 0 }} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Google Maps Location"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3405.6410765008327!2d73.10933427560663!3d31.396458874270884!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzHCsDIzJzQ3LjMiTiA3M8KwMDYnNDIuOSJF!5e0!3m2!1sen!2s!4v1759854773798!5m2!1sen!2s" width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Google Maps Location"></iframe>
           </div>
         </div>
       </div>

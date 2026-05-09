@@ -18,15 +18,15 @@ export const SITE_CONFIG = {
   // These must match your Google Business Profile exactly.
   // The Navbar had two phone numbers — both are kept here so dropdowns can
   // show both, but only `phone` (0301) is used in schema / GBP / footer CTA.
-  phone:          '+92-301-6832064',   // canonical — schema + GBP
-  phoneDisplay:   '0301-6832064',
-  phoneTel:       'tel:+923016832064',
+  phone:          '+92-340-7300408',   // canonical — schema + GBP
+  phoneDisplay:   '0340-7300408',
+  phoneTel:       'tel:+923407300408',
   phoneAlt:       '+92-340-7300408',   // secondary — shown in navbar dropdown only
   phoneAltDisplay:'0340-7300408',
   phoneAltTel:    'tel:+923407300408',
   whatsappUrl:    'https://wa.me/923016832064',
   whatsappGroup:  'https://wa.me/message/QJQEJZWC36JKN1', // navbar quick-link
-  email:          'hussnain@akbartaxstore.com',
+  email:          'info@akbartaxstore.com',
 
   // ── Address ───────────────────────────────────────────────────────────────
   address: {
@@ -61,16 +61,15 @@ export const NAV_LINKS = [
   // { label: 'GLOBAL SERVICES',href: '/international-financial-services' },
   { label: 'ABOUT',          href: '/about' },
   { label: 'CONTACT',        href: '/contact' },
-  { label: 'BOOK MEETING',   href: '/book-meeting' },
+  { label: 'BOOK MEETING',   href: '/booking', cta: true },
 ];
 
 // ── Navbar top-bar: Contact dropdown ─────────────────────────────────────────
 // Rendered in the blue utility strip at the top of the navbar on desktop.
 // Mix of <a href="tel:"> and <a href="mailto:"> — not Next.js routes.
 export const NAV_CONTACT_DROPDOWN = [
-  { label: '📞 0301-6832064',                  href: 'tel:+923016832064',              external: true },
   { label: '📞 0340-7300408',                  href: 'tel:+923407300408',              external: true },
-  { label: '✉️ Email Us',                      href: 'mailto:hussnain@akbartaxstore.com', external: true },
+  { label: '✉️ Email Us',                      href: 'mailto:info@akbartaxstore.com', external: true },
 ];
 
 // ── Navbar top-bar: Personal dropdown ────────────────────────────────────────
@@ -115,7 +114,7 @@ export const FOOTER_LINKS = [
   { label: 'Global Services',     href: '/international-financial-services' },
   { label: 'About Us',            href: '/about' },
   { label: 'Contact',             href: '/contact' },
-  { label: 'Book Meeting',        href: '/book-meeting' },
+  { label: 'Book Meeting',        href: '/booking' },
   { label: 'Privacy Policy',      href: '/privacy-policy' },
 ];
 
@@ -123,12 +122,12 @@ export const FOOTER_LINKS = [
 // Linked to individual service SEO pages so footer passes PageRank
 // to service pages on every page of the site.
 export const FOOTER_SERVICES = [
-  { label: 'NTN & Filer Registration',    href: '/services/ntn-registration' },
-  { label: 'FBR Tax Return Filing',        href: '/services/tax-filing' },
-  { label: 'Business / Firm Registration', href: '/services/business-registration' },
-  { label: 'SECP Company Registration',    href: '/services/company-registration' },
-  { label: 'Trademark & GST / PRA',        href: '/services/gst-registration' },
-  { label: 'Import & Export License',      href: '/services/import-export-license' },
+  { label: 'NTN & Filer Registration',    href: '/personal/ntn' },
+  { label: 'FBR Tax Return Filing',        href: '/personal/tax-return' },
+  { label: 'Business / Firm Registration', href: '/business/business-reg' },
+  { label: 'SECP Company Registration',    href: '/business/company-reg' },
+  { label: 'Trademark & GST / PRA',        href: '/business/trademark' },
+  { label: 'Import & Export License',      href: '/business/import-export' },
   { label: 'Financial Modeling (Global)',  href: '/international-financial-services#financial-modeling' },
   { label: 'Fractional CFO (Global)',      href: '/international-financial-services#fractional-cfo' },
 ];
@@ -156,7 +155,7 @@ export const HERO_TYPING_TEXTS = [
 // Static values rendered in HTML for Google crawler visibility.
 // Client-side counter animations run on top of these.
 export const HOME_STATS = [
-  { id: 'stat-clients',  value: '200+',  label: 'Happy Clients',   animateTo: 500 },
+  { id: 'stat-clients',  value: '500+',  label: 'Happy Clients',   animateTo: 500 },
   { id: 'stat-hours',    value: '24hrs', label: 'Fast Service',     animateTo: 24  },
   { id: 'stat-services', value: '15+',   label: 'Services',         animateTo: 15  },
   { id: 'stat-legal',    value: '99%',  label: 'Legal Compliance', animateTo: 100 },
@@ -169,42 +168,42 @@ export const HOME_SERVICES = [
     description: 'Get your National Tax Number (NTN) issued quickly. We handle all FBR IRIS portal submissions and paperwork on your behalf.',
     image: '/images/ntn-registration.jpg',
     alt:   'NTN registration service Pakistan — Akbar Tax Store Faisalabad',
-    href:  '/services/ntn-registration',
+    href:  '/personal/ntn',
   },
   {
     title: 'FBR Tax Return Filing',
     description: 'Professional FBR income tax return preparation and filing for individuals, salaried employees, freelancers, and business owners.',
     image: '/images/tax-return.jpg',
     alt:   'FBR income tax return filing service Pakistan',
-    href:  '/services/tax-filing',
+    href:  '/personal/tax-return',
   },
   {
     title: 'SECP Company Registration',
     description: 'Register your private limited company with SECP including complete legal documentation, digital signatures, and certificate of incorporation.',
     image: '/images/company-registration.jpg',
     alt:   'SECP company registration Pakistan — private limited company',
-    href:  '/services/company-registration',
+    href:  '/business/company-reg',
   },
   {
     title: 'Business Registration',
     description: 'Start your sole proprietorship or partnership legally with complete FBR and SECP registration services and end-to-end support.',
     image: '/images/business-registration.jpg',
     alt:   'Business registration in Pakistan — sole proprietorship and partnership',
-    href:  '/services/business-registration',
+    href:  '/business/business-reg',
   },
   {
     title: 'GST Registration',
     description: 'Federal GST and Punjab Revenue Authority (PRA) registration services for businesses supplying taxable goods and services in Pakistan.',
     image: '/images/gst.jpg',
     alt:   'GST registration Pakistan — General Sales Tax FBR',
-    href:  '/services/gst-registration',
+    href:  '/personal/gst',
   },
   {
     title: 'Trademark Registration',
     description: 'Protect your brand name and logo with comprehensive trademark registration through the Intellectual Property Organisation of Pakistan (IPO).',
     image: '/images/trademark-registration.jpg',
     alt:   'Trademark registration Pakistan — brand protection IPO',
-    href:  '/services/trademark-registration',
+    href:  '/business/trademark',
   },
 ];
 

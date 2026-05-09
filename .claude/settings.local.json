@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\('next:', p.dependencies.next\\); console.log\\('react:', p.dependencies.react\\); console.log\\('react-dom:', p.dependencies['react-dom']\\); console.log\\('@clerk/nextjs:', p.dependencies['@clerk/nextjs']\\);\")",
+      "Bash(Remove-Item \"d:\\\\Client Websites\\\\akbar-tax-store\\\\src\\\\proxy.js\")",
+      "Bash(npx prisma *)",
+      "Bash(Get-ChildItem -Path . -Force)",
+      "Bash(npx next *)",
+      "Bash(echo \"EXIT_CODE: $?\")",
+      "PowerShell(tree \"d:\\\\Client Websites\\\\akbar-tax-store\\\\src\\\\app\" -L 3)",
+      "Bash(Remove-Item -Recurse -Force \"D:\\\\Client Websites\\\\akbar-tax-store\\\\.next\" -ErrorAction SilentlyContinue)",
+      "Bash(Write-Host \"Cleared .next cache\")"
+    ],
+    "additionalDirectories": [
+      "D:\\Client Websites\\akbar-tax-store\\.next"
+    ]
+  }
+}

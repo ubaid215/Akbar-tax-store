@@ -18,7 +18,7 @@ function parseArgs() {
 async function createAdmin() {
   const args = parseArgs();
 
-  const email    = args.email    || 'hussnain@akbartaxstore.com';
+  const email    = args.email    || 'info@akbartaxstore.com';
   const name     = args.name     || 'Hussnain Akbar';
   const password = args.password || 'Akbar%1511.';
   const role     = args.role     || 'SUPER_ADMIN';

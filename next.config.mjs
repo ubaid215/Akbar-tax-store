@@ -26,6 +26,18 @@ const nextConfig = {
         destination: "/services-fees",
         permanent: true,
       },
+      { source: "/services/tax-filing", destination: "/personal/tax-return", permanent: true },
+      { source: "/services/ntn-registration", destination: "/personal/ntn", permanent: true },
+      { source: "/services/filer-status", destination: "/personal/filer", permanent: true },
+      { source: "/services/gst-registration", destination: "/personal/gst", permanent: true },
+      { source: "/services/pra-registration", destination: "/personal/pra", permanent: true },
+      { source: "/services/company-registration", destination: "/business/company-reg", permanent: true },
+      { source: "/services/secp-registration", destination: "/business/company-reg", permanent: true },
+      { source: "/services/business-registration", destination: "/business/business-reg", permanent: true },
+      { source: "/services/trademark-registration", destination: "/business/trademark", permanent: true },
+      { source: "/services/import-export-license", destination: "/business/import-export", permanent: true },
+      { source: "/services/bookkeeping", destination: "/business/bookkeeping", permanent: true },
+      { source: "/services/accounting-services", destination: "/business/accounting", permanent: true },
     ];
   },
 
@@ -43,15 +55,6 @@ const nextConfig = {
         headers: [
           { key: "Content-Type", value: "application/xml" },
           { key: "Cache-Control", value: "public, max-age=3600" },
-        ],
-      },
-      {
-        source: "/_next/static/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
         ],
       },
       {
