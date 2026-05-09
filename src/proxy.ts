@@ -6,7 +6,7 @@ const isAdminRoute = createRouteMatcher(['/admin', '/admin/(.*)']);
 export default clerkMiddleware(async (auth, req) => {
   if (!isAdminRoute(req)) return;
 
-  // Must be signed in
+  // Must be signed in =========
   await auth.protect();
 
   // Must be the designated admin user
