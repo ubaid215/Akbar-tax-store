@@ -1,7 +1,6 @@
 // src/app/api/bookings/route.ts  (REPLACE existing file)
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getSettingsRow } from '@/lib/dashboard-security'
 
 // ─── GET: available slots for a given date ───────────────────────────────────
 export async function GET(req: NextRequest) {
@@ -26,7 +25,7 @@ export async function GET(req: NextRequest) {
   }
 
   // 3. Settings
-  const settings = await getSettingsRow()
+  const settings = await prisma.settings.findUnique({ where: { id: 'singleton' } })
   const slotDuration = settings?.slotDuration || 60
   const bufferTime = settings?.bufferTime || 0
 
@@ -134,7 +133,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const settings = await getSettingsRow()
+    const settings = await prisma.settings.findUnique({ where: { id: 'singleton' } })
     const adminTo =
       settings?.businessEmail?.trim() ||
       process.env.ADMIN_ALERT_EMAIL?.trim() ||

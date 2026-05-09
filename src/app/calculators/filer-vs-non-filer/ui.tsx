@@ -31,7 +31,7 @@ export default function FilerVsNonFilerClient() {
   }, [cashWithdrawals, propertyValue, transactionType, dividendIncome, bankProfit]);
 
   const daysToRecoverFee = result.total > 0 ? Math.max(1, Math.round(9000 / (result.total / 365))) : 0;
-  const waURL = `https://wa.me/923487300408?text=${encodeURIComponent(
+  const waURL = `https://wa.me/923407300408?text=${encodeURIComponent(
     `Hi, I used your Filer vs Non-Filer calculator. Estimated annual savings PKR ${Math.round(result.total)}. Help me become a filer.`,
   )}`;
   const track = (event: string, params: Record<string, string | number> = {}) => {

@@ -44,7 +44,7 @@ export default function ShouldIFileQuizClient() {
   }, [done, result]);
 
   if (done && result) {
-    const wa = `https://wa.me/923487300408?text=${encodeURIComponent(`I took your quiz and got ${result.title}. ${result.cta}`)}`;
+    const wa = `https://wa.me/923407300408?text=${encodeURIComponent(`I took your quiz and got ${result.title}. ${result.cta}`)}`;
     return (
       <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <h1 className="text-2xl font-bold">Should I File? Quiz Result</h1>

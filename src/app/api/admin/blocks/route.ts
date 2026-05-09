@@ -1,7 +1,6 @@
 // src/app/api/admin/blocks/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getSettingsRow } from '@/lib/dashboard-security'
 import { addCalendarEvent } from '@/lib/googleCalendar'
 
 export async function GET(req: NextRequest) {
@@ -18,7 +17,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const body = await req.json()
   const { date, startTime, endTime, label, addToCalendar } = body
-  const settings = await getSettingsRow()
+  const settings = await prisma.settings.findUnique({ where: { id: 'singleton' } })
   const calendarId = settings?.googleCalendarId || process.env.GOOGLE_CALENDAR_ID
 
   // Validate times

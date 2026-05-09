@@ -66,7 +66,7 @@ export default function GSTCalculatorClient() {
         <p className="mt-2 text-sm text-slate-600">Authority: {authority} | Applied rate: {(rate * 100).toFixed(2)}%</p>
         {calc.tax > 300000 && <p className="mt-3 rounded-lg bg-amber-50 p-3 text-sm text-amber-700">You may need GST Registration (Sec 236G). Akbar Tax Store handles this for PKR 40,000.</p>}
         <a
-          href={`https://wa.me/923487300408?text=${encodeURIComponent(`Hi, I used your GST calculator and got tax ${Math.round(calc.tax)} PKR. Please guide GST registration.`)}`}
+          href={`https://wa.me/923407300408?text=${encodeURIComponent(`Hi, I used your GST calculator and got tax ${Math.round(calc.tax)} PKR. Please guide GST registration.`)}`}
           target="_blank"
           rel="noreferrer"
           onClick={() => track("whatsapp_clicked", { calculator: "gst" })}

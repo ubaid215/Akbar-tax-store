@@ -36,7 +36,7 @@ export default function FreelancerTaxClient() {
   useEffect(() => {
     track("result_viewed", { calculator: "freelancer-tax", tax_non_pseb: Math.round(result.nonPsebTax) });
   }, [result.nonPsebTax]);
-  const waURL = `https://wa.me/923487300408?text=${encodeURIComponent(
+  const waURL = `https://wa.me/923407300408?text=${encodeURIComponent(
     `Hi, I used your Freelancer Tax Calculator. PSEB tax ${Math.round(result.psebTax)} and Non-PSEB tax ${Math.round(
       result.nonPsebTax,
     )}. Please help me file return.`,

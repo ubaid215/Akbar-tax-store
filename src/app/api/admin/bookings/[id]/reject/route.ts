@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getSettingsRow } from '@/lib/dashboard-security'
 import { sendBookingRejectedEmail } from '@/lib/email'
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -12,7 +11,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     include: { service: true },
   })
   if (!booking) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  const settings = await getSettingsRow()
+  const settings = await prisma.settings.findUnique({ where: { id: 'singleton' } })
   const calendarId = settings?.googleCalendarId || process.env.GOOGLE_CALENDAR_ID
 
   if (booking.calendarEventId) {

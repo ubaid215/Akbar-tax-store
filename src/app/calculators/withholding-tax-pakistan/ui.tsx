@@ -16,7 +16,7 @@ export default function WithholdingTaxClient() {
     return { filerTax, nonFilerTax, extra: nonFilerTax - filerTax, netFiler: amount - filerTax, netNonFiler: amount - nonFilerTax };
   }, [paymentAmount, current]);
 
-  const waURL = `https://wa.me/923487300408?text=${encodeURIComponent(
+  const waURL = `https://wa.me/923407300408?text=${encodeURIComponent(
     `Hi, I used your WHT calculator and my extra non-filer tax is PKR ${Math.round(values.extra)}. Help me become a filer.`,
   )}`;
   const track = (event: string, params: Record<string, string | number> = {}) => {

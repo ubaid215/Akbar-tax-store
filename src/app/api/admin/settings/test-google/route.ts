@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
-import { getSettingsRow } from '@/lib/dashboard-security'
+import { prisma } from '@/lib/prisma'
 import { google } from 'googleapis'
 
 export async function GET() {
   try {
-    const settings = await getSettingsRow()
+    const settings = await prisma.settings.findUnique({ where: { id: 'singleton' } })
     const calendarId = settings?.googleCalendarId || process.env.GOOGLE_CALENDAR_ID
 
     if (!calendarId) {

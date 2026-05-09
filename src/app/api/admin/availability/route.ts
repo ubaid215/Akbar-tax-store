@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getSettingsRow, upsertSettingsRow } from '@/lib/dashboard-security'
 
 export async function GET() {
   const [availabilityRows, blockedDates, settings] = await Promise.all([
     prisma.availability.findMany({ include: { slots: true }, orderBy: { dayOfWeek: 'asc' } }),
     prisma.blockedDate.findMany({ orderBy: { date: 'asc' } }),
-    getSettingsRow(),
+    prisma.settings.findUnique({ where: { id: 'singleton' } }),
   ])
 
   const availability = availabilityRows.map(a => ({
@@ -52,9 +51,11 @@ export async function POST(req: NextRequest) {
     })
   )
 
-  await upsertSettingsRow({
+  // Upsert settings
+  await prisma.settings.upsert({
+    where: { id: 'singleton' },
     update: { bufferTime, slotDuration },
-    create: { bufferTime, slotDuration },
+    create: { id: 'singleton', bufferTime, slotDuration },
   })
 
   return NextResponse.json({ ok: true })

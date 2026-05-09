@@ -100,10 +100,8 @@ model AdminBlock {
 }
 
 model Settings {
-  id                  String   @id @default(cuid())
-  /// Stable singleton discriminator for app settings (one row). Upsert on this, not on id.
-  settingsKey         String   @unique
-
+  id                  String   @id @default("singleton")
+  
   // Business
   businessName        String   @default("Akbar Tax Store")
   businessEmail       String   @default("")

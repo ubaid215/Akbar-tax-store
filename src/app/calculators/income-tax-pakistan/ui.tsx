@@ -38,7 +38,7 @@ export default function IncomeTaxCalculatorClient() {
   const waMessage = `Hi, I used your Income Tax Calculator and got: Annual Tax PKR ${Math.round(
     result.annualTax,
   )}. I need help filing.`;
-  const waURL = `https://wa.me/923487300408?text=${encodeURIComponent(waMessage)}`;
+  const waURL = `https://wa.me/923407300408?text=${encodeURIComponent(waMessage)}`;
 
   const totalBreakdown = result.breakdown.reduce((sum, s) => sum + s.amount, 0) || 1;
   const slabs = incomeType === "salaried" ? SALARIED_SLABS : BUSINESS_SLABS;

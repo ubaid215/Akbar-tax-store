@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getSettingsRow } from '@/lib/dashboard-security'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
@@ -51,7 +50,7 @@ export async function POST(req: NextRequest) {
   })
 
   try {
-    const settings = await getSettingsRow()
+    const settings = await prisma.settings.findUnique({ where: { id: 'singleton' } })
     const adminTo =
       settings?.businessEmail?.trim() ||
       process.env.ADMIN_ALERT_EMAIL?.trim() ||
