@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { loadOrCreateSettingsRow, upsertSettingsRow } from '@/lib/dashboard-security'
 
 export async function GET() {
-  const settings = await prisma.settings.upsert({
-    where: { id: 'singleton' },
-    update: {},
-    create: { id: 'singleton' },
-  })
+  const settings = await loadOrCreateSettingsRow()
 
   return NextResponse.json({
     ...settings,
@@ -30,8 +26,7 @@ export async function POST(req: NextRequest) {
   } = body
   const normalizedFields = bookingFormFields ?? customFields ?? []
 
-  const settings = await prisma.settings.upsert({
-    where: { id: 'singleton' },
+  const settings = await upsertSettingsRow({
     update: {
       businessName, businessEmail, businessPhone, timezone,
       slotDuration, bufferTime, maxAdvanceBooking, minAdvanceBooking,
@@ -41,7 +36,6 @@ export async function POST(req: NextRequest) {
       customFields: normalizedFields,
     },
     create: {
-      id: 'singleton',
       businessName, businessEmail, businessPhone, timezone,
       slotDuration, bufferTime, maxAdvanceBooking, minAdvanceBooking,
       confirmationSubject, rejectionSubject, reminderSubject,

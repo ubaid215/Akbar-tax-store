@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { getSettingsRow } from '@/lib/dashboard-security'
 import { isReminderDue } from '@/lib/appointmentTime'
 import {
   sendBookingReminderEmail,
@@ -25,7 +26,7 @@ async function run(req: NextRequest) {
     return unauthorized()
   }
 
-  const settings = await prisma.settings.findUnique({ where: { id: 'singleton' } })
+  const settings = await getSettingsRow()
   const adminEmail = settings?.businessEmail?.trim() || ''
 
   const candidates = await prisma.booking.findMany({
