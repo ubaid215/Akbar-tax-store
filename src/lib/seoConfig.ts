@@ -88,15 +88,15 @@ export const SEO_CONFIG: Record<string, PageSEO> = {
   },
 
   '/contact': {
-    title: 'Contact Akbar Tax Store | WhatsApp 0301-6832064',
+    title: 'Contact Akbar Tax Store | WhatsApp 0340-7300408',
     description:
-      'Free tax consultation. WhatsApp us at 0301-6832064. NTN registration, FBR tax filing & SECP company registration in Pakistan. Fast 24-hour service.',
+      'Free tax consultation. WhatsApp us at 0340-7300408. NTN registration, FBR tax filing & SECP company registration in Pakistan. Fast 24-hour service.',
     ogTitle: 'Contact Akbar Tax Store | Free Tax Consultation Pakistan',
     ogDescription:
-      'Get a free tax consultation. WhatsApp 0301-6832064. NTN registration, FBR tax filing, and SECP registration in 24 hours.',
-    twitterTitle: 'Contact Akbar Tax Store | WhatsApp 0301-6832064',
+      'Get a free tax consultation. WhatsApp 0340-7300408. NTN registration, FBR tax filing, and SECP registration in 24 hours.',
+    twitterTitle: 'Contact Akbar Tax Store | WhatsApp 0340-7300408',
     twitterDescription:
-      'Contact us for free tax consultation. WhatsApp 0301-6832064. NTN, FBR tax filing, SECP registration in 24 hours across Pakistan.',
+      'Contact us for free tax consultation. WhatsApp 0340-7300408. NTN, FBR tax filing, SECP registration in 24 hours across Pakistan.',
     keywords: [
       'contact Akbar Tax Store',
       'tax consultant WhatsApp Pakistan',

@@ -17,14 +17,14 @@ export const SITE_CONFIG = {
   // ── Canonical contact details ─────────────────────────────────────────────
   // These must match your Google Business Profile exactly.
   // The Navbar had two phone numbers — both are kept here so dropdowns can
-  // show both, but only `phone` (0301) is used in schema / GBP / footer CTA.
+  // show both, but only `phone` (0340) is used in schema / GBP / footer CTA.
   phone:          '+92-340-7300408',   // canonical — schema + GBP
   phoneDisplay:   '0340-7300408',
   phoneTel:       'tel:+923407300408',
   phoneAlt:       '+92-340-7300408',   // secondary — shown in navbar dropdown only
   phoneAltDisplay:'0340-7300408',
   phoneAltTel:    'tel:+923407300408',
-  whatsappUrl:    'https://wa.me/923016832064',
+  whatsappUrl:    'https://wa.me/923407300804',
   whatsappGroup:  'https://wa.me/message/QJQEJZWC36JKN1', // navbar quick-link
   email:          'info@akbartaxstore.com',
 

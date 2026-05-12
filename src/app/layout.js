@@ -76,9 +76,9 @@ const structuredData = [
     name: 'Akbar Tax Store',
     alternateName: 'ATS Tax Services',
     url: BASE_URL,
-    telephone: '+923016832064',
+    telephone: '+923407300408',
     email: 'info@akbartaxstore.com',
-    foundingDate: '2019',
+    foundingDate: '2024',
     currenciesAccepted: 'PKR',
     address: {
       '@type': 'PostalAddress',
@@ -132,7 +132,7 @@ const structuredData = [
     },
     sameAs: [
       'https://www.instagram.com/_akbar_tax_store',
-      'https://wa.me/923016832064',
+      'https://wa.me/923407300408',
     ],
     image: `${BASE_URL}/images/og-image.jpg`,
     logo: {

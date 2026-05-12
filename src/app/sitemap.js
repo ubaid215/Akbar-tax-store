@@ -9,21 +9,22 @@ export default function sitemap() {
     { path: '/',              priority: 1.0, changeFrequency: 'weekly',  lastModified: TODAY },
     { path: '/services-fees', priority: 0.9, changeFrequency: 'monthly', lastModified: TODAY },
     { path: '/about',         priority: 0.6, changeFrequency: 'yearly',  lastModified: new Date('2026-03-01') },
-    { path: '/contact',       priority: 0.65, changeFrequency: 'yearly', lastModified: new Date('2026-03-01') },
+    { path: '/contact',       priority: 0.70, changeFrequency: 'yearly', lastModified: TODAY },
     { path: '/booking',       priority: 0.7, changeFrequency: 'monthly', lastModified: new Date('2026-03-01') },
     { path: '/personal',      priority: 0.8, changeFrequency: 'monthly', lastModified: new Date('2026-03-01') },
     { path: '/business',      priority: 0.8, changeFrequency: 'monthly', lastModified: new Date('2026-03-01') },
     { path: '/faisalabad-tax-services', priority: 0.8, changeFrequency: 'monthly', lastModified: new Date('2026-03-01') },
+    { path: '/international-financial-services', priority: 0.75, changeFrequency: 'monthly', lastModified: new Date('2026-03-01') },
   ];
 
   // ── Calculator tools — highest-traffic pages after homepage ─────────────────
   const toolRoutes = [
-    { path: '/calculators/income-tax-pakistan',    priority: 0.95, changeFrequency: 'monthly', lastModified: TODAY },
-    { path: '/calculators/filer-vs-non-filer',     priority: 0.95, changeFrequency: 'monthly', lastModified: TODAY },
+    { path: '/calculators/income-tax-pakistan',     priority: 0.95, changeFrequency: 'monthly', lastModified: TODAY },
+    { path: '/calculators/filer-vs-non-filer',      priority: 0.95, changeFrequency: 'monthly', lastModified: TODAY },
     { path: '/calculators/gst-calculator-pakistan', priority: 0.90, changeFrequency: 'monthly', lastModified: TODAY },
-    { path: '/calculators/withholding-tax-pakistan', priority: 0.90, changeFrequency: 'monthly', lastModified: TODAY },
+    { path: '/calculators/withholding-tax-pakistan',priority: 0.90, changeFrequency: 'monthly', lastModified: TODAY },
     { path: '/calculators/freelancer-tax-pakistan', priority: 0.90, changeFrequency: 'monthly', lastModified: TODAY },
-    { path: '/calculators/should-i-file-quiz',     priority: 0.85, changeFrequency: 'monthly', lastModified: TODAY },
+    { path: '/calculators/should-i-file-quiz',      priority: 0.85, changeFrequency: 'monthly', lastModified: TODAY },
   ];
 
   // ── Top service pages ───────────────────────────────────────────────────────
