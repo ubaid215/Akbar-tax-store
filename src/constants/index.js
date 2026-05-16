@@ -58,6 +58,7 @@ export const SITE_CONFIG = {
 export const NAV_LINKS = [
   { label: 'HOME',           href: '/' },
   { label: 'SERVICES FEE',   href: '/services-fees' },
+  { label: 'CALCULATORS',    href: '/calculators' },
   // { label: 'GLOBAL SERVICES',href: '/international-financial-services' },
   { label: 'ABOUT',          href: '/about' },
   { label: 'CONTACT',        href: '/contact' },

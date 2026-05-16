@@ -1,6 +1,7 @@
 // src/app/layout.jsx  — Root Layout (Server Component)
 
 import { Geist, Geist_Mono } from 'next/font/google';
+import Script from 'next/script';
 import { ClerkProvider } from '@clerk/nextjs';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Providers from '@/context/Providers';
@@ -207,7 +208,9 @@ export default function RootLayout({ children }) {
         />
 
         {/* Service Worker */}
-        <script
+        <Script
+          id="sw-register"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               if ('serviceWorker' in navigator) {

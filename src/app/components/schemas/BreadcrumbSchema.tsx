@@ -3,6 +3,7 @@
 // src/app/components/schemas/BreadcrumbSchema.tsx
 // Auto-generates BreadcrumbList JSON-LD and a visible nav trail from the current pathname.
 
+import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
@@ -62,38 +63,48 @@ const toLabel = (segment: string): string =>
 export default function BreadcrumbSchema() {
   const pathname = usePathname();
 
+  const segments = pathname && pathname !== '/' ? pathname.split('/').filter(Boolean) : [];
+
+  const crumbs = segments.length > 0
+    ? [
+        { name: 'Home', url: BASE_URL, path: '/' },
+        ...segments.map((seg, i) => ({
+          name: toLabel(seg),
+          url: `${BASE_URL}/${segments.slice(0, i + 1).join('/')}`,
+          path: `/${segments.slice(0, i + 1).join('/')}`,
+        })),
+      ]
+    : [];
+
+  useEffect(() => {
+    if (crumbs.length === 0) return;
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: crumbs.map((crumb, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: crumb.name,
+        item: crumb.url,
+      })),
+    };
+    const id = 'breadcrumb-jsonld';
+    let el = document.getElementById(id) as HTMLScriptElement | null;
+    if (!el) {
+      el = document.createElement('script');
+      el.id = id;
+      el.type = 'application/ld+json';
+      document.head.appendChild(el);
+    }
+    el.textContent = JSON.stringify(schema);
+    return () => { el?.remove(); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
   if (!pathname || pathname === '/') return null;
-
-  const segments = pathname.split('/').filter(Boolean);
-
-  const crumbs = [
-    { name: 'Home', url: BASE_URL, path: '/' },
-    ...segments.map((seg, i) => ({
-      name: toLabel(seg),
-      url: `${BASE_URL}/${segments.slice(0, i + 1).join('/')}`,
-      path: `/${segments.slice(0, i + 1).join('/')}`,
-    })),
-  ];
-
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: crumbs.map((crumb, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      name: crumb.name,
-      item: crumb.url,
-    })),
-  };
 
   return (
     <>
-      {/* JSON-LD for Google rich results */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-      />
-
       {/* Visible breadcrumb nav — renders above H1 on every non-homepage page */}
       <nav
         aria-label="Breadcrumb"
