@@ -144,7 +144,7 @@ export default function BookPage() {
   const isDaySelectable = (day: number) => {
     if (!mounted) return false
     const maxDate = new Date(); maxDate.setDate(maxDate.getDate() + (settings?.maxAdvanceBooking || 30))
-    const minDate = new Date(); minDate.setHours(minDate.getHours() + (settings?.minAdvanceBooking || 24))
+    const minDate = new Date(); minDate.setHours(0, 0, 0, 0)
     const d = new Date(calYear, calMonth, day)
     return d >= minDate && d <= maxDate
   }
@@ -436,24 +436,33 @@ export default function BookPage() {
                   ) : (
                     <>
                       <p className="text-[13px] text-[#6b7280] mb-4">{formattedDate}</p>
-                      <div className="grid grid-cols-2 gap-2 max-h-[360px] overflow-y-auto pr-1">
+                      <div className="grid grid-cols-2 gap-2">
                         {slots.map(slot => {
                           const isSelected = slot.time === selectedSlot
                           const isBooked = slot.status === 'booked'
+                          const todayStr = `${today.current.getFullYear()}-${String(today.current.getMonth()+1).padStart(2,'0')}-${String(today.current.getDate()).padStart(2,'0')}`
+                          const isPast = selectedDate === todayStr && (() => {
+                            const [h, m] = slot.time.split(':').map(Number)
+                            const now = new Date()
+                            return h * 60 + m < now.getHours() * 60 + now.getMinutes()
+                          })()
+                          const isDisabled = isBooked || isPast
                           return (
                             <button
                               key={slot.time}
-                              disabled={isBooked}
-                              onClick={() => !isBooked && setSelectedSlot(slot.time)}
+                              disabled={isDisabled}
+                              onClick={() => !isDisabled && setSelectedSlot(slot.time)}
                               className={`
                                 py-2.5 px-2 rounded-xl border text-[13px] font-semibold transition-all duration-[180ms] relative
                                 ${isSelected ? 'bg-[#0040A8] text-white border-[#0040A8]' : ''}
                                 ${isBooked && !isSelected ? 'bg-gray-50 text-gray-300 border-gray-100 cursor-not-allowed line-through' : ''}
-                                ${!isSelected && !isBooked ? 'bg-white text-[#1a1a2e] border-[#e8e8e0] cursor-pointer hover:-translate-y-px hover:shadow-[0_4px_16px_rgba(0,64,168,0.15)]' : ''}
+                                ${isPast && !isSelected ? 'bg-gray-50 text-gray-300 border-gray-100 cursor-not-allowed' : ''}
+                                ${!isSelected && !isDisabled ? 'bg-white text-[#1a1a2e] border-[#e8e8e0] cursor-pointer hover:-translate-y-px hover:shadow-[0_4px_16px_rgba(0,64,168,0.15)]' : ''}
                               `}
                             >
                               {formatTime(slot.time)}
                               {isBooked && <span className="block text-[10px] text-red-400 font-medium no-underline mt-0.5">Booked</span>}
+                              {isPast && !isBooked && <span className="block text-[10px] text-gray-400 font-medium mt-0.5">Passed</span>}
                             </button>
                           )
                         })}

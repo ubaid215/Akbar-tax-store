@@ -56,7 +56,7 @@ export async function GET(req: NextRequest) {
     let current = sh * 60 + sm
     const windowEnd = eh * 60 + em
 
-    while (current + slotDuration <= windowEnd) {
+    while (current < windowEnd) {
       const slotStart = toTime(current)
       const slotEnd = toTime(current + slotDuration)
 
