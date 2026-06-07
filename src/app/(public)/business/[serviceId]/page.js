@@ -1,4 +1,8 @@
 // src/app/(public)/business/[serviceId]/page.jsx
+// IMPROVED — changes:
+// 1. Added BreadcrumbList JSON-LD (new) — 3-level breadcrumb: Home → Business Services → [Service Name]
+//    Enables breadcrumb display in Google SERPs for all business service detail pages
+// All original JSX, metadata, generateStaticParams, and Service schema are unchanged.
 
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -26,6 +30,7 @@ export async function generateMetadata({ params }) {
   };
 }
 
+// ── Service JSON-LD schema (unchanged) ───────────────────────────────────────
 function buildServiceSchema(service) {
   return {
     '@context': 'https://schema.org',
@@ -56,6 +61,35 @@ function buildServiceSchema(service) {
   };
 }
 
+// ── BreadcrumbList schema (NEW) ───────────────────────────────────────────────
+// 3-level: Home → Business Registration Services → [Service Name]
+function buildBreadcrumbSchema(service) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: BASE_URL,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Business Registration Services',
+        item: `${BASE_URL}/business`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: service.title,
+        item: `${BASE_URL}${service.href}`,
+      },
+    ],
+  };
+}
+
 export default async function BusinessServiceDetailPage({ params }) {
   const { serviceId } = await params;
   const service = BUSINESS_SERVICES.find((s) => s.id === serviceId);
@@ -68,6 +102,11 @@ export default async function BusinessServiceDetailPage({ params }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildServiceSchema(service)) }}
+      />
+      {/* NEW: BreadcrumbList */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbSchema(service)) }}
       />
 
       <div className="min-h-screen bg-[#D9E8FF]">

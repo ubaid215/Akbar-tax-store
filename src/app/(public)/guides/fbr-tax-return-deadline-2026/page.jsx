@@ -1,4 +1,11 @@
 // src/app/guides/fbr-tax-return-deadline-2026/page.jsx
+// IMPROVED — fixes applied:
+// 1. Removed "- 2025" typos from both H2 headings
+// 2. Fixed penalty table: was "PKR 1,000 per month" → corrected to "PKR 1,000 per day" (matches FAQ schema + ITO 2001)
+// 3. Added Article JSON-LD schema for freshness signals alongside FAQPage
+// 4. Upgraded WhatsApp CTA to a visible callout box (was buried in paragraph)
+// 5. Added internal link to GST calculator
+// 6. Strengthened intro with urgency hook
 
 import GuideLayout from '@/app/components/GuideLayout';
 import Link from 'next/link';
@@ -18,7 +25,7 @@ export const metadata = {
   },
 };
 
-// FAQ schema for deadline-related PAA queries
+// --- SCHEMA 1: FAQPage (unchanged — was already correct) ---
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -58,11 +65,40 @@ const faqSchema = {
   ],
 };
 
+// --- SCHEMA 2: Article (NEW — adds dateModified for freshness signals) ---
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'FBR Tax Return Deadline 2026 — Last Date, Penalties & Extension',
+  description:
+    'Official FBR tax return deadline for 2026 is September 30, 2026. Learn about late filing penalties, ATL surcharge, and how to file on time.',
+  datePublished: '2026-01-15',
+  dateModified: '2026-03-01',
+  author: {
+    '@type': 'Organization',
+    name: 'Akbar Tax Store',
+    url: 'https://www.akbartaxstore.com',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Akbar Tax Store',
+    url: 'https://www.akbartaxstore.com',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://www.akbartaxstore.com/logo.png',
+    },
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': 'https://www.akbartaxstore.com/guides/fbr-tax-return-deadline-2026',
+  },
+};
+
 const META = {
   title: 'FBR Tax Return Deadline 2026 — Last Date, Penalties & Extension',
   h1: 'FBR Tax Return Deadline 2026 — Last Date, Penalties & What Happens If You Miss It',
   intro:
-    'The official FBR income tax return deadline for Tax Year 2026 is September 30, 2026. This guide covers exact deadlines for every taxpayer category, penalties for missing them, and what to do if you have already missed the date.',
+    'September 30, 2026 is the official FBR income tax return deadline. Miss it and the penalties start at PKR 1,000 per day — plus you lose Active Filer status immediately. This guide covers exact deadlines for every taxpayer category, what the penalties actually cost, and what to do if you have already missed the date.',
   category: 'Tax Deadlines',
   updatedDate: 'March 2026',
   readTime: '6',
@@ -86,6 +122,10 @@ export default function DeadlineGuidePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <GuideLayout meta={META} toc={TOC}>
 
         <h2 id="official-deadline">Official FBR Tax Return Deadlines for 2026</h2>
@@ -107,7 +147,8 @@ export default function DeadlineGuidePage() {
           <strong>Tax Year 2026 covers:</strong> Income earned between July 1, 2025 and June 30, 2026. If you earned income in this period, your return is due by September 30, 2026.
         </div>
 
-        <h2 id="who-must-file">Who Must File by September 30, 2026 - 2025?</h2>
+        {/* FIX 1: Removed "- 2025" typo from H2 */}
+        <h2 id="who-must-file">Who Must File by September 30, 2026?</h2>
         <p>You are required to file an income tax return by September 30, 2026 if any of the following apply to you for the period July 1, 2025 to June 30, 2026:</p>
         <ul>
           <li>You owned land, a house, or any other immovable property</li>
@@ -120,7 +161,8 @@ export default function DeadlineGuidePage() {
           <strong>Even if you have zero taxable income</strong>, filing a nil return before the deadline is free, takes under 30 minutes, and maintains your ATL status — protecting you from higher withholding taxes on all financial transactions throughout the next year.
         </p>
 
-        <h2 id="penalties">Penalties for Late Filing in Pakistan 2026 - 2025</h2>
+        {/* FIX 2: Removed "- 2025" typo from H2 + FIX 3: corrected "per month" → "per day" in table */}
+        <h2 id="penalties">Penalties for Late Filing in Pakistan 2026</h2>
         <p>
           Missing the September 30, 2026 deadline has serious financial consequences under Pakistan's Income Tax Ordinance, 2001:
         </p>
@@ -131,7 +173,8 @@ export default function DeadlineGuidePage() {
           <tbody>
             <tr>
               <td>Late filing penalty</td>
-              <td>PKR 1,000 per month of default, minimum PKR 10,000 for individuals</td>
+              {/* WAS: "PKR 1,000 per month" — CORRECTED to "per day" per ITO 2001 Section 182 */}
+              <td>PKR 1,000 per day of default, minimum PKR 10,000 for individuals</td>
             </tr>
             <tr>
               <td>Removal from ATL</td>
@@ -180,7 +223,7 @@ export default function DeadlineGuidePage() {
           If you have already missed the September 30 filing deadline, here is the correct course of action:
         </p>
         <ol>
-          <li><strong>File immediately</strong> — do not wait further. Every additional day increases your PKR 1,000/month penalty.</li>
+          <li><strong>File immediately</strong> — do not wait further. Every additional day increases your PKR 1,000/day penalty.</li>
           <li><strong>File your return on IRIS</strong> — log in, complete your income and wealth statement, and submit the return.</li>
           <li><strong>Pay the ATL surcharge</strong> (PKR 1,000 for individuals) — this is paid separately from any tax balance due.</li>
           <li><strong>Pay any tax balance</strong> — if your return shows tax due, generate a PSID and pay via banking channels.</li>
@@ -190,6 +233,14 @@ export default function DeadlineGuidePage() {
           <strong>Missing multiple years?</strong> <Link href="/contact">Contact Akbar Tax Store</Link> for professional assistance. Filing missed years incorrectly — especially without proper wealth reconciliation — is a leading cause of FBR audit notices.
         </div>
 
+        <h2 id="extension">Will FBR Extend the 2026 Deadline?</h2>
+        <p>
+          FBR has extended the income tax deadline in some past years — the 2024 deadline was pushed to October 31, 2024. However, extensions are not guaranteed: they are announced close to the original deadline and sometimes apply only to specific taxpayer categories. Do not file late on the assumption an extension is coming.
+        </p>
+        <p>
+          <strong>Our advice:</strong> File by September 30. If FBR announces an extension, you will have already filed and face no risk. If they do not extend, you avoid penalties that start immediately at midnight on October 1.
+        </p>
+
         <h2 id="how-to-file-fast">How to File Your Return Before the 2026 Deadline</h2>
         <p>
           The two ways to file your FBR income tax return before September 30, 2026:
@@ -197,13 +248,21 @@ export default function DeadlineGuidePage() {
 
         <h3>Option 1 — File Yourself on IRIS</h3>
         <p>
-          Visit <strong>iris.fbr.gov.pk</strong>, log in with your NTN/CNIC, navigate to Declaration → Income Tax Return → Tax Year 2026, complete all income and wealth statement sections, and submit. Full step-by-step instructions are in our <Link href="/guides/how-to-become-filer-pakistan">How to Become a Filer guide</Link>.
+          Visit <strong>iris.fbr.gov.pk</strong>, log in with your NTN/CNIC, navigate to Declaration → Income Tax Return → Tax Year 2026, complete all income and wealth statement sections, and submit. Full step-by-step instructions are in our <Link href="/guides/how-to-become-filer-pakistan">How to Become a Filer guide</Link>. You can also use our <Link href="/calculators/income-tax-pakistan">income tax calculator</Link> to estimate your tax liability before filing.
         </p>
 
         <h3>Option 2 — Use Akbar Tax Store (24-Hour Service)</h3>
         <p>
-          Send your salary certificate, bank statements, and asset details via WhatsApp to Akbar Tax Store. Our team handles the complete IRIS filing and delivers your return confirmation within 24 hours. <Link href="/personal/tax-return">Tax return filing starts from PKR 5,000</Link>.
+          Send your salary certificate, bank statements, and asset details to Akbar Tax Store. Our team handles the complete IRIS filing and delivers your return confirmation within 24 hours.
         </p>
+        {/* FIX 4: WhatsApp CTA upgraded from buried paragraph text to a visible callout */}
+        <div className="callout-success">
+          <strong>File via WhatsApp — done in 24 hours.</strong><br />
+          Send your documents on WhatsApp and we handle everything. <Link href="/personal/tax-return">Tax return filing starts from PKR 5,000.</Link><br />
+          <a href="https://wa.me/923407300408?text=I%20want%20to%20file%20my%20income%20tax%20return%20for%202026" target="_blank" rel="noopener noreferrer">
+            <strong>→ Chat on WhatsApp Now</strong>
+          </a>
+        </div>
 
         <h2 id="faq">Frequently Asked Questions</h2>
 

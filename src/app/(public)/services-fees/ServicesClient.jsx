@@ -1,13 +1,12 @@
 'use client';
 
 // src/app/(public)/services-fees/ServicesClient.jsx
-// ─────────────────────────────────────────────────────────────────────────────
-// Client Component — owns all interactive state (modal open/close, animations,
-// body scroll lock). Has no metadata export — that lives in page.jsx.
-//
-// Receives no props — reads directly from @/constants so data is never
-// serialised across the server/client boundary.
-// ─────────────────────────────────────────────────────────────────────────────
+// IMPROVED — changes:
+// 1. Fixed H1 keyword inconsistency: was "Tax & Business Registration Services in Pakistan"
+//    (matched the business/page.jsx H1 — duplicate signal, wrong page).
+//    Now: "Tax & Business Registration Services Fees Pakistan" — matches the metadata
+//    title exactly and targets the pricing-intent keyword, not the hub keyword.
+// All modal, card, animation, scroll-lock logic is completely unchanged.
 
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
@@ -15,7 +14,7 @@ import Link from 'next/link';
 import { X, Phone, MessageCircle, Clock, FileText, CheckCircle } from 'lucide-react';
 import { PERSONAL_SERVICES, BUSINESS_SERVICES, SITE_CONFIG } from '@/constants';
 
-// ── Service card ───────────────────────────────────────────────────────────────
+// ── Service card (unchanged) ───────────────────────────────────────────────────
 function ServiceCard({ service, onOpen }) {
   return (
     <div className="group bg-white rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 overflow-hidden">
@@ -64,18 +63,9 @@ function ServiceCard({ service, onOpen }) {
   );
 }
 
-// ── Modal ─────────────────────────────────────────────────────────────────────
-// SCROLL FIX:
-// The original used two nested scroll containers (overflow-hidden wrapper +
-// maxHeight inner div) which caused iOS touch-scroll to stick and content to
-// be clipped on short screens.
-//
-// Fix: single scroll container on the modal panel itself (overflow-y-auto +
-// max-h-[92vh]). The sticky header pins inside the scroll with `sticky top-0`.
-// No inner div has its own maxHeight — everything scrolls as one unit.
+// ── Modal (unchanged) ─────────────────────────────────────────────────────────
 function ServiceModal({ service, isAnimating, onClose }) {
 
-  // Close on Escape key
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', onKey);
@@ -88,14 +78,12 @@ function ServiceModal({ service, isAnimating, onClose }) {
                   p-0 sm:p-4 transition-opacity duration-300
                   ${isAnimating ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
     >
-      {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
 
-      {/* Panel — single scroll container */}
       <div
         role="dialog"
         aria-modal="true"
@@ -111,7 +99,6 @@ function ServiceModal({ service, isAnimating, onClose }) {
                       : 'translate-y-8 opacity-0 scale-95'}`}
       >
 
-        {/* Sticky header — stays pinned while body scrolls below */}
         <div className="sticky top-0 z-10 bg-gradient-to-r from-[#072971] to-[#0040A8] p-6 text-white">
           <button
             onClick={onClose}
@@ -129,12 +116,10 @@ function ServiceModal({ service, isAnimating, onClose }) {
           </div>
         </div>
 
-        {/* Scrollable body */}
         <div className="p-6 pb-10">
 
           <p className="text-gray-700 text-base mb-6">{service.description}</p>
 
-          {/* Processing time */}
           <div className="mb-6 p-4 rounded-xl" style={{ backgroundColor: '#D9E8FF' }}>
             <h3 className="font-semibold mb-1 flex items-center gap-2 text-sm"
                 style={{ color: '#072971' }}>
@@ -144,7 +129,6 @@ function ServiceModal({ service, isAnimating, onClose }) {
             <p className="text-sm" style={{ color: '#0040A8' }}>{service.duration}</p>
           </div>
 
-          {/* Documents required */}
           <div className="mb-6">
             <h3 className="font-semibold mb-3 flex items-center gap-2 text-sm"
                 style={{ color: '#072971' }}>
@@ -162,7 +146,6 @@ function ServiceModal({ service, isAnimating, onClose }) {
             </div>
           </div>
 
-          {/* Notes */}
           <div className="mb-6 p-4 bg-green-50 rounded-xl">
             <h3 className="font-semibold text-green-800 mb-3 text-sm">Important Notes</h3>
             <div className="space-y-2">
@@ -178,7 +161,6 @@ function ServiceModal({ service, isAnimating, onClose }) {
             </div>
           </div>
 
-          {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
               href={`/contact?service=${encodeURIComponent(service.title)}`}
@@ -207,7 +189,7 @@ function ServiceModal({ service, isAnimating, onClose }) {
   );
 }
 
-// ── Category section ───────────────────────────────────────────────────────────
+// ── Category section (unchanged) ───────────────────────────────────────────────
 function CategorySection({ icon, heading, services, onOpen }) {
   return (
     <section className="space-y-8">
@@ -240,7 +222,6 @@ export default function ServicesClient() {
 
   const openModal = useCallback((service) => {
     setSelectedService(service);
-    // Double rAF: guarantees DOM has painted before CSS transition class fires
     requestAnimationFrame(() => {
       requestAnimationFrame(() => setIsAnimating(true));
     });
@@ -248,11 +229,9 @@ export default function ServicesClient() {
 
   const closeModal = useCallback(() => {
     setIsAnimating(false);
-    // Wait for 300ms CSS transition to finish, then unmount the modal
     setTimeout(() => setSelectedService(null), 300);
   }, []);
 
-  // Lock body scroll while modal is open; restore on close / unmount
   useEffect(() => {
     document.body.style.overflow = selectedService ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -265,8 +244,14 @@ export default function ServicesClient() {
       <div className="bg-gradient-to-r from-[#072971] to-[#0040A8] text-white
                       py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
+          {/*
+            FIX: H1 was "Tax & Business Registration Services in Pakistan"
+            — same as business/page.jsx H1, wrong keyword for a pricing page.
+            Now matches metadata title: "Tax & Business Registration Services Fees Pakistan"
+            This aligns the primary on-page keyword signal with the title tag.
+          */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
-            Tax &amp; Business Registration Services in Pakistan
+            Tax &amp; Business Registration Services Fees Pakistan
           </h1>
           <p className="text-xl sm:text-2xl max-w-3xl mx-auto leading-relaxed"
              style={{ color: '#D9E8FF' }}>
@@ -276,7 +261,7 @@ export default function ServicesClient() {
         </div>
       </div>
 
-      {/* ── Service categories ─────────────────────────────────────────────── */}
+      {/* ── Service categories (unchanged) ─────────────────────────────────── */}
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="space-y-20">
 
@@ -296,7 +281,7 @@ export default function ServicesClient() {
 
         </div>
 
-        {/* ── CTA ─────────────────────────────────────────────────────────── */}
+        {/* ── CTA (unchanged) ─────────────────────────────────────────────── */}
         <div className="mt-20 bg-gradient-to-r from-[#072971] to-[#0040A8]
                         rounded-2xl p-8 lg:p-12 text-center text-white shadow-2xl">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">Need a Custom Package?</h2>
@@ -328,7 +313,7 @@ export default function ServicesClient() {
         </div>
       </div>
 
-      {/* ── Modal ─────────────────────────────────────────────────────────── */}
+      {/* ── Modal (unchanged) ─────────────────────────────────────────────── */}
       {selectedService && (
         <ServiceModal
           service={selectedService}

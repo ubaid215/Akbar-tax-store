@@ -1,4 +1,8 @@
-// src/app/(public)/business/page.jsx 
+// src/app/(public)/business/page.jsx
+// IMPROVED — changes:
+// 1. Added FAQPage JSON-LD (new) — targets "SECP registration cost", "how to register company Pakistan" PAA queries
+// 2. Added BreadcrumbList JSON-LD (new) — signals page hierarchy: Home → Business Services
+// All original JSX, metadata, and ItemList schema are unchanged.
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -19,6 +23,7 @@ export const metadata = {
   },
 };
 
+// ── ItemList schema (unchanged) ───────────────────────────────────────────────
 const serviceListSchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
@@ -43,12 +48,91 @@ const serviceListSchema = {
   })),
 };
 
+// ── BreadcrumbList schema (NEW) ───────────────────────────────────────────────
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: BASE_URL,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Business Registration Services',
+      item: `${BASE_URL}/business`,
+    },
+  ],
+};
+
+// ── FAQPage schema (NEW) ──────────────────────────────────────────────────────
+// Targets PAA queries for business registration in Pakistan
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How much does SECP company registration cost in Pakistan?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'SECP company registration costs PKR 50,000 at Akbar Tax Store. This includes complete documentation (Memorandum and Articles of Association), SECP eServices portal submission, digital signatures, and the Certificate of Incorporation — completed within 24–48 hours.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do I register a business in Pakistan?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'To register a business in Pakistan, you need to choose your business structure (sole proprietorship, partnership, or private limited company), register with SECP or local authorities, obtain an NTN from FBR, and register for relevant taxes (GST, PRA). Akbar Tax Store handles the complete business registration process for PKR 15,000, including all government portal submissions and documentation.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How long does business registration take in Pakistan?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Business registration timelines in Pakistan vary by type: sole proprietorship and partnership (business registration) takes 1–3 working days; SECP private limited company registration takes 24–48 hours through the eServices portal; GST and PRA registration takes 5–7 working days; trademark registration takes 12–18 months for full approval but TM acknowledgement is immediate.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the difference between business registration and SECP company registration?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Business registration (PKR 15,000) covers sole proprietorships and partnerships registered with local authorities or FBR — simpler structure with no share capital requirement. SECP company registration (PKR 50,000) creates a private limited company (Pvt. Ltd.) with separate legal identity, limited liability protection, and share capital — registered with the Securities and Exchange Commission of Pakistan.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do I need GST registration for my business in Pakistan?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'GST registration is mandatory in Pakistan if your business makes taxable supplies of goods exceeding PKR 10 million annually, or if you are a manufacturer, importer, or exporter regardless of turnover. Service providers in Punjab must register for PRA (Punjab Revenue Authority) if their annual revenue exceeds PKR 3 million. Akbar Tax Store handles both GST and PRA registration for PKR 40,000 each.',
+      },
+    },
+  ],
+};
+
 export default function BusinessServicesPage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceListSchema) }}
+      />
+      {/* NEW: BreadcrumbList */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      {/* NEW: FAQPage */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <div className="min-h-screen bg-[#D9E8FF]">

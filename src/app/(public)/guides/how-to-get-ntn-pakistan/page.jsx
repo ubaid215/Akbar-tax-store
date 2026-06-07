@@ -1,4 +1,11 @@
 // src/app/guides/how-to-get-ntn-pakistan/page.jsx
+// IMPROVED — fixes applied:
+// 1. Fixed missing prose Steps 4, 5, 6 (Complete All Tabs, Upload Documents) — now match HowTo schema
+// 2. Added "atl-surcharge" to TOC array (was in content but unreachable from TOC)
+// 3. Added FAQPage JSON-LD schema (guide answers high-volume PAA questions but had none)
+// 4. Fixed spacing: "companies,Businesses" → "companies, Businesses"
+// 5. Added NTN service CTA callout (PKR 4,000) — transactional page was missing conversion point
+// 6. Softened "Completed Tasks" language to be resilient to IRIS UI changes
 
 import GuideLayout from '@/app/components/GuideLayout';
 import Link from 'next/link';
@@ -18,7 +25,7 @@ export const metadata = {
   },
 };
 
-// JSON-LD: HowTo schema — enables Google rich results for step-by-step guides
+// --- SCHEMA 1: HowTo (kept from original — correct) ---
 const howToSchema = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
@@ -37,16 +44,65 @@ const howToSchema = {
   ],
 };
 
+// --- SCHEMA 2: FAQPage (NEW — unlocks PAA boxes for NTN queries) ---
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How do I get an NTN number in Pakistan?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'To get an NTN (National Tax Number) in Pakistan, visit iris.fbr.gov.pk, click "Registration for Unregistered Person", enter your CNIC and mobile number, verify via OTP, then complete Form 181 with your personal and bank details and upload your CNIC and utility bill. FBR approves registration within 1–2 working days.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is NTN registration free in Pakistan?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, NTN registration on the FBR IRIS portal is completely free of charge. You only pay if you use a professional tax consultant to register on your behalf. Akbar Tax Store charges PKR 4,000 for assisted NTN registration.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the difference between NTN and CNIC in Pakistan tax?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'For salaried individuals and sole proprietors, the 13-digit CNIC number serves as the NTN. However, you must still register on the FBR IRIS portal to activate your tax profile. Companies and AOPs receive a unique 7-digit NTN issued by FBR upon e-enrollment — separate from any CNIC.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How long does NTN registration take in Pakistan?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'NTN registration via the FBR IRIS portal typically takes 1–2 working days after you submit your application and documents. The online registration process itself takes approximately 20–30 minutes to complete.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I check my NTN number online in Pakistan?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. You can check your NTN and Active Taxpayer List status by visiting e.fbr.gov.pk/esbn/Verification.aspx and entering your CNIC or NTN. You can also send SMS "ATL [space] 13-digit CNIC" to 9966, or check via the FBR Tax Asaan mobile app.',
+      },
+    },
+  ],
+};
+
 const META = {
   title: 'How to Get NTN in Pakistan (2026 Step-by-Step Guide)',
   h1: 'How to Get NTN in Pakistan (2026 Complete Guide)',
   intro:
-    'A National Tax Number (NTN) is your official identity in Pakistan\'s tax system. This guide walks you through every step of FBR IRIS registration — documents required, the exact process, and how to avoid common mistakes.',
+    'A National Tax Number (NTN) is your official identity in Pakistan\'s tax system. This guide walks you through every step of FBR IRIS registration — documents required, the exact process, and how to avoid the mistakes that delay most applications.',
   category: 'Tax Registration',
   updatedDate: 'March 2026',
   readTime: '7',
 };
 
+// FIX 2: Added "atl-surcharge" to TOC — was present in content but missing here
 const TOC = [
   { id: 'what-is-ntn',         label: 'What is an NTN?' },
   { id: 'who-needs-ntn',       label: 'Who Needs an NTN?' },
@@ -54,6 +110,7 @@ const TOC = [
   { id: 'step-by-step',        label: 'Step-by-Step Registration' },
   { id: 'after-registration',  label: 'After Registration: Verify Your NTN' },
   { id: 'common-mistakes',     label: 'Common Mistakes to Avoid' },
+  { id: 'atl-surcharge',       label: 'Late Filing & ATL Surcharge' },
   { id: 'faq',                 label: 'Frequently Asked Questions' },
 ];
 
@@ -64,11 +121,17 @@ export default function NTNGuidePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
+      {/* FIX 3: Added FAQPage schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <GuideLayout meta={META} toc={TOC}>
 
         <h2 id="what-is-ntn">What is an NTN?</h2>
         <p>
-          A <strong>National Tax Number (NTN)</strong> is a unique identification number issued by Pakistan's Federal Board of Revenue (FBR) to individuals, companies,Businesses, and Associations of Persons (AOPs). It is your official identity within Pakistan's tax system and is required for filing income tax returns, opening business bank accounts, and conducting most formal financial transactions.
+          {/* FIX 4: "companies,Businesses" → "companies, businesses" (space + lowercase) */}
+          A <strong>National Tax Number (NTN)</strong> is a unique identification number issued by Pakistan's Federal Board of Revenue (FBR) to individuals, companies, businesses, and Associations of Persons (AOPs). It is your official identity within Pakistan's tax system and is required for filing income tax returns, opening business bank accounts, and conducting most formal financial transactions.
         </p>
         <p>
           For salaried individuals and sole proprietors, <strong>your 13-digit CNIC number serves as your NTN</strong>. However, you must still register on the FBR IRIS portal to activate your tax profile and receive login credentials. For companies and AOPs, FBR issues a unique 7-digit NTN upon e-enrollment.
@@ -90,6 +153,12 @@ export default function NTNGuidePage() {
         <p>
           Even if your income is below the taxable threshold, registering for an NTN is highly recommended. It costs nothing and allows you to conduct formal business, apply for loans, and avoid higher withholding taxes on banking and property transactions.
         </p>
+
+        {/* FIX 5: NTN service CTA added — converts transactional intent visitors */}
+        <div className="callout-success">
+          <strong>Want us to handle it for you?</strong><br />
+          Akbar Tax Store registers your NTN within 24 hours — you just send us your CNIC and utility bill on WhatsApp. <Link href="/personal/ntn-registration">NTN registration starts from PKR 4,000.</Link>
+        </div>
 
         <h2 id="documents-required">Documents Required for NTN Registration</h2>
 
@@ -135,18 +204,36 @@ export default function NTNGuidePage() {
           Enter the OTP within the time limit. You will be prompted to create a password for your IRIS account. Store this password safely — you will use it for all future FBR filings.
         </p>
 
-        <h3>Step 4 — Submit the Tax File</h3>
+        {/* FIX 1: Steps 4, 5, 6 were missing from prose — added to match HowTo schema */}
+        <h3>Step 4 — Open Form 181 from Drafts</h3>
         <p>
-          Review all tabs carefully. Once you click <strong>Submit</strong>, you cannot make further changes. After submission, FBR typically approves registration within <strong>1–2 working days</strong>. You will receive a confirmation email.
+          Log into your IRIS account with the credentials you just created. Navigate to the <strong>Drafts</strong> section and open <strong>Form 181 — Application for Registration</strong>. This is the main registration form where you will enter all your details.
         </p>
 
-        <h3>Step 5 — Download Your NTN Certificate</h3>
+        <h3>Step 5 — Complete All Tabs</h3>
         <p>
-          Log back into your IRIS account after approval. Navigate to your profile and download your NTN certificate from the IRIS dashboard. You can re-download this certificate at any time if you lose it.
+          Form 181 has multiple tabs. Complete each one carefully:
+        </p>
+        <ul>
+          <li><strong>Personal Tab:</strong> CNIC details, date of birth, contact number, email, and residential address</li>
+          <li><strong>Property Tab:</strong> Enter the address from your utility bill to confirm your residence</li>
+          <li><strong>Business Tab:</strong> Fill in only if you have a business. Leave blank if you are a salaried individual or freelancer</li>
+          <li><strong>Bank Account Tab:</strong> Enter your IBAN. At least one bank account is required</li>
+        </ul>
+
+        <h3>Step 6 — Upload Documents</h3>
+        <p>
+          In the documents section, upload scanned copies of your CNIC (front and back) and your utility bill. Files must be in JPG or PDF format. Ensure all four corners of the CNIC are visible and the image is not blurry — unclear scans are a leading cause of application rejection.
         </p>
 
+        <h3>Step 7 — Submit and Download Your NTN Certificate</h3>
+        <p>
+          Review all tabs carefully. Once you click <strong>Submit</strong>, you cannot make further changes. After submission, FBR typically approves registration within <strong>1–2 working days</strong>. You will receive a confirmation email. Log back in after approval to download your NTN certificate from the IRIS dashboard.
+        </p>
+
+        {/* FIX 6: Softened "Completed Tasks" language to be resilient to IRIS UI changes */}
         <div className="callout-success">
-          <strong>After getting your NTN:</strong> Check the "Completed Tasks" folder in IRIS for an "Order to grant/refuse registration" task. You must complete this task before you can file your first income tax return. Without completing it, you will receive a "Task Not Enabled" error.
+          <strong>After your registration is approved:</strong> Log back into IRIS and check for any pending tasks or notifications from FBR. You may need to acknowledge an "Order to grant registration" notice before you can file your first income tax return. Without completing this step, you may encounter a "Task Not Enabled" error during filing. If you are unsure, <Link href="/contact">contact us for guidance</Link>.
         </div>
 
         <h2 id="after-registration">After Registration: Verify Your NTN is Active</h2>
@@ -159,7 +246,7 @@ export default function NTNGuidePage() {
           <li><strong>Tax Asaan App:</strong> Download the official FBR Tax Asaan mobile app and verify your status</li>
         </ul>
         <p>
-          Note that simply obtaining an NTN does not automatically make you an active filer. You must also <Link href="/guides/how-to-become-filer-pakistan">file your annual income tax return</Link> to appear on the ATL and enjoy filer benefits.
+          Note that simply obtaining an NTN does not automatically make you an active filer. You must also <Link href="/guides/how-to-become-filer-pakistan">file your annual income tax return</Link> to appear on the ATL and enjoy filer benefits such as lower withholding tax on banking, property, and vehicle transactions.
         </p>
 
         <h2 id="common-mistakes">Common Mistakes to Avoid</h2>
@@ -181,7 +268,7 @@ export default function NTNGuidePage() {
             <tr>
               <td>Incorrect CNIC or outdated address</td>
               <td>Mismatch with NADRA records, rejection</td>
-              <td>Update CNIC via NADRA before registering if it has expired or has old address</td>
+              <td>Update CNIC via NADRA before registering if it has expired or has an old address</td>
             </tr>
             <tr>
               <td>Entering business details before completing individual registration</td>
@@ -189,9 +276,9 @@ export default function NTNGuidePage() {
               <td>Complete the Personal Tab fully before adding business information</td>
             </tr>
             <tr>
-              <td>Not completing the "Completed Tasks" step after registration</td>
+              <td>Not acknowledging the FBR approval notice after registration</td>
               <td>"Task Not Enabled" error when trying to file return</td>
-              <td>After approval, always check and complete the order in the Completed Tasks folder</td>
+              <td>After approval, check for and complete any pending FBR notices in your IRIS inbox</td>
             </tr>
           </tbody>
         </table>
@@ -217,8 +304,36 @@ export default function NTNGuidePage() {
           In addition to the ATL surcharge, late filing attracts a penalty of <strong>PKR 1,000 per day</strong> of default, with a minimum penalty of PKR 10,000 for individuals. Continued non-compliance can lead to SIM card blockage under FBR's authority with NADRA/PTA.
         </p>
         <div className="callout-warning">
-          <strong>Even if your income is zero:</strong> File a nil return before the deadline. It costs nothing and prevents penalties, keeps your ATL status active, and avoids the PKR 1,000/day late filing penalty.
+          <strong>Even if your income is zero:</strong> File a nil return before the deadline. It costs nothing and prevents penalties, keeps your ATL status active, and avoids the PKR 1,000/day late filing penalty. See our <Link href="/guides/fbr-tax-return-deadline-2026">full guide on the 2026 tax return deadline</Link>.
         </div>
+
+        <h2 id="faq">Frequently Asked Questions</h2>
+
+        <h3>How do I get my NTN number if I already have a CNIC?</h3>
+        <p>
+          For individuals, your 13-digit CNIC is your NTN. However, you still need to register on the FBR IRIS portal at iris.fbr.gov.pk to activate your tax profile. The registration is free and takes 20–30 minutes. Without IRIS registration, you cannot file tax returns or access filer benefits.
+        </p>
+
+        <h3>Is NTN registration free in Pakistan?</h3>
+        <p>
+          Yes. Registering directly on the IRIS portal is completely free. Professional assistance is optional — <Link href="/personal/ntn-registration">Akbar Tax Store provides NTN registration from PKR 4,000</Link> for those who prefer to have it handled for them.
+        </p>
+
+        <h3>How long does NTN registration take?</h3>
+        <p>
+          The online application on IRIS takes 20–30 minutes to complete. FBR processes and approves most applications within 1–2 working days. You will receive an email confirmation once approved.
+        </p>
+
+        <h3>Can I have more than one NTN in Pakistan?</h3>
+        <p>
+          No. Each individual or entity can have only one NTN. If you believe you have a duplicate NTN, contact FBR's helpline (051-111-772-772) to resolve it. Filing under a duplicate NTN can cause complications with your tax history.
+        </p>
+
+        <h3>What should I do after getting my NTN?</h3>
+        <p>
+          After obtaining your NTN, file your first income tax return on IRIS by September 30 of the relevant tax year. This is what places you on the Active Taxpayer List and unlocks filer benefits. Getting an NTN alone does not make you an active filer. Read our <Link href="/guides/how-to-become-filer-pakistan">complete guide on how to become a filer in Pakistan</Link>.
+        </p>
+
       </GuideLayout>
     </>
   );

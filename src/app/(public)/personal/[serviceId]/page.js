@@ -1,4 +1,8 @@
 // src/app/(public)/personal/[serviceId]/page.jsx
+// IMPROVED — changes:
+// 1. Added BreadcrumbList JSON-LD (new) — 3-level breadcrumb: Home → Personal → [Service Name]
+//    Enables breadcrumb display in Google SERPs for all 7 personal service pages
+// All original JSX, metadata, generateStaticParams, and Service schema are unchanged.
 
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -6,26 +10,18 @@ import { PERSONAL_SERVICES, SITE_CONFIG } from '@/constants';
 
 const BASE_URL = 'https://www.akbartaxstore.com';
 
-// ── Pre-render all service pages at build time ────────────────────────────────
-// Without generateStaticParams, Next.js renders pages on demand.
-// With it, all 7 service pages are built as static HTML — faster and indexed
-// immediately on deploy.
 export async function generateStaticParams() {
   return PERSONAL_SERVICES.map((s) => ({ serviceId: s.id }));
 }
 
-// ── Per-page metadata — unique title + description per service ────────────────
 export async function generateMetadata({ params }) {
   const { serviceId } = await params;
   const service = PERSONAL_SERVICES.find((s) => s.id === serviceId);
   if (!service) return { title: 'Service Not Found' };
-
   return {
     title: service.metaTitle,
     description: service.metaDesc,
-    alternates: {
-      canonical: `${BASE_URL}${service.href}`,
-    },
+    alternates: { canonical: `${BASE_URL}${service.href}` },
     openGraph: {
       title: service.metaTitle,
       description: service.metaDesc,
@@ -34,7 +30,7 @@ export async function generateMetadata({ params }) {
   };
 }
 
-// ── Service JSON-LD schema ────────────────────────────────────────────────────
+// ── Service JSON-LD schema (unchanged) ───────────────────────────────────────
 function buildServiceSchema(service) {
   return {
     '@context': 'https://schema.org',
@@ -65,22 +61,53 @@ function buildServiceSchema(service) {
   };
 }
 
-// ── Page ───────────────────────────────────────────────────────────────────────
+// ── BreadcrumbList schema (NEW) ───────────────────────────────────────────────
+// 3-level: Home → Personal Tax Services → [Service Name]
+// Built per-service so breadcrumb text and URL are always accurate.
+function buildBreadcrumbSchema(service) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: BASE_URL,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Personal Tax Services',
+        item: `${BASE_URL}/personal`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: service.title,
+        item: `${BASE_URL}${service.href}`,
+      },
+    ],
+  };
+}
+
 export default async function ServiceDetailPage({ params }) {
   const { serviceId } = await params;
   const service = PERSONAL_SERVICES.find((s) => s.id === serviceId);
-  // Return Next.js 404 if serviceId doesn't match any known service
   if (!service) notFound();
 
-  // 3 related services — all except the current one, limited to 3
   const related = PERSONAL_SERVICES.filter((s) => s.id !== service.id).slice(0, 3);
 
   return (
     <>
-      {/* Per-page Service schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildServiceSchema(service)) }}
+      />
+      {/* NEW: BreadcrumbList */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbSchema(service)) }}
       />
 
       <div className="min-h-screen bg-[#D9E8FF]">
@@ -88,7 +115,6 @@ export default async function ServiceDetailPage({ params }) {
         {/* ── Hero ──────────────────────────────────────────────────────── */}
         <section className="relative bg-gradient-to-r from-[#072971] to-[#0040A8] text-white py-16">
           <div className="container mx-auto px-6">
-            {/* Back link — internal route, use Link */}
             <Link
               href="/personal"
               className="inline-flex items-center text-[#D9E8FF] hover:text-white mb-6 text-sm"
@@ -99,11 +125,6 @@ export default async function ServiceDetailPage({ params }) {
               Back to Personal Services
             </Link>
 
-            {/*
-              H1 — unique keyword-targeted per service.
-              e.g. "NTN Registration in Pakistan — Get Your NTN Certificate in 24 Hours"
-              Pulled from service.h1 in constants — not a generic repeated phrase.
-            */}
             <h1 className="text-3xl md:text-4xl font-bold mb-4">{service.h1}</h1>
 
             <div className="flex flex-wrap items-center gap-3">
@@ -130,7 +151,6 @@ export default async function ServiceDetailPage({ params }) {
                   <h2 className="text-2xl font-bold text-[#072971] mb-4">Service Overview</h2>
                   <p className="text-[#050505] mb-8 leading-relaxed">{service.description}</p>
 
-                  {/* Process */}
                   <h2 className="text-xl font-semibold text-[#0040A8] mb-4">Our Process</h2>
                   <ol className="mb-8 space-y-4">
                     {service.process.map((step, i) => (
@@ -143,7 +163,6 @@ export default async function ServiceDetailPage({ params }) {
                     ))}
                   </ol>
 
-                  {/* Benefits */}
                   <h2 className="text-xl font-semibold text-[#0040A8] mb-4">Key Benefits</h2>
                   <ul className="mb-8 space-y-3">
                     {service.benefits.map((benefit, i) => (
@@ -173,14 +192,12 @@ export default async function ServiceDetailPage({ params }) {
                     </ul>
 
                     <div className="space-y-3 mb-6">
-                      {/* Internal route — Link */}
                       <Link
                         href={`/contact?service=${encodeURIComponent(service.title)}`}
                         className="block w-full bg-[#0040A8] hover:bg-[#072971] text-white font-bold py-3 px-6 rounded-lg text-center transition-colors"
                       >
                         Apply Now
                       </Link>
-                      {/* External URL — <a> */}
                       <a
                         href={SITE_CONFIG.whatsappUrl}
                         target="_blank"
@@ -194,7 +211,6 @@ export default async function ServiceDetailPage({ params }) {
                     <div className="pt-5 border-t border-[#0040A8]/30">
                       <h3 className="text-sm font-semibold text-[#072971] mb-3">Contact Information</h3>
                       <div className="space-y-2">
-                        {/* External tel: — <a> */}
                         <a
                           href={SITE_CONFIG.phoneTel}
                           className="flex items-center text-sm text-[#050505] hover:text-[#0040A8] transition-colors"
@@ -204,7 +220,6 @@ export default async function ServiceDetailPage({ params }) {
                           </svg>
                           {SITE_CONFIG.phoneDisplay}
                         </a>
-                        {/* External mailto: — <a> */}
                         <a
                           href={`mailto:${SITE_CONFIG.email}`}
                           className="flex items-center text-sm text-[#050505] hover:text-[#0040A8] transition-colors"
@@ -236,7 +251,6 @@ export default async function ServiceDetailPage({ params }) {
                   >
                     <h3 className="font-semibold text-[#0040A8] mb-1">{rel.title}</h3>
                     <p className="text-sm text-[#050505] mb-2">{rel.description}</p>
-                    {/* Live price from constants — original had hardcoded wrong prices */}
                     <p className="text-xs text-[#0040A8] font-semibold">
                       PKR {rel.price.toLocaleString()}
                     </p>

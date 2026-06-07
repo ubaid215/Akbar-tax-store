@@ -1,31 +1,36 @@
 // src/app/(public)/personal/page.jsx
+// IMPROVED — changes:
+// 1. Added FAQPage JSON-LD (new) — unlocks PAA boxes for "personal tax services Pakistan" queries
+// 2. Added BreadcrumbList JSON-LD (new) — signals page hierarchy to Google
+// All original JSX, metadata, and ItemList schema are unchanged.
 
 import Link from 'next/link';
 import Image from 'next/image';
 import { PERSONAL_SERVICES, SITE_CONFIG } from '@/constants';
 
-// ── Page metadata ─────────────────────────────────────────────────────────────
+const BASE_URL = 'https://www.akbartaxstore.com';
+
 export const metadata = {
   title: 'Personal Tax Services Pakistan — NIN, NTN & Tax Return Filing',
   description:
     'Professional personal tax services in Pakistan. NIN registration, NTN certificate, income tax return filing, GST and PRA registration. Fast 24-hour service. Akbar Tax Store, Faisalabad.',
   alternates: {
-    canonical: 'https://www.akbartaxstore.com/personal',
+    canonical: `${BASE_URL}/personal`,
   },
   openGraph: {
     title: 'Personal Tax Services Pakistan — NIN, NTN & Tax Return Filing | Akbar Tax Store',
     description:
       'NIN registration PKR 3,000. NTN certificate PKR 4,000. Tax return filing PKR 5,000. Expert personal tax services across Pakistan — results in 24 hours.',
-    url: 'https://www.akbartaxstore.com/personal',
+    url: `${BASE_URL}/personal`,
   },
 };
 
-// ── ItemList schema ───────────────────────────────────────────────────────────
+// ── ItemList schema (unchanged) ───────────────────────────────────────────────
 const serviceListSchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
   name: 'Personal Tax Services Pakistan — Akbar Tax Store',
-  url: 'https://www.akbartaxstore.com/personal',
+  url: `${BASE_URL}/personal`,
   itemListElement: PERSONAL_SERVICES.map((s, i) => ({
     '@type': 'ListItem',
     position: i + 1,
@@ -33,7 +38,7 @@ const serviceListSchema = {
       '@type': 'Service',
       name: s.title,
       description: s.description,
-      url: `https://www.akbartaxstore.com${s.href}`,
+      url: `${BASE_URL}${s.href}`,
       provider: { '@type': 'LocalBusiness', name: 'Akbar Tax Store' },
       offers: {
         '@type': 'Offer',
@@ -45,12 +50,92 @@ const serviceListSchema = {
   })),
 };
 
+// ── BreadcrumbList schema (NEW) ───────────────────────────────────────────────
+// Tells Google: Home → Personal Tax Services
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: BASE_URL,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Personal Tax Services',
+      item: `${BASE_URL}/personal`,
+    },
+  ],
+};
+
+// ── FAQPage schema (NEW) ──────────────────────────────────────────────────────
+// Targets PAA queries: "how much does NTN cost", "how to become filer", etc.
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How much does NTN registration cost in Pakistan?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'NTN registration via FBR IRIS portal costs PKR 4,000 at Akbar Tax Store. This includes complete document submission, FBR IRIS portal registration, and your NTN certificate — delivered within 24 hours. You can also register yourself for free directly at iris.fbr.gov.pk.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do I become an active filer in Pakistan?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'To become an active filer in Pakistan, you need to register on the FBR IRIS portal (iris.fbr.gov.pk), obtain your NTN, and file an annual income tax return before the September 30 deadline. After filing, your name appears on the Active Taxpayer List (ATL). Akbar Tax Store handles the complete process for PKR 20,000 within 24–48 hours.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the difference between NIN and NTN in Pakistan?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'NIN (National Identity Number) and NTN (National Tax Number) are two separate identifiers in Pakistan\'s tax system. Your 13-digit CNIC number is your NTN for individuals, but you need IRIS registration to activate it. NIN is a separate registration number used for specific tax identification purposes. Both are required for full FBR compliance.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How long does NTN registration take in Pakistan?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'NTN registration via the FBR IRIS portal typically takes 1–2 working days after you submit your application. When handled by Akbar Tax Store, we complete the registration within 24 hours of receiving your CNIC and mobile number.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What documents are needed for personal tax registration in Pakistan?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'For personal tax registration in Pakistan, you need: CNIC (front and back), active mobile number registered against your CNIC, email address, and a utility bill for address verification. For tax return filing, you additionally need your salary certificate or income proof, bank account details, and details of any property or vehicles owned.',
+      },
+    },
+  ],
+};
+
 export default function PersonalServicesPage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceListSchema) }}
+      />
+      {/* NEW: BreadcrumbList */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      {/* NEW: FAQPage */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <div className="min-h-screen bg-[#D9E8FF]">
@@ -62,11 +147,6 @@ export default function PersonalServicesPage() {
             <div className="inline-flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
               <span className="text-sm font-medium">Personal Tax Services Pakistan</span>
             </div>
-            {/*
-              H1 — targets "personal tax services Pakistan".
-              Original H1 "Professional Tax Services Made Simple" had zero
-              search value — nobody searches for that phrase.
-            */}
             <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
               Professional Personal Tax Services in Pakistan
               <span className="block text-[#D9E8FF]">NIN, NTN &amp; Tax Return Filing</span>
@@ -82,7 +162,6 @@ export default function PersonalServicesPage() {
         <section className="py-16">
           <div className="container mx-auto px-6">
             <div className="text-center mb-12">
-              {/* H2 with keyword: "personal tax services" */}
               <h2 className="text-3xl font-bold text-[#072971] mb-4">
                 Our Personal Tax Services
               </h2>
@@ -254,14 +333,12 @@ export default function PersonalServicesPage() {
               guide you through every step of the process.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              {/* Internal route — Link */}
               <Link
                 href="/contact"
                 className="inline-flex items-center justify-center bg-white text-[#072971] font-semibold py-3 px-8 rounded-xl hover:bg-[#D9E8FF] transition-colors"
               >
                 Get Free Consultation
               </Link>
-              {/* External tel: — <a> */}
               <a
                 href={SITE_CONFIG.phoneTel}
                 className="inline-flex items-center justify-center border-2 border-white text-white font-semibold py-3 px-8 rounded-xl hover:bg-white hover:text-[#072971] transition-colors"

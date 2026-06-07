@@ -248,7 +248,7 @@ export const HOME_FAQS = [
 
 // ── Homepage guide/resource links ─────────────────────────────────────────────
 export const HOME_GUIDES = [
-  { title: 'How to Get NTN in Pakistan',          href: '/guides/how-to-become-filer-pakistan' },
+  { title: 'How to Get NTN in Pakistan',          href: '/guides/how-to-get-ntn-pakistan' },
   { title: 'FBR Tax Return Deadline 2026',         href: '/guides/fbr-tax-return-deadline-2026' },
   { title: 'Filer vs Non-Filer: Key Differences',  href: '/guides/filer-vs-non-filer-benefits' },
 ];
