@@ -1,8 +1,12 @@
 // src/app/(public)/personal/[serviceId]/page.jsx
-// IMPROVED — changes:
-// 1. Added BreadcrumbList JSON-LD (new) — 3-level breadcrumb: Home → Personal → [Service Name]
-//    Enables breadcrumb display in Google SERPs for all 7 personal service pages
-// All original JSX, metadata, generateStaticParams, and Service schema are unchanged.
+// UPDATED — changes from previous version:
+// 1. Added buildFAQSchema() — FAQPage JSON-LD per service (uses service.faqs)
+// 2. Replaced single service.description paragraph with longDescription multi-paragraph renderer
+// 3. Added "Who Needs This?" section (service.whoNeeds)
+// 4. Added "What Happens If You Don't?" consequences section (service.consequences)
+// 5. Added visible FAQ accordion section (service.faqs)
+// 6. All new sections are optional-chained — pages without the new fields render exactly as before
+// BreadcrumbList, Service schema, metadata, generateStaticParams — all unchanged.
 
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -61,9 +65,7 @@ function buildServiceSchema(service) {
   };
 }
 
-// ── BreadcrumbList schema (NEW) ───────────────────────────────────────────────
-// 3-level: Home → Personal Tax Services → [Service Name]
-// Built per-service so breadcrumb text and URL are always accurate.
+// ── BreadcrumbList schema (unchanged) ────────────────────────────────────────
 function buildBreadcrumbSchema(service) {
   return {
     '@context': 'https://schema.org',
@@ -91,12 +93,32 @@ function buildBreadcrumbSchema(service) {
   };
 }
 
+// ── FAQPage schema (NEW) ──────────────────────────────────────────────────────
+// Only injected when service.faqs exists and has entries.
+// Targets PAA boxes and FAQ rich results in Google SERPs.
+function buildFAQSchema(service) {
+  if (!service.faqs?.length) return null;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: service.faqs.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: a,
+      },
+    })),
+  };
+}
+
 export default async function ServiceDetailPage({ params }) {
   const { serviceId } = await params;
   const service = PERSONAL_SERVICES.find((s) => s.id === serviceId);
   if (!service) notFound();
 
   const related = PERSONAL_SERVICES.filter((s) => s.id !== service.id).slice(0, 3);
+  const faqSchema = buildFAQSchema(service);
 
   return (
     <>
@@ -104,11 +126,17 @@ export default async function ServiceDetailPage({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildServiceSchema(service)) }}
       />
-      {/* NEW: BreadcrumbList */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbSchema(service)) }}
       />
+      {/* FAQPage schema — only rendered when service has faqs array */}
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
 
       <div className="min-h-screen bg-[#D9E8FF]">
 
@@ -145,12 +173,51 @@ export default async function ServiceDetailPage({ params }) {
             <div className="p-8">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-                {/* ── Left: Process + Benefits ─────────────────────────── */}
+                {/* ── Left: all content sections ───────────────────────── */}
                 <div className="lg:col-span-2">
 
+                  {/* ── Service Overview ─────────────────────────────────
+                      If longDescription exists: render each double-newline
+                      separated paragraph. Falls back to single description. */}
                   <h2 className="text-2xl font-bold text-[#072971] mb-4">Service Overview</h2>
-                  <p className="text-[#050505] mb-8 leading-relaxed">{service.description}</p>
+                  {service.longDescription
+                    ? service.longDescription
+                        .split('\n\n')
+                        .map((para, i) => (
+                          <p key={i} className="text-[#050505] mb-4 leading-relaxed">
+                            {para.trim()}
+                          </p>
+                        ))
+                    : (
+                      <p className="text-[#050505] mb-8 leading-relaxed">
+                        {service.description}
+                      </p>
+                    )
+                  }
 
+                  {/* ── Who Needs This? (NEW) ─────────────────────────── */}
+                  {service.whoNeeds?.length > 0 && (
+                    <div className="mb-8 mt-6">
+                      <h2 className="text-xl font-semibold text-[#0040A8] mb-4">
+                        Who Needs {service.title}?
+                      </h2>
+                      <ul className="space-y-2">
+                        {service.whoNeeds.map((item, i) => (
+                          <li key={i} className="flex items-start">
+                            <span
+                              className="font-bold mr-3 mt-0.5 flex-shrink-0 text-base leading-none"
+                              style={{ color: '#0040A8' }}
+                            >
+                              →
+                            </span>
+                            <span className="text-[#050505] text-sm leading-relaxed">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* ── Our Process (unchanged) ───────────────────────── */}
                   <h2 className="text-xl font-semibold text-[#0040A8] mb-4">Our Process</h2>
                   <ol className="mb-8 space-y-4">
                     {service.process.map((step, i) => (
@@ -163,6 +230,7 @@ export default async function ServiceDetailPage({ params }) {
                     ))}
                   </ol>
 
+                  {/* ── Key Benefits (unchanged) ──────────────────────── */}
                   <h2 className="text-xl font-semibold text-[#0040A8] mb-4">Key Benefits</h2>
                   <ul className="mb-8 space-y-3">
                     {service.benefits.map((benefit, i) => (
@@ -173,9 +241,50 @@ export default async function ServiceDetailPage({ params }) {
                     ))}
                   </ul>
 
+                  {/* ── What Happens If You Don't? (NEW) ─────────────── */}
+                  {service.consequences?.length > 0 && (
+                    <div className="mb-8 p-5 bg-red-50 rounded-xl border border-red-100">
+                      <h2 className="text-lg font-semibold text-red-800 mb-4">
+                        What Happens Without {service.title}?
+                      </h2>
+                      <ul className="space-y-2">
+                        {service.consequences.map((item, i) => (
+                          <li key={i} className="flex items-start">
+                            <span className="text-red-500 mr-3 mt-0.5 font-bold flex-shrink-0 leading-none">
+                              ✕
+                            </span>
+                            <span className="text-red-700 text-sm leading-relaxed">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* ── FAQ Section (NEW) ─────────────────────────────── */}
+                  {service.faqs?.length > 0 && (
+                    <div className="mb-4">
+                      <h2 className="text-xl font-semibold text-[#0040A8] mb-6">
+                        Frequently Asked Questions
+                      </h2>
+                      <div className="space-y-4">
+                        {service.faqs.map((faq, i) => (
+                          <div
+                            key={i}
+                            className="p-5 bg-[#F7FAFF] rounded-xl border border-[#D9E8FF]"
+                          >
+                            <h3 className="font-semibold text-[#072971] mb-2 text-sm leading-snug">
+                              {faq.q}
+                            </h3>
+                            <p className="text-[#050505] text-sm leading-relaxed">{faq.a}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                 </div>
 
-                {/* ── Right: Documents + CTAs ───────────────────────────── */}
+                {/* ── Right: Documents + CTAs (unchanged) ──────────────── */}
                 <div>
                   <div className="bg-[#D9E8FF] rounded-lg p-6 sticky top-24">
 
@@ -239,7 +348,7 @@ export default async function ServiceDetailPage({ params }) {
               </div>
             </div>
 
-            {/* ── Related services ──────────────────────────────────────── */}
+            {/* ── Related services (unchanged) ──────────────────────────── */}
             <div className="bg-[#F7FAFF] px-8 py-6 border-t border-[#D9E8FF]">
               <h2 className="text-xl font-bold text-[#072971] mb-4">Related Services</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
