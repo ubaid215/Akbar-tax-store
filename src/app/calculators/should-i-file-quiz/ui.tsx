@@ -60,7 +60,7 @@ export default function ShouldIFileQuizClient() {
         {/* Header */}
         <div className="border-b border-slate-100 pb-4">
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">Should I File? — Quiz Result</h1>
-          <p className="mt-1 text-sm text-slate-500">Based on your answers · Finance Act 2025 · FBR guidelines</p>
+          <p className="mt-1 text-sm text-slate-500">Based on your answers · Finance Bill 2026 · FBR guidelines</p>
         </div>
 
         {/* Result card */}
@@ -131,7 +131,7 @@ export default function ShouldIFileQuizClient() {
       {/* Header */}
       <div className="border-b border-slate-100 pb-4">
         <h1 className="text-2xl font-bold tracking-tight text-slate-900">Should I File Tax Return in Pakistan?</h1>
-        <p className="mt-1 text-sm text-slate-500">5 quick questions · Finance Act 2025 · FBR guidelines</p>
+        <p className="mt-1 text-sm text-slate-500">5 quick questions · Finance Bill 2026 · FBR guidelines</p>
       </div>
 
       {/* Quiz card */}

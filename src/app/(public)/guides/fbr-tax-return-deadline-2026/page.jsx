@@ -13,7 +13,7 @@ import Link from 'next/link';
 export const metadata = {
   title: 'FBR Tax Return Deadline 2026 — Last Date, Penalties & Extension',
   description:
-    'Official FBR tax return deadline for 2026 is September 30, 2026. Learn about late filing penalties (PKR 1,000/day), ATL surcharge, and how to file on time to stay an active filer.',
+    'Official FBR tax return deadline for 2026 is September 30, 2026. Learn about late filing penalties (PKR 25,000), ATL surcharge, and how to file on time to stay an active filer.',
   alternates: {
     canonical: 'https://www.akbartaxstore.com/guides/fbr-tax-return-deadline-2026',
   },
@@ -43,7 +43,7 @@ const faqSchema = {
       name: 'What is the penalty for late filing of income tax return in Pakistan?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'The penalty for late filing of an income tax return in Pakistan is PKR 1,000 per day of default, with a minimum penalty of PKR 10,000 for individuals. You also face removal from the Active Taxpayer List and must pay an ATL surcharge of PKR 1,000 (individuals) or PKR 10,000 (AOP) to regain filer status.',
+        text: 'The penalty for late filing of an income tax return in Pakistan is PKR 1,000 per day of default, with a minimum penalty of PKR 10,000 for individuals. You also face removal from the Active Taxpayer List and must pay an ATL surcharge of PKR 25,000 (individuals) or PKR 50,000 (AOP) to regain filer status.',
       },
     },
     {
@@ -51,7 +51,7 @@ const faqSchema = {
       name: 'What is the ATL surcharge in Pakistan 2026?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'The ATL (Active Taxpayer List) surcharge for late filers in Pakistan is PKR 1,000 for individuals, PKR 10,000 for AOPs, and PKR 20,000 for companies. This surcharge must be paid in addition to any late filing penalty to restore Active Filer status after the deadline has passed.',
+        text: 'The ATL (Active Taxpayer List) surcharge for late filers in Pakistan is PKR 25,000 for individuals, PKR 50,000 for AOPs, and PKR 1,00,000 for companies. This surcharge must be paid in addition to any late filing penalty to restore Active Filer status after the deadline has passed.',
       },
     },
     {
@@ -212,9 +212,9 @@ export default function DeadlineGuidePage() {
             <tr><th>Taxpayer Type</th><th>ATL Surcharge</th></tr>
           </thead>
           <tbody>
-            <tr><td>Individual</td><td>PKR 1,000</td></tr>
-            <tr><td>AOP (Association of Persons)</td><td>PKR 10,000</td></tr>
-            <tr><td>Company</td><td>PKR 20,000</td></tr>
+            <tr><td>Individual</td><td>PKR 25,000</td></tr>
+            <tr><td>AOP (Association of Persons)</td><td>PKR 50,000</td></tr>
+            <tr><td>Company</td><td>PKR 1,00,000</td></tr>
           </tbody>
         </table>
 
@@ -225,7 +225,7 @@ export default function DeadlineGuidePage() {
         <ol>
           <li><strong>File immediately</strong> — do not wait further. Every additional day increases your PKR 1,000/day penalty.</li>
           <li><strong>File your return on IRIS</strong> — log in, complete your income and wealth statement, and submit the return.</li>
-          <li><strong>Pay the ATL surcharge</strong> (PKR 1,000 for individuals) — this is paid separately from any tax balance due.</li>
+          <li><strong>Pay the ATL surcharge</strong> (PKR 25,000 for individuals) — this is paid separately from any tax balance due.</li>
           <li><strong>Pay any tax balance</strong> — if your return shows tax due, generate a PSID and pay via banking channels.</li>
           <li><strong>If you have missed multiple years</strong> — do not file them all at once without professional guidance. Previous years require careful wealth reconciliation to explain asset changes over the missing period without triggering an audit.</li>
         </ol>

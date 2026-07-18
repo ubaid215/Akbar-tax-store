@@ -12,7 +12,7 @@ import {
 } from "@/lib/taxData";
 
 const DISCLAIMER =
-  "Disclaimer: This calculator provides estimates based on Finance Act 2025 (FY 2025-26) tax slabs published by the Federal Board of Revenue (FBR). Results are for guidance purposes only. Your actual tax liability may differ based on specific deductions, exemptions, allowances, and other factors applicable to your individual circumstances. Always consult a certified tax advisor or contact Akbar Tax Store for a personalized assessment.";
+  "Disclaimer: This calculator provides estimates based on Finance Bill 2026 (FY 2026-27 / Tax Year 2027) tax slabs published by the Federal Board of Revenue (FBR). Results are for guidance purposes only. Your actual tax liability may differ based on specific deductions, exemptions, allowances, and other factors applicable to your individual circumstances. Always consult a certified tax advisor or contact Akbar Tax Store for a personalized assessment.";
 
 function InputField({
   label,
@@ -62,6 +62,7 @@ function SlabBar({
     "bg-emerald-400",
     "bg-cyan-400",
     "bg-blue-400",
+    "bg-indigo-400",
     "bg-violet-400",
     "bg-orange-400",
     "bg-rose-400",
@@ -173,6 +174,7 @@ export default function IncomeTaxCalculatorClient() {
     { bar: "bg-emerald-400", badge: "bg-emerald-100 text-emerald-700", border: "border-emerald-200" },
     { bar: "bg-cyan-400", badge: "bg-cyan-100 text-cyan-700", border: "border-cyan-200" },
     { bar: "bg-blue-400", badge: "bg-blue-100 text-blue-700", border: "border-blue-200" },
+    { bar: "bg-indigo-400", badge: "bg-indigo-100 text-indigo-700", border: "border-indigo-200" },
     { bar: "bg-violet-400", badge: "bg-violet-100 text-violet-700", border: "border-violet-200" },
     { bar: "bg-orange-400", badge: "bg-orange-100 text-orange-700", border: "border-orange-200" },
     { bar: "bg-rose-400", badge: "bg-rose-100 text-rose-700", border: "border-rose-200" },
@@ -189,9 +191,9 @@ export default function IncomeTaxCalculatorClient() {
             "@context": "https://schema.org",
             "@type": "FAQPage",
             mainEntity: [
-              { "@type": "Question", name: "What is the salary tax rate in Pakistan for 2025-26?", acceptedAnswer: { "@type": "Answer", text: "Salaried rates start from 0% and go up to 35% under Finance Act 2025, plus 9% surcharge for income above PKR 10 million." } },
+              { "@type": "Question", name: "What is the salary tax rate in Pakistan for 2026-27?", acceptedAnswer: { "@type": "Answer", text: "Salaried rates start from 0% and go up to 35% under Finance Bill 2026, with the 35% rate now applying only above PKR 7 million. The 9% surcharge on income above PKR 10 million has been abolished for salaried individuals." } },
               { "@type": "Question", name: "How is income tax calculated in Pakistan?", acceptedAnswer: { "@type": "Answer", text: "Annual income is adjusted for allowable deductions (medical allowance, zakat / charitable donations), then progressive FBR slabs are applied. Tax = fixed component + (taxable income - slab floor) × slab rate." } },
-              { "@type": "Question", name: "What is the FBR return deadline for Tax Year 2026?", acceptedAnswer: { "@type": "Answer", text: "The filing deadline for Tax Year 2026 is September 30, 2026 unless extended by FBR." } },
+              { "@type": "Question", name: "What is the FBR return deadline for Tax Year 2027?", acceptedAnswer: { "@type": "Answer", text: "The filing deadline for Tax Year 2027 is expected to be September 30, 2027 unless extended by FBR." } },
               { "@type": "Question", name: "Does zakat or charitable donation reduce taxable income?", acceptedAnswer: { "@type": "Answer", text: "Yes, zakat and charitable donations are fully deducted from taxable income with no cap in this calculator." } },
               { "@type": "Question", name: "What is the medical allowance exemption?", acceptedAnswer: { "@type": "Answer", text: "Medical allowance is exempt up to 10% of basic salary or PKR 25,000 per year, whichever is lower." } },
             ],
@@ -205,7 +207,7 @@ export default function IncomeTaxCalculatorClient() {
           Pakistan Income Tax Calculator
         </h1>
         <p className="mt-1 text-sm text-slate-500">
-          Finance Act 2025 · FY July 2025 – June 2026 · FBR progressive slabs
+          Finance Bill 2026 · FY July 2026 – June 2027 · FBR progressive slabs
         </p>
       </div>
 
@@ -391,8 +393,8 @@ export default function IncomeTaxCalculatorClient() {
               {result.surcharge > 0 && (
                 <BreakdownStep
                   step={8}
-                  label="+ Surcharge (9% on tax)"
-                  sub="Applied because income exceeds PKR 10 million"
+                  label="+ Surcharge"
+                  sub="High-income surcharge (business/AOP income only — abolished for salaried individuals from Tax Year 2027)"
                   value={`+ ${formatPKR(result.surcharge)}`}
                   type="tax"
                 />
@@ -454,7 +456,7 @@ export default function IncomeTaxCalculatorClient() {
 
               {result.surcharge > 0 && (
                 <div className="mx-5 mb-5 mt-0 rounded-xl bg-amber-900/40 px-4 py-2.5 text-xs text-amber-300">
-                  ⚠ Surcharge of 9% applied on tax ({formatPKR(result.surcharge)}) — income exceeds PKR 10 million.
+                  ⚠ Surcharge applied on tax ({formatPKR(result.surcharge)}) — income exceeds PKR 10 million.
                 </div>
               )}
 
@@ -581,7 +583,7 @@ export default function IncomeTaxCalculatorClient() {
 
       {/* Full slab guide section */}
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="text-lg font-bold text-slate-900">Pakistan income tax slabs 2025-26 — complete guide</h2>
+        <h2 className="text-lg font-bold text-slate-900">Pakistan income tax slabs 2026-27 — complete guide</h2>
 
         <div className="mt-4">
           <table className="w-full border-collapse text-xs">
@@ -605,7 +607,7 @@ export default function IncomeTaxCalculatorClient() {
             </tbody>
           </table>
           <p className="mt-1.5 text-[10px] text-slate-400">
-            + 9% surcharge on tax if annual income exceeds PKR 10 million
+            The 9% high-income surcharge has been abolished for salaried individuals from Tax Year 2027 (it still applies to non-salaried/business income above PKR 10 million).
           </p>
         </div>
 
@@ -618,13 +620,13 @@ export default function IncomeTaxCalculatorClient() {
               subtracting allowable deductions (medical allowance exemption, zakat / charitable donations) from gross annual income. Then
               the applicable slab&lsquo;s formula is used: <code className="rounded bg-slate-100 px-1 text-xs">Tax = Fixed Component + (Taxable Income − Slab Floor) × Slab Rate</code>.
               Only the income <em>within each slab band</em> is taxed at that band&apos;s rate — not the entire income.
-              For incomes above PKR 10 million, a 9% surcharge is applied on top of slab tax.
+              The 9% surcharge on incomes above PKR 10 million has been abolished for salaried individuals from Tax Year 2027; it still applies to non-salaried/business income.
             </p>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-slate-800">What is the FBR tax return deadline for 2026?</h3>
+            <h3 className="text-sm font-semibold text-slate-800">What is the FBR tax return deadline for 2027?</h3>
             <p className="mt-1.5 text-sm leading-relaxed text-slate-600">
-              The expected deadline is <strong>September 30, 2026</strong>. Filing on time keeps your Active Taxpayer
+              The expected deadline for Tax Year 2027 is <strong>September 30, 2027</strong>. Filing on time keeps your Active Taxpayer
               List (ATL) status intact, which means lower withholding rates on banking, property, and investment
               transactions. Late filers face penalties and higher WHT deductions throughout the year.
             </p>

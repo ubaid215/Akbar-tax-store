@@ -564,9 +564,9 @@ At Akbar Tax Store, we manage the complete process end-to-end for PKR 20,000. Th
     category: 'Registration',
     description: 'Federal Goods and Services Tax registration with FBR',
     metaTitle: 'GST Registration Pakistan — Federal General Sales Tax FBR | Akbar Tax Store',
-    metaDesc: 'GST registration in Pakistan via FBR portal. PKR 40,000. Completed in 5–7 working days. For businesses with taxable supplies. Akbar Tax Store, Faisalabad.',
+    metaDesc: 'GST registration in Pakistan via FBR portal. PKR 45000. Completed in 15–20 working days. For businesses with taxable supplies. Akbar Tax Store, Faisalabad.',
     h1: 'GST Registration in Pakistan — Federal General Sales Tax FBR',
-    price: 40000, duration: '5–7 working days',
+    price: 45000, duration: '15–20 working days',
     image: '/images/gst.jpg',
     alt: 'GST registration Pakistan — Federal General Sales Tax FBR',
     href: '/personal/gst',
@@ -574,14 +574,14 @@ At Akbar Tax Store, we manage the complete process end-to-end for PKR 20,000. Th
       'ID Card Picture', 'Phone Number', 'Email ID', 'Business Name', 'Business Address',
       'Business Principal Activity', 'Office Front Door picture',
       'Electricity bill & meter pic', 'Property/office agreement',
-      'Bank maintenance Certificate (Business bank)',
+      'Bank maintenance Certificate (Business bank)','Business LetterHead', 'Business Dead',
     ],
     process: [
       'Business category and turnover determination',
       'Document preparation and verification',
       'FBR sales tax portal application submission',
       'Follow-up and coordination with FBR',
-      'GST registration certificate issued within 5–7 working days',
+      'GST registration certificate issued within 15–20 working days',
     ],
     benefits: [
       'Legal compliance for your business operations',
@@ -594,9 +594,9 @@ At Akbar Tax Store, we manage the complete process end-to-end for PKR 20,000. Th
  
 Pakistan has three main sales tax authorities depending on the nature and location of your business: FBR (Federal Board of Revenue) handles GST on goods and certain services at the federal level; PRA (Punjab Revenue Authority) handles services sold in Punjab; and SRB (Sindh Revenue Board) handles services in Sindh. Most product-based businesses register with FBR. Service businesses register with FBR, PRA, or SRB depending on which province they operate in.
  
-The GST rate in Pakistan is 18% for standard goods and services under the Finance Act 2025-26. Certain categories — including basic food items, medicines, and exports — are zero-rated or exempt. Once registered, you must file monthly GST returns through the FBR IRIS portal by the 18th of the following month, even if your sales for that month were zero.
+The GST rate in Pakistan is 18% for standard goods and services under the Finance Act 2026-27. Certain categories — including basic food items, medicines, and exports — are zero-rated or exempt. Once registered, you must file monthly GST returns through the FBR IRIS portal by the 18th of the following month, even if your sales for that month were zero.
  
-At Akbar Tax Store, our team handles the complete GST registration process — document preparation, office front photograph, FBR portal application, and follow-up with the FBR officer — in 5 to 7 working days. We also offer ongoing monthly GST return filing as a separate service to keep your compliance current.`,
+At Akbar Tax Store, our team handles the complete GST registration process — document preparation, office front photograph, FBR portal application, and follow-up with the FBR officer — in 15 to 20 working days. We also offer ongoing monthly GST return filing as a separate service to keep your compliance current.`,
  
   whoNeeds: [
     'Manufacturers and importers of taxable goods — GST registration is mandatory regardless of turnover',
@@ -635,7 +635,7 @@ At Akbar Tax Store, our team handles the complete GST registration process — d
     },
     {
       q: 'How long does GST registration take in Pakistan?',
-      a: 'With Akbar Tax Store, GST registration is completed in 5 to 7 working days. The timeline depends on FBR officer verification of your premises photos and documents. Our team prepares everything correctly to avoid rejection and re-submission delays.',
+      a: 'With Akbar Tax Store, GST registration is completed in 15 to 20 working days. The timeline depends on FBR officer verification of your premises photos and documents. Our team prepares everything correctly to avoid rejection and re-submission delays.',
     },
     {
       q: 'What documents are required for GST registration in Pakistan?',
@@ -647,7 +647,7 @@ At Akbar Tax Store, our team handles the complete GST registration process — d
     },
     {
       q: 'How much does GST registration cost at Akbar Tax Store?',
-      a: 'Akbar Tax Store charges PKR 40,000 for complete GST registration with FBR. This covers document preparation, office verification photograph coordination, FBR portal application, follow-up with the assigned FBR officer, and registration certificate delivery. PRA registration for Punjab service providers is also PKR 40,000 and follows the same process.',
+      a: 'Akbar Tax Store charges PKR 45,000 for complete GST registration with FBR. This covers document preparation, office verification photograph coordination, FBR portal application, follow-up with the assigned FBR officer, and registration certificate delivery. PRA registration for Punjab service providers is also PKR 45,000 and follows the same process.',
     },
     {
       q: 'Do I need to file GST returns every month after registration?',
@@ -661,9 +661,9 @@ At Akbar Tax Store, our team handles the complete GST registration process — d
     category: 'Registration',
     description: 'Punjab Revenue Authority registration for Punjab-based businesses',
     metaTitle: 'PRA Registration Pakistan — Punjab Revenue Authority | Akbar Tax Store',
-    metaDesc: 'PRA registration for service providers in Punjab, Pakistan. PKR 40,000. Completed in 5–7 working days. Doctors, lawyers, consultants, and businesses. Faisalabad.',
+    metaDesc: 'PRA registration for service providers in Punjab, Pakistan. PKR 45,000. Completed in 15–20 working days. Doctors, lawyers, consultants, and businesses. Faisalabad.',
     h1: 'PRA Registration in Pakistan — Punjab Revenue Authority',
-    price: 40000, duration: '5–7 working days',
+    price: 45000, duration: '15–20 working days',
     image: '/images/pra-registration.png',
     alt: 'PRA registration Pakistan — Punjab Revenue Authority service tax',
     href: '/personal/pra',
@@ -671,14 +671,15 @@ At Akbar Tax Store, our team handles the complete GST registration process — d
       'ID Card Picture', 'Phone Number', 'Email ID', 'Business Name', 'Business Address',
       'Business Principal Activity', 'Office Front Door picture',
       'Electricity bill & meter pic', 'Property/office agreement',
-      'Bank maintenance Certificate (Business bank)',
+      'Bank maintenance Certificate (Business bank)', 'Business Letterhead', 'Business deed',
     ],
     process: [
       'Service category and tax rate determination',
       'Document preparation and verification',
       'Online PRA portal application submission',
       'PRA coordination and follow-up',
-      'Registration certificate issued within 5–7 working days',
+      'Audit Office From FBR',
+      'Registration certificate issued within 15–20 working days',
     ],
     benefits: [
       'Legal compliance for Punjab-based service providers',
@@ -694,9 +695,9 @@ At Akbar Tax Store, our team handles the complete GST registration process — d
     category: 'Registration',
     description: 'Chamber of Commerce membership registration',
     metaTitle: 'Chamber of Commerce Membership Registration Pakistan | Akbar Tax Store',
-    metaDesc: 'Chamber of Commerce membership registration in Pakistan. PKR 30,000. Completed in 5–7 working days. Required for import/export businesses. Faisalabad.',
+    metaDesc: 'Chamber of Commerce membership registration in Pakistan. PKR 30,000. Completed in 7–8 working days. Required for import/export businesses. Faisalabad.',
     h1: 'Chamber of Commerce Membership Registration in Pakistan',
-    price: 30000, duration: '5–7 working days',
+    price: 30000, duration: '7–8 working days',
     image: '/images/chamber-commerce.jpg',
     alt: 'Chamber of Commerce membership registration Pakistan Faisalabad',
     href: '/personal/chamber',
@@ -966,17 +967,17 @@ At Akbar Tax Store, we manage the complete process end-to-end for PKR 20,000. Th
     category: 'Registration',
     description: 'Private limited company registration with SECP including all legal documentation',
     metaTitle: 'SECP Company Registration Pakistan — Private Limited Company | Akbar Tax Store',
-    metaDesc: 'SECP private limited company registration in Pakistan in 24–48 hours. PKR 50,000. Complete incorporation including MOA, AOA, and Certificate of Incorporation. Faisalabad.',
-    h1: 'SECP Company Registration Pakistan — Private Limited Company in 24–48 Hours',
-    price: 50000, duration: '24–48 hours after document submission',
+    metaDesc: 'SECP private limited company registration in Pakistan in 7-8 working days. PKR 50,000. Complete incorporation including MOA, AOA, and Certificate of Incorporation. Faisalabad.',
+    h1: 'SECP Company Registration Pakistan — Private Limited Company in 7-8 working days',
+    price: 50000, duration: '7-8 working days after document submission',
     image: '/images/company-registration.jpg',
     alt: 'SECP company registration Pakistan private limited certificate of incorporation',
     href: '/business/company-reg',
     requirements: [
       'Owner Details: Name, CNIC, Contact, Email, Share holder',
       'Company Details: Name, CNIC, Contact, Email',
-      'Company Address', 'Company Category',
-      'Director: Name, CNIC, Email, Contact, Share Holder',
+      'Company Address', 'Company Category', 'Office Visit Must',
+      'Director: Name, CNIC, Email, Contact, Share Holder Details', 'Bank Account Tax Maintanance Certificate'
     ],
     process: [
       'Company name search and availability check on SECP eServices',
@@ -1095,16 +1096,16 @@ At Akbar Tax Store, we handle the entire process for PKR 50,000 — from name av
     category: 'Protection',
     description: 'Brand name and logo protection via IPO Pakistan trademark registration',
     metaTitle: 'Trademark Registration Pakistan — IPO Brand Protection | Akbar Tax Store',
-    metaDesc: 'Trademark registration in Pakistan via IPO. PKR 80,000. Protect your brand name and logo. Application filed in 24–48 hours. 10-year protection. Faisalabad.',
+    metaDesc: 'Trademark registration in Pakistan via IPO. PKR 80,000. Protect your brand name and logo. Application filed in 15-20 working days. 10-year protection. Faisalabad.',
     h1: 'Trademark Registration in Pakistan — Protect Your Brand via IPO Pakistan',
-    price: 80000, duration: '24–48 hours after document submission',
+    price: 80000, duration: '15-20 working days after document submission',
     image: '/images/trademark.jpg',
     alt: 'Trademark registration Pakistan IPO brand name logo protection',
     href: '/business/trademark',
     requirements: [
       'Owner/partner CNICs', 'Phone Number', 'Email Address',
       'Business name', 'Business Address Proof', 'Business Principal Activity',
-      'Person Signature', 'Business logo white background picture',
+      'Person Signature', 'Business logo white background picture', 'Office Visit', 'Letterhead',
     ],
     process: [
       'Trademark search and availability check on IPO Pakistan database',
@@ -1127,22 +1128,22 @@ At Akbar Tax Store, we handle the entire process for PKR 50,000 — from name av
     category: 'License',
     description: 'License for international trade — import and export from Pakistan',
     metaTitle: 'Import Export License Pakistan — International Trade Registration | Akbar Tax Store',
-    metaDesc: 'Import and export license registration in Pakistan in 24–48 hours. PKR 40,000. Required for international trade. FBR IRIS and EPB registration handled. Faisalabad.',
+    metaDesc: 'Import and export license registration in Pakistan in 7-8 working days. PKR 40,000. Required for international trade. FBR IRIS and EPB registration handled. Faisalabad.',
     h1: 'Import Export License in Pakistan — International Trade Registration',
-    price: 40000, duration: '24–48 hours after document submission',
+    price: 40000, duration: '7-8 working days after document submission',
     image: '/images/import-export.jpg',
     alt: 'Import export license Pakistan international trade registration',
     href: '/business/import-export',
     requirements: [
       'ID card picture', 'Phone Number (registered on NTN)',
-      'IRIS login credentials', 'Email ID (registered on NTN)',
+      'IRIS login credentials', 'Email ID (registered on NTN)','Business Letterhead', 'office Picture', 'Account Maintanance Certificate', 'Utility Bill', 
     ],
     process: [
       'NTN and IRIS profile verification',
       'Export/import registration on FBR portal',
       'EPB (Export Promotion Bureau) coordination if required',
       'Customs department liaison',
-      'License certificate issued within 24–48 hours',
+      'License certificate issued within 7-8 working days',
     ],
     benefits: [
       'Legal authorisation for international trade from Pakistan',
@@ -1158,9 +1159,9 @@ At Akbar Tax Store, we handle the entire process for PKR 50,000 — from name av
     category: 'Tax',
     description: 'Federal Goods and Services Tax registration with FBR for businesses',
     metaTitle: 'Business GST Registration Pakistan — FBR Sales Tax | Akbar Tax Store',
-    metaDesc: 'GST registration for businesses in Pakistan via FBR portal. PKR 40,000. 5–7 working days. Complete documentation and FBR submission handled. Faisalabad.',
+    metaDesc: 'GST registration for businesses in Pakistan via FBR portal. PKR 45,000. 15–20 working days. Complete documentation and FBR submission handled. Faisalabad.',
     h1: 'Business GST Registration in Pakistan — Federal General Sales Tax FBR',
-    price: 40000, duration: '5–7 working days',
+    price: 45000, duration: '15–20 working days',
     image: '/images/gst.jpg',
     alt: 'Business GST registration Pakistan FBR General Sales Tax',
     href: '/business/gst',
@@ -1168,14 +1169,14 @@ At Akbar Tax Store, we handle the entire process for PKR 50,000 — from name av
       'ID Card Picture', 'Phone Number', 'Email ID', 'Business Name', 'Business Address',
       'Business Principal Activity', 'Office Front Door picture',
       'Electricity bill & meter pic', 'Property/office agreement',
-      'Bank maintenance Certificate (Business bank)',
+      'Bank maintenance Certificate (Business bank)', 'Business Letterhead', 'Business Deed',
     ],
     process: [
       'Business turnover and category determination',
       'Document preparation and verification',
       'FBR sales tax portal submission',
       'Follow-up and coordination with FBR',
-      'GST registration certificate issued within 5–7 working days',
+      'GST registration certificate issued within 15–20 working days',
     ],
     benefits: [
       'Legal compliance for businesses supplying taxable goods and services',
@@ -1188,9 +1189,9 @@ At Akbar Tax Store, we handle the entire process for PKR 50,000 — from name av
  
 Pakistan has three main sales tax authorities depending on the nature and location of your business: FBR (Federal Board of Revenue) handles GST on goods and certain services at the federal level; PRA (Punjab Revenue Authority) handles services sold in Punjab; and SRB (Sindh Revenue Board) handles services in Sindh. Most product-based businesses register with FBR. Service businesses register with FBR, PRA, or SRB depending on which province they operate in.
  
-The GST rate in Pakistan is 18% for standard goods and services under the Finance Act 2025-26. Certain categories — including basic food items, medicines, and exports — are zero-rated or exempt. Once registered, you must file monthly GST returns through the FBR IRIS portal by the 18th of the following month, even if your sales for that month were zero.
+The GST rate in Pakistan is 18% for standard goods and services under the Finance Act 2026-27. Certain categories — including basic food items, medicines, and exports — are zero-rated or exempt. Once registered, you must file monthly GST returns through the FBR IRIS portal by the 18th of the following month, even if your sales for that month were zero.
  
-At Akbar Tax Store, our team handles the complete GST registration process — document preparation, office front photograph, FBR portal application, and follow-up with the FBR officer — in 5 to 7 working days. We also offer ongoing monthly GST return filing as a separate service to keep your compliance current.`,
+At Akbar Tax Store, our team handles the complete GST registration process — document preparation, office front photograph, FBR portal application, and follow-up with the FBR officer — in 15 to 20 working days. We also offer ongoing monthly GST return filing as a separate service to keep your compliance current.`,
  
   whoNeeds: [
     'Manufacturers and importers of taxable goods — GST registration is mandatory regardless of turnover',
@@ -1229,7 +1230,7 @@ At Akbar Tax Store, our team handles the complete GST registration process — d
     },
     {
       q: 'How long does GST registration take in Pakistan?',
-      a: 'With Akbar Tax Store, GST registration is completed in 5 to 7 working days. The timeline depends on FBR officer verification of your premises photos and documents. Our team prepares everything correctly to avoid rejection and re-submission delays.',
+      a: 'With Akbar Tax Store, GST registration is completed in 15 to 20 working days. The timeline depends on FBR officer verification of your premises photos and documents. Our team prepares everything correctly to avoid rejection and re-submission delays.',
     },
     {
       q: 'What documents are required for GST registration in Pakistan?',
@@ -1241,7 +1242,7 @@ At Akbar Tax Store, our team handles the complete GST registration process — d
     },
     {
       q: 'How much does GST registration cost at Akbar Tax Store?',
-      a: 'Akbar Tax Store charges PKR 40,000 for complete GST registration with FBR. This covers document preparation, office verification photograph coordination, FBR portal application, follow-up with the assigned FBR officer, and registration certificate delivery. PRA registration for Punjab service providers is also PKR 40,000 and follows the same process.',
+      a: 'Akbar Tax Store charges PKR 45,000 for complete GST registration with FBR. This covers document preparation, office verification photograph coordination, FBR portal application, follow-up with the assigned FBR officer, and registration certificate delivery. PRA registration for Punjab service providers is also PKR 45,000 and follows the same process.',
     },
     {
       q: 'Do I need to file GST returns every month after registration?',
@@ -1255,9 +1256,9 @@ At Akbar Tax Store, our team handles the complete GST registration process — d
     category: 'Registration',
     description: 'Punjab Revenue Authority registration for Punjab-based businesses',
     metaTitle: 'PRA Registration Punjab Pakistan — Punjab Revenue Authority | Akbar Tax Store',
-    metaDesc: 'PRA registration for businesses in Punjab, Pakistan. PKR 40,000. 5–7 working days. Required for service providers in Punjab. Complete documentation handled. Faisalabad.',
+    metaDesc: 'PRA registration for businesses in Punjab, Pakistan. PKR 45,000. 15–20 working days. Required for service providers in Punjab. Complete documentation handled. Faisalabad.',
     h1: 'PRA Registration in Punjab Pakistan — Punjab Revenue Authority',
-    price: 40000, duration: '5–7 working days',
+    price: 40000, duration: '15–20 working days',
     image: '/images/pra-registration.png',
     alt: 'PRA registration Punjab Pakistan Punjab Revenue Authority business',
     href: '/business/pra',
@@ -1265,14 +1266,14 @@ At Akbar Tax Store, our team handles the complete GST registration process — d
       'ID Card Picture', 'Phone Number', 'Email ID', 'Business Name', 'Business Address',
       'Business Principal Activity', 'Office Front Door picture',
       'Electricity bill & meter pic', 'Property/office agreement',
-      'Bank maintenance Certificate (Business bank)',
+      'Bank maintenance Certificate (Business bank)', 'Business Letterhead', 'Business Deed',
     ],
     process: [
       'Service category and PRA tax rate determination',
       'Document preparation and verification',
       'PRA online portal submission',
       'PRA coordination and follow-up',
-      'Registration certificate issued within 5–7 working days',
+      'Registration certificate issued within 15–20 working days',
     ],
     benefits: [
       'Legal compliance for Punjab-based service businesses',
@@ -1288,9 +1289,9 @@ At Akbar Tax Store, our team handles the complete GST registration process — d
     category: 'Registration',
     description: 'Chamber of Commerce membership registration',
     metaTitle: 'Chamber of Commerce Membership Registration Pakistan | Akbar Tax Store',
-    metaDesc: 'Chamber of Commerce membership for businesses in Pakistan. PKR 30,000. 5–7 working days. Required for import/export and trade activities. Faisalabad.',
+    metaDesc: 'Chamber of Commerce membership for businesses in Pakistan. PKR 30,000. 7–8 working days. Required for import/export and trade activities. Faisalabad.',
     h1: 'Chamber of Commerce Membership Registration in Pakistan',
-    price: 30000, duration: '5–7 working days',
+    price: 30000, duration: '7–8 working days',
     image: '/images/chamber-commerce.jpg',
     alt: 'Chamber of Commerce membership registration Pakistan business',
     href: '/business/chamber',
@@ -1304,7 +1305,7 @@ At Akbar Tax Store, our team handles the complete GST registration process — d
       'Document preparation and sponsorship arrangement',
       'Application submission to relevant Chamber of Commerce',
       'Membership approval and processing',
-      'Certificate and membership card delivered within 5–7 working days',
+      'Certificate and membership card delivered within 7–8 working days',
     ],
     benefits: [
       'Essential for import/export businesses and international trade',
@@ -1320,9 +1321,9 @@ At Akbar Tax Store, our team handles the complete GST registration process — d
     category: 'Compliance',
     description: 'Designated Non-Financial Business and Professions registration',
     metaTitle: 'DNFBP Registration Pakistan — FIA AML Compliance | Akbar Tax Store',
-    metaDesc: 'DNFBP registration in Pakistan for real estate, dealers, lawyers, and accountants. PKR 15,000. 4–5 working days. FIA AML/CFT compliance. Faisalabad.',
+    metaDesc: 'DNFBP registration in Pakistan for real estate, dealers, lawyers, and accountants. PKR 15,000. 15-20 working days. FIA AML/CFT compliance. Faisalabad.',
     h1: 'DNFBP Registration in Pakistan — FIA AML/CFT Compliance',
-    price: 15000, duration: '4–5 working days',
+    price: 15000, duration: '15-20 working days',
     image: '/images/dnfbp.png',
     alt: 'DNFBP registration Pakistan FIA AML compliance',
     href: '/business/dnfbp',
@@ -1336,7 +1337,7 @@ At Akbar Tax Store, our team handles the complete GST registration process — d
       'Document preparation and police character certificate guidance',
       'FIA online portal submission',
       'AML/CFT compliance check and approval',
-      'Registration certificate delivered within 4–5 working days',
+      'Registration certificate delivered within 15-20 working days',
     ],
     benefits: [
       'Legal compliance with FIA regulations — avoids penalties up to PKR 1 million',
@@ -1388,7 +1389,7 @@ At Akbar Tax Store, our team handles the complete GST registration process — d
     metaTitle: 'Bookkeeping Services Pakistan — Business Accounts Management | Akbar Tax Store',
     metaDesc: 'Professional bookkeeping services for businesses in Pakistan. PKR 20,000. Daily transaction recording, reconciliations, and monthly summaries. Akbar Tax Store Faisalabad.',
     h1: 'Professional Bookkeeping Services for Businesses in Pakistan',
-    price: 20000, duration: '4–5 working days',
+    price: 20000, duration: '24-48 hours',
     image: '/images/bookkeeping.jpg',
     alt: 'Bookkeeping services Pakistan small business accounts management',
     href: '/business/bookkeeping',

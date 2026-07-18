@@ -7,7 +7,7 @@
 import { useState, useEffect } from 'react';
 
 const WHATSAPP_NUMBER = '923407300408'; // International format, no + or spaces
-const WHATSAPP_MESSAGE = 'Hello! I need help with tax services.'; // Pre-filled message
+const WHATSAPP_MESSAGE = 'Hello. I visited your website and would like to discuss accounting, taxation, or compliance services for my business.'; 
 
 export default function FloatingWhatsApp() {
   const [visible, setVisible] = useState(false);
@@ -76,7 +76,7 @@ export default function FloatingWhatsApp() {
           lineHeight: '1.4',
         }}
       >
-        Chat with us — free consultation
+        Chat with us — Need expert tax advice?
       </div>
 
       {/* WhatsApp Button */}

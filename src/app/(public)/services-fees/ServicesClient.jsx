@@ -152,6 +152,7 @@ function ServiceModal({ service, isAnimating, onClose }) {
               {[
                 'Prices inclusive of all government fees',
                 'No hidden charges',
+                'All documents Required',
               ].map((note) => (
                 <div key={note} className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
